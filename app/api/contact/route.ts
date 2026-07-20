@@ -1,14 +1,17 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL ??
-  "West TN Ink Revival Expo <contact@westtninkrevival.com>";
+// Sender identity for West TN Ink Revival Expo.
+// westtninkrevival.com must be verified as a sending domain in the Resend
+// account before this address will work.  Do NOT change this to the AMC or
+// Lambuth domain — this address belongs to this project only.
+const FROM_EMAIL = "West TN Ink Revival Expo <contact@westtninkrevival.com>";
 const TO_EMAIL = "studio45tattoo2025@gmail.com";
 
 export async function POST(req: Request) {
+  // Instantiate inside handler so RESEND_API_KEY is read at runtime, not build time
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   try {
     const body = await req.json();
     const { name, email, phone, reason, message, _gotcha } = body as {
