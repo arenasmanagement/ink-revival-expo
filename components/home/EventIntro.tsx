@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { EVENT } from "@/lib/eventData";
 
@@ -51,36 +52,19 @@ export default function EventIntro() {
             </div>
           </div>
 
-          {/* Media placeholder */}
-          <div className="relative">
-            <div
-              className="aspect-video bg-parchment-dark flex flex-col items-center justify-center border-2 border-ink/20 relative overflow-hidden"
-              style={{ boxShadow: "inset 0 0 0 6px rgba(196,144,42,0.15), 0 4px 20px rgba(26,16,8,0.12)" }}
-            >
-              {/* Corner dots */}
-              {["top-2 left-2", "top-2 right-2", "bottom-2 left-2", "bottom-2 right-2"].map((pos) => (
-                <div key={pos} className={`absolute ${pos} w-3 h-3 border-2 border-gold/40`} />
-              ))}
-
-              <div className="text-center p-6">
-                <div className="text-4xl text-ink/20 mb-3">▶</div>
-                <p
-                  className="text-ink/40 text-xs tracking-widest uppercase"
-                  style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                >
-                  Event video / photo
-                </p>
-                <p
-                  className="text-ink/30 text-xs mt-1"
-                  style={{ fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}
-                >
-                  Coming soon
-                </p>
-              </div>
-            </div>
-            {/* Shadow accent */}
-            <div
-              className="absolute -bottom-2 -right-2 w-full h-full -z-10 border-2 border-parchment-deep/40"
+          {/* Event image */}
+          <div
+            className="relative"
+            style={{ boxShadow: "0 8px 36px rgba(26,16,8,0.28), 0 2px 8px rgba(26,16,8,0.15)" }}
+          >
+            <Image
+              src="/ink-image.png"
+              alt="Tattoo artist tattooing an arm at the West TN Ink Revival Expo 2027 in Huntingdon, Tennessee"
+              width={1402}
+              height={1122}
+              className="w-full h-auto block"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={false}
             />
           </div>
         </div>

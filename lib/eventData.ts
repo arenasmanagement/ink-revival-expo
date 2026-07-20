@@ -106,7 +106,7 @@ export const TATTOO_SPECIALTIES = [
 export const FAQ_ITEMS = [
   {
     q: "Where will the expo be held?",
-    a: "West TN Ink Revival Expo will be held at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Additional venue details, including a full address and parking information, will be announced closer to the event.",
+    a: "West TN Ink Revival Expo will be held at the Carroll County TN Fairgrounds, 201 Fairgrounds Road, Huntingdon, TN 38344. On-site parking is available. Additional details will be confirmed closer to the event.",
   },
   {
     q: "When will tickets become available?",

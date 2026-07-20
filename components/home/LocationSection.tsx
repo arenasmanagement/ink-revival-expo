@@ -1,4 +1,5 @@
 import SectionHeading from "@/components/ui/SectionHeading";
+import VenueMap from "@/components/ui/VenueMap";
 import { EVENT } from "@/lib/eventData";
 
 export default function LocationSection() {
@@ -10,61 +11,14 @@ export default function LocationSection() {
         <SectionHeading
           eyebrow="Find Us"
           title="Event Location"
-          className="mb-12"
+          className="mb-10"
         />
 
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-          {/* Map placeholder */}
-          <div className="relative">
-            <div
-              className="aspect-[4/3] bg-parchment-dark flex items-center justify-center border-2 border-ink/20 relative overflow-hidden"
-              style={{ boxShadow: "inset 0 0 0 6px rgba(196,144,42,0.12)" }}
-            >
-              {/* Map grid lines */}
-              <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 400 300">
-                {/* Horizontal lines */}
-                {[50, 100, 150, 200, 250].map((y) => (
-                  <line key={y} x1="0" y1={y} x2="400" y2={y} stroke="#1A1008" strokeWidth="1" />
-                ))}
-                {/* Vertical lines */}
-                {[80, 160, 240, 320].map((x) => (
-                  <line key={x} x1={x} y1="0" x2={x} y2="300" stroke="#1A1008" strokeWidth="1" />
-                ))}
-                {/* Roads */}
-                <line x1="0" y1="150" x2="400" y2="150" stroke="#1A1008" strokeWidth="3" />
-                <line x1="200" y1="0" x2="200" y2="300" stroke="#1A1008" strokeWidth="3" />
-                {/* Location pin */}
-                <circle cx="200" cy="150" r="12" fill="#7A1714" />
-                <circle cx="200" cy="150" r="6" fill="#F5E6C8" />
-              </svg>
+        {/* Map */}
+        <VenueMap directionsUrl={EVENT.venue.directionsUrl} />
 
-              <div className="text-center relative z-10 p-6">
-                <div className="text-3xl mb-2">📍</div>
-                <p
-                  className="text-ink/60 text-sm font-semibold"
-                  style={{ fontFamily: "var(--font-rye, serif)" }}
-                >
-                  {EVENT.venue.name}
-                </p>
-                <p
-                  className="text-ink/45 text-xs mt-1"
-                  style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                >
-                  {EVENT.venue.address}
-                </p>
-                <p
-                  className="text-ink/40 text-xs mt-0.5"
-                  style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                >
-                  {EVENT.venue.city}, {EVENT.venue.state} {EVENT.venue.zip}
-                </p>
-              </div>
-            </div>
-            {/* Shadow */}
-            <div className="absolute -bottom-2 -right-2 w-full h-full -z-10 border-2 border-parchment-deep/30" />
-          </div>
-
-          {/* Info */}
+        <div className="mt-8 grid md:grid-cols-2 gap-6 items-start">
+          {/* Info blocks */}
           <div className="space-y-5">
             <InfoBlock
               title="Venue"
@@ -87,6 +41,9 @@ export default function LocationSection() {
               items={["Accessible venue"]}
               note="Full accessibility information coming soon"
             />
+          </div>
+
+          <div className="space-y-5">
             <InfoBlock
               title="Nearby Hotels"
               icon="🏨"
