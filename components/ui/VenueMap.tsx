@@ -4,25 +4,35 @@ import { useState } from "react";
 
 interface VenueMapProps {
   directionsUrl: string;
+  /**
+   * When provided, overrides the default aspect-ratio / min/max-height sizing.
+   * Use Tailwind height classes (e.g. "h-[260px] md:h-[380px]") to control
+   * the map container when embedding it in a constrained layout like a grid column.
+   */
+  containerClassName?: string;
 }
 
-export default function VenueMap({ directionsUrl }: VenueMapProps) {
+export default function VenueMap({ directionsUrl, containerClassName }: VenueMapProps) {
   const [failed, setFailed] = useState(false);
 
   const mapEmbedUrl =
     "https://maps.google.com/maps?q=Carroll+County+TN+Fairgrounds,+201+Fairgrounds+Road,+Huntingdon,+TN+38344&hl=en&z=15&output=embed";
 
+  // When containerClassName is supplied the caller controls sizing via Tailwind;
+  // drop the built-in aspect-ratio/height constraints so they don't conflict.
+  const sizeStyle: React.CSSProperties = containerClassName
+    ? {}
+    : { aspectRatio: "16/7", minHeight: "280px", maxHeight: "420px" };
+
   return (
     <div
-      className="w-full overflow-hidden relative"
+      className={`overflow-hidden relative${containerClassName ? ` ${containerClassName}` : " w-full"}`}
       style={{
         borderRadius: "2px",
         border: "1px solid rgba(196,144,42,0.25)",
         boxShadow: "0 4px 20px rgba(26,16,8,0.15)",
-        aspectRatio: "16/7",
-        minHeight: "280px",
-        maxHeight: "420px",
         background: "#1A1008",
+        ...sizeStyle,
       }}
     >
       {failed ? (
