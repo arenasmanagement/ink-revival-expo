@@ -62,19 +62,27 @@ export default function Footer() {
               </a>
             </address>
 
-            {/* Socials */}
-            <div className="flex gap-4 mt-5">
-              {(["facebook", "instagram", "tiktok"] as const).map((s) => (
-                <a
-                  key={s}
-                  href={EVENT.social[s]}
-                  aria-label={s}
-                  className="text-cream/40 hover:text-gold transition-colors duration-200"
-                >
-                  {SOCIAL_ICON[s]}
-                </a>
-              ))}
-            </div>
+            {/* Socials — only render icons when real URLs are set */}
+            {(["facebook", "instagram", "tiktok"] as const).some(
+              (s) => EVENT.social[s] !== "#"
+            ) && (
+              <div className="flex gap-4 mt-5">
+                {(["facebook", "instagram", "tiktok"] as const)
+                  .filter((s) => EVENT.social[s] !== "#")
+                  .map((s) => (
+                    <a
+                      key={s}
+                      href={EVENT.social[s]}
+                      aria-label={`${s} — West TN Ink Revival Expo`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cream/40 hover:text-gold transition-colors duration-200"
+                    >
+                      {SOCIAL_ICON[s]}
+                    </a>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* Quick links */}

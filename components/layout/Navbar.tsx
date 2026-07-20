@@ -43,6 +43,8 @@ export default function Navbar() {
 
   /* close everything on route change */
   useEffect(() => {
+    // Synchronous setState is intentional: menu must close immediately on navigation.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMenuOpen(false);
     setParticipateOpen(false);
     setDropdownOpen(false);

@@ -20,6 +20,10 @@ export default function Countdown() {
   const [time, setTime] = useState<ReturnType<typeof getTimeLeft> | null>(null);
 
   useEffect(() => {
+    // Immediately set time on mount to avoid showing zeros for the first second.
+    // Initializing in state directly would cause a server/client hydration mismatch
+    // because Date.now() differs between SSR and hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTime(getTimeLeft());
     const id = setInterval(() => setTime(getTimeLeft()), 1000);
     return () => clearInterval(id);

@@ -8,16 +8,14 @@ export const metadata: Metadata = {
   description: "Discover tattoo artists at West TN Ink Revival Expo 2027. Apply as a tattoo artist or browse our featured artists.",
 };
 
-const PLACEHOLDER_ARTISTS = Array.from({ length: 12 }, (_, i) => ({
+// Placeholder slots until real artist data is available.
+// No booking status on placeholder cards — status belongs only on confirmed artists.
+const PLACEHOLDER_ARTISTS = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
-  name: "Artist Name",
-  studio: "Studio Name",
-  location: "City, TN",
   specialties: [
     TATTOO_SPECIALTIES[i % TATTOO_SPECIALTIES.length],
     TATTOO_SPECIALTIES[(i + 2) % TATTOO_SPECIALTIES.length],
   ],
-  booked: i % 5 === 0,
 }));
 
 export default function ArtistsPage() {
@@ -89,8 +87,8 @@ export default function ArtistsPage() {
           ))}
         </div>
 
-        {/* Artist cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-10 sm:mb-14">
+        {/* Artist placeholder cards — replaced with real data once lineup is confirmed */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10 sm:mb-14 max-w-3xl mx-auto">
           {PLACEHOLDER_ARTISTS.map((a) => (
             <div key={a.id} className="card-vintage border border-ink/12 bg-cream/70 flex flex-col">
               <div
@@ -102,46 +100,15 @@ export default function ArtistsPage() {
                   <rect x="22" y="18" width="16" height="22" rx="2" />
                   <path d="M28,40 L30,56 L32,40 Z" />
                 </svg>
-                {a.booked && (
-                  <span
-                    className="absolute top-1.5 right-1.5 bg-crimson text-cream text-[8px] px-1.5 py-0.5 uppercase tracking-wider"
-                    style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                  >
-                    Booked
-                  </span>
-                )}
-                <div className="absolute bottom-0 inset-x-0 h-[3px] bg-crimson" />
+                <div className="absolute bottom-0 inset-x-0 h-[3px] bg-crimson/60" />
               </div>
-              <div className="p-3">
+              <div className="p-3 text-center">
                 <p
-                  className="text-ink text-sm font-semibold leading-tight mb-0.5"
-                  style={{ fontFamily: "var(--font-playfair, serif)" }}
-                >
-                  {a.name}
-                </p>
-                <p
-                  className="text-ink/50 text-xs mb-1"
-                  style={{ fontFamily: "var(--font-garamond, serif)" }}
-                >
-                  {a.studio}
-                </p>
-                <p
-                  className="text-ink/40 text-[10px] mb-2"
+                  className="text-ink/30 text-[10px] uppercase tracking-wider"
                   style={{ fontFamily: "var(--font-special-elite, monospace)" }}
                 >
-                  {a.location}
+                  Coming Soon
                 </p>
-                <div className="flex flex-wrap gap-1">
-                  {a.specialties.map((s) => (
-                    <span
-                      key={s}
-                      className="text-[8px] bg-crimson/10 text-crimson/80 px-1 py-0.5 border border-crimson/12"
-                      style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
               </div>
             </div>
           ))}

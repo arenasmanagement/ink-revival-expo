@@ -32,6 +32,10 @@ const specialElite = Special_Elite({
 });
 
 export const metadata: Metadata = {
+  // metadataBase is required for Next.js to resolve relative OG/Twitter image URLs
+  // to absolute URLs when the metadata is consumed by social platforms.
+  metadataBase: new URL("https://www.westtninkrevival.com"),
+
   title: "West TN Ink Revival Expo 2027 | Tattoo Convention in Huntingdon, Tennessee",
   description:
     "Join the first annual West TN Ink Revival Expo, March 12–14, 2027, at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Discover tattoo artists, vendors, food, sponsors, and three days celebrating tattoo culture.",
@@ -51,12 +55,14 @@ export const metadata: Metadata = {
       "The first annual West TN Ink Revival Expo — March 12–14, 2027 in Huntingdon, Tennessee. Three days of tattoo artistry, vendors, food, and community.",
     type: "website",
     locale: "en_US",
+    url: "https://www.westtninkrevival.com",
+    siteName: "West TN Ink Revival Expo",
     images: [
       {
-        url: "/flyer-sponsorship.png",
+        url: "/og-card.png",
         width: 1200,
         height: 630,
-        alt: "West TN Ink Revival Expo 2027",
+        alt: "West TN Ink Revival Expo 2027 — March 12–14, Huntingdon, Tennessee",
       },
     ],
   },
@@ -64,6 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "West TN Ink Revival Expo 2027",
     description: "March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, Tennessee",
+    images: ["/og-card.png"],
   },
 };
 
