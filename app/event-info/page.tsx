@@ -3,6 +3,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollworkDivider } from "@/components/ui/OrnamentalDivider";
 import Link from "next/link";
 import { EVENT } from "@/lib/eventData";
+import VenueMap from "@/components/ui/VenueMap";
 
 export const metadata: Metadata = {
   title: "Event Info | West TN Ink Revival Expo 2027",
@@ -155,6 +156,36 @@ export default function EventInfoPage() {
               )}
             </div>
           ))}
+        </div>
+
+        <ScrollworkDivider className="mb-8 sm:mb-10" />
+
+        {/* Venue Map */}
+        <div className="mb-10 sm:mb-14">
+          <h2
+            className="text-center text-ink text-xl mb-2"
+            style={{ fontFamily: "var(--font-rye, serif)" }}
+          >
+            Venue Location
+          </h2>
+          <p
+            className="text-center text-ink/50 text-sm mb-6"
+            style={{ fontFamily: "var(--font-garamond, serif)" }}
+          >
+            Carroll County TN Fairgrounds · 201 Fairgrounds Road · Huntingdon, TN 38344
+          </p>
+          <VenueMap directionsUrl={EVENT.venue.directionsUrl} />
+          <div className="text-center mt-5">
+            <a
+              href={EVENT.venue.directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-7 py-2.5 bg-crimson text-cream uppercase tracking-widest text-xs hover:bg-crimson-dark transition-all duration-200 active:scale-95"
+              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
+            >
+              Get Directions →
+            </a>
+          </div>
         </div>
 
         <ScrollworkDivider className="mb-8 sm:mb-10" />

@@ -164,6 +164,23 @@ export default function Footer() {
             <Link href="/terms" className="hover:text-cream/60 transition-colors">Terms</Link>
           </div>
         </div>
+
+        {/* Agency credit */}
+        <p
+          className="text-center text-cream/20 text-[11px] mt-4 pb-1 tracking-wide"
+          style={{ fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}
+        >
+          Website designed &amp; developed by{" "}
+          <a
+            href="https://www.arenasmanagementco.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-gold/50 transition-colors duration-200 not-italic"
+            style={{ fontFamily: "var(--font-special-elite, monospace)", fontStyle: "normal" }}
+          >
+            Arenas Management Co.
+          </a>
+        </p>
       </div>
     </footer>
   );
