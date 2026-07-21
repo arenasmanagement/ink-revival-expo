@@ -12,9 +12,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.westtninkrevival.com/contact" },
 };
 
+// Force dynamic rendering so process.env is read at request time, not build time.
+// Without this, Next.js statically generates the page and RESEND_API_KEY evaluates
+// to undefined even when it's set in Vercel environment variables.
+export const dynamic = "force-dynamic";
+
 export default function ContactPage() {
-  // Read at request time (server component runs per-request in Next.js App Router).
-  // Form renders when RESEND_API_KEY is present in the Vercel environment.
   const FORM_ACTIVE = Boolean(process.env.RESEND_API_KEY);
   return (
     <div className="bg-parchment-light-texture min-h-screen">
