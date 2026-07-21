@@ -12,13 +12,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.westtninkrevival.com/contact" },
 };
 
-// Force dynamic rendering so process.env is read at request time, not build time.
-// Without this, Next.js statically generates the page and RESEND_API_KEY evaluates
-// to undefined even when it's set in Vercel environment variables.
-export const dynamic = "force-dynamic";
-
 export default function ContactPage() {
-  const FORM_ACTIVE = Boolean(process.env.RESEND_API_KEY);
   return (
     <div className="bg-parchment-light-texture min-h-screen">
       {/* Header */}
@@ -176,55 +170,16 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* ── Right column: form or coming-soon notice ── */}
+          {/* ── Right column: contact form ── */}
           <div>
-            {FORM_ACTIVE ? (
-              <>
-                <h2
-                  className="text-ink text-2xl mb-6"
-                  style={{ fontFamily: "var(--font-rye, serif)" }}
-                >
-                  Send a Message
-                </h2>
-                <div className="divider-ink mb-6" style={{ width: "80px" }} />
-                <ContactForm />
-              </>
-            ) : (
-              <div className="bg-cream/60 border border-ink/12 p-6 sm:p-8">
-                <p className="text-2xl text-center mb-4">★</p>
-                <p
-                  className="text-ink text-xl text-center mb-3"
-                  style={{ fontFamily: "var(--font-rye, serif)" }}
-                >
-                  Online Form Coming Soon
-                </p>
-                <div
-                  className="divider-ink mx-auto mb-5"
-                  style={{ width: "60px" }}
-                />
-                <p
-                  className="text-ink/65 text-base leading-relaxed text-center mb-6"
-                  style={{ fontFamily: "var(--font-garamond, serif)" }}
-                >
-                  Our online contact form will be available shortly. In the
-                  meantime, please reach out directly by phone — we&rsquo;d love
-                  to hear from you.
-                </p>
-                <a
-                  href={`tel:${EVENT.contact.phone}`}
-                  className="block w-full text-center py-4 bg-crimson text-cream uppercase tracking-widest text-sm hover:bg-crimson-dark transition-all duration-200 active:scale-95 mb-3"
-                  style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                >
-                  Call {EVENT.contact.phone}
-                </a>
-                <p
-                  className="text-ink/35 text-xs italic text-center"
-                  style={{ fontFamily: "var(--font-garamond, serif)" }}
-                >
-                  Presented by {EVENT.producer}
-                </p>
-              </div>
-            )}
+            <h2
+              className="text-ink text-2xl mb-6"
+              style={{ fontFamily: "var(--font-rye, serif)" }}
+            >
+              Send a Message
+            </h2>
+            <div className="divider-ink mb-6" style={{ width: "80px" }} />
+            <ContactForm />
           </div>
 
         </div>
