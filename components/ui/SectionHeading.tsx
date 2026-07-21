@@ -5,6 +5,7 @@ interface SectionHeadingProps {
   light?: boolean; // true = cream text on dark bg
   centered?: boolean;
   className?: string;
+  as?: "h1" | "h2"; // semantic heading level — use "h1" for the main page heading
 }
 
 export default function SectionHeading({
@@ -14,6 +15,7 @@ export default function SectionHeading({
   light = false,
   centered = true,
   className = "",
+  as: Tag = "h2",
 }: SectionHeadingProps) {
   const textColor = light ? "text-cream" : "text-ink";
   const subColor = light ? "text-cream/70" : "text-ink/70";
@@ -30,12 +32,12 @@ export default function SectionHeading({
           ★ {eyebrow} ★
         </p>
       )}
-      <h2
+      <Tag
         className={`${textColor} text-3xl sm:text-4xl leading-tight`}
         style={{ fontFamily: "var(--font-rye, 'Rye', serif)" }}
       >
         {title}
-      </h2>
+      </Tag>
       <div className={`${dividerClass} ${centered ? "mx-auto" : ""} w-32 my-4`} />
       {subtitle && (
         <p

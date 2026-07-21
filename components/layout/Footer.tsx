@@ -165,30 +165,23 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-cream/30">
           <p style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            © 2027 West TN Ink Revival Expo. All rights reserved.
+            © 2026 West TN Ink Revival Expo. All rights reserved.
           </p>
-          <div className="flex gap-5" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-            <Link href="/privacy" className="hover:text-cream/60 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-cream/60 transition-colors">Terms</Link>
-          </div>
-        </div>
-
-        {/* Agency credit */}
-        <p
-          className="text-center text-cream/20 text-[11px] mt-4 pb-1 tracking-wide"
-          style={{ fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}
-        >
-          Website designed &amp; developed by{" "}
-          <a
-            href="https://www.arenasmanagementco.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-gold/50 transition-colors duration-200 not-italic"
-            style={{ fontFamily: "var(--font-special-elite, monospace)", fontStyle: "normal" }}
+          <p
+            style={{ fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}
           >
-            Arenas Management Co.
-          </a>
-        </p>
+            Website by{" "}
+            <a
+              href="https://www.arenasmanagementco.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gold/50 transition-colors duration-200 not-italic"
+              style={{ fontFamily: "var(--font-special-elite, monospace)", fontStyle: "normal" }}
+            >
+              Arenas Management Co.
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

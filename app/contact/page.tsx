@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Contact | West TN Ink Revival Expo 2027",
   description:
     "Get in touch with the West TN Ink Revival Expo team. Send a message or call with questions about attending, applying as an artist, or reserving a vendor booth.",
+  alternates: { canonical: "https://www.westtninkrevival.com/contact" },
 };
 
 // ── Form activation gate ───────────────────────────────────────────────────
@@ -40,9 +41,10 @@ export default function ContactPage() {
         />
         <SectionHeading
           eyebrow="Reach Out"
-          title="Contact Us"
+          title="Contact West TN Ink Revival Expo"
           subtitle="Get in touch with the West TN Ink Revival Expo team."
           light
+          as="h1"
           className="max-w-4xl mx-auto"
         />
       </div>

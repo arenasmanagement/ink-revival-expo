@@ -23,6 +23,9 @@ export default function Hero() {
       {/* ── Content ──────────────────────────────── */}
       <div className="relative z-10 w-full max-w-5xl mx-auto px-6 py-14 sm:py-18 text-center">
 
+        {/* Screen-reader H1 — the visual title is embedded in the hero artwork */}
+        <h1 className="sr-only">West TN Ink Revival Expo 2027</h1>
+
         {/* "You're Invited" eyebrow */}
         <div className="animate-fade-in mb-5">
           <span

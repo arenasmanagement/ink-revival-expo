@@ -6,6 +6,7 @@ import { TATTOO_SPECIALTIES, PRICING } from "@/lib/eventData";
 export const metadata: Metadata = {
   title: "Tattoo Artists | West TN Ink Revival Expo 2027",
   description: "Discover tattoo artists at West TN Ink Revival Expo 2027. Apply as a tattoo artist or browse our featured artists.",
+  alternates: { canonical: "https://www.westtninkrevival.com/artists" },
 };
 
 // Placeholder slots until real artist data is available.
@@ -32,6 +33,7 @@ export default function ArtistsPage() {
             title="Tattoo Artists"
             subtitle="Showcasing the best tattoo artists from across the region."
             light
+            as="h1"
           />
         </div>
       </div>

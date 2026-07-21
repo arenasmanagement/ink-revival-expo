@@ -8,6 +8,7 @@ import VenueMap from "@/components/ui/VenueMap";
 export const metadata: Metadata = {
   title: "Event Info | West TN Ink Revival Expo 2027",
   description: "Event details for West TN Ink Revival Expo — March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
+  alternates: { canonical: "https://www.westtninkrevival.com/event-info" },
 };
 
 const INFO_BLOCKS = [
@@ -93,6 +94,7 @@ export default function EventInfoPage() {
             title="Event Information"
             subtitle="Everything you need to know about West TN Ink Revival Expo 2027."
             light
+            as="h1"
           />
         </div>
       </div>

@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "FAQ | West TN Ink Revival Expo 2027",
   description:
     "Frequently asked questions about West TN Ink Revival Expo — dates, venue, artists, vendors, tickets, and how to participate.",
+  alternates: { canonical: "https://www.westtninkrevival.com/faq" },
 };
 
 export default function FAQPage() {
@@ -26,6 +27,7 @@ export default function FAQPage() {
           title="Frequently Asked Questions"
           subtitle="Everything you need to know about West TN Ink Revival Expo."
           light
+          as="h1"
           className="max-w-4xl mx-auto"
         />
       </div>

@@ -8,6 +8,7 @@ const { vendorRegistrationUrl } = REGISTRATION_URLS;
 export const metadata: Metadata = {
   title: "Vendors & Food Trucks | West TN Ink Revival Expo 2027",
   description: "Reserve a vendor booth or food truck space at West TN Ink Revival Expo 2027.",
+  alternates: { canonical: "https://www.westtninkrevival.com/vendors" },
 };
 
 const VENDOR_TYPES = [
@@ -34,6 +35,7 @@ export default function VendorsPage() {
           title="Vendors & Food Trucks"
           subtitle="Showcase your business to the West Tennessee tattoo community."
           light
+          as="h1"
           className="max-w-4xl mx-auto"
         />
       </div>

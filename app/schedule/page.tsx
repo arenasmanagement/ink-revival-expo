@@ -6,6 +6,7 @@ import { EVENT } from "@/lib/eventData";
 export const metadata: Metadata = {
   title: "Schedule | West TN Ink Revival Expo 2027",
   description: "Event schedule for West TN Ink Revival Expo — March 12–14, 2027. Full schedule coming soon.",
+  alternates: { canonical: "https://www.westtninkrevival.com/schedule" },
 };
 
 const EVENT_DAYS = [
@@ -38,9 +39,10 @@ export default function SchedulePage() {
         <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />
         <SectionHeading
           eyebrow="Plan Your Visit"
-          title="Official Schedule"
+          title="Event Schedule"
           subtitle="The complete three-day schedule will be released as details are finalized."
           light
+          as="h1"
           className="max-w-4xl mx-auto"
         />
       </div>

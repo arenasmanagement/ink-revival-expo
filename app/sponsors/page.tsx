@@ -7,6 +7,7 @@ const { sponsorRegistrationUrl } = REGISTRATION_URLS;
 export const metadata: Metadata = {
   title: "Sponsorships | West TN Ink Revival Expo 2027",
   description: "Sponsor West TN Ink Revival Expo 2027 and place your brand in front of a passionate regional audience.",
+  alternates: { canonical: "https://www.westtninkrevival.com/sponsors" },
 };
 
 const WHY = [
@@ -23,7 +24,7 @@ export default function SponsorsPage() {
       <div className="bg-ink-texture py-16 px-4 relative">
         <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />
-        <SectionHeading eyebrow="Partnerships" title="Sponsorship" subtitle="Partner with West TN Ink Revival Expo and place your business in front of a passionate regional audience." light className="max-w-4xl mx-auto" />
+        <SectionHeading eyebrow="Partnerships" title="Sponsorship Opportunities" subtitle="Partner with West TN Ink Revival Expo and place your business in front of a passionate regional audience." light as="h1" className="max-w-4xl mx-auto" />
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-10 sm:py-14">

@@ -1,4 +1,9 @@
+import type { Metadata } from "next";
 import Hero from "@/components/home/Hero";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://www.westtninkrevival.com" },
+};
 import Countdown from "@/components/home/Countdown";
 import EventIntro from "@/components/home/EventIntro";
 import WhoIsItFor from "@/components/home/WhoIsItFor";
