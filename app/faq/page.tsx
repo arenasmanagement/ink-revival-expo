@@ -1,17 +1,54 @@
 import type { Metadata } from "next";
 import SectionHeading from "@/components/ui/SectionHeading";
 import FAQAccordion from "@/components/faq/FAQAccordion";
+import { FAQ_ITEMS } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "FAQ | West TN Ink Revival Expo 2027",
+  title: "FAQ — Tattoo Convention Questions Answered | West TN Ink Revival Expo",
   description:
-    "Frequently asked questions about West TN Ink Revival Expo — dates, venue, artists, vendors, tickets, and how to participate.",
+    "Answers to the most common questions about West TN Ink Revival Expo 2027 — tickets, venue address, artist applications, vendor booths, food trucks, sponsorships, parking, age policy, and more. West Tennessee's first tattoo convention, March 12–14, 2027 in Huntingdon, TN.",
   alternates: { canonical: "https://www.westtninkrevival.com/faq" },
+  openGraph: {
+    title: "FAQ — West TN Ink Revival Expo 2027 | Huntingdon, Tennessee",
+    description:
+      "Tickets, venue, artists, vendors, sponsorships, parking — all your questions about West Tennessee's first tattoo convention answered.",
+    url: "https://www.westtninkrevival.com/faq",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.westtninkrevival.com" },
+    { "@type": "ListItem", position: 2, name: "FAQ", item: "https://www.westtninkrevival.com/faq" },
+  ],
+};
+
+const faqPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.a,
+    },
+  })),
 };
 
 export default function FAQPage() {
   return (
     <div className="bg-parchment-light-texture min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd) }}
+      />
       {/* Header */}
       <div className="bg-ink-texture py-16 px-4 relative">
         <div

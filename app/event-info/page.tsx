@@ -6,9 +6,23 @@ import { EVENT } from "@/lib/eventData";
 import VenueMap from "@/components/ui/VenueMap";
 
 export const metadata: Metadata = {
-  title: "Event Info | West TN Ink Revival Expo 2027",
-  description: "Event details for West TN Ink Revival Expo — March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
+  title: "Event Info — Dates, Venue & Details | West TN Ink Revival Expo",
+  description: "West TN Ink Revival Expo details: March 12–14, 2027 at the Carroll County TN Fairgrounds, 201 Fairgrounds Road, Huntingdon, Tennessee. Parking, accessibility, hotels, and everything you need to plan your visit to the West Tennessee tattoo convention.",
   alternates: { canonical: "https://www.westtninkrevival.com/event-info" },
+  openGraph: {
+    title: "Event Details — West TN Ink Revival Expo 2027, Huntingdon, Tennessee",
+    description: "Dates: March 12–14, 2027. Location: Carroll County TN Fairgrounds, 201 Fairgrounds Road, Huntingdon, TN 38344. Plan your visit to West Tennessee's first tattoo convention.",
+    url: "https://www.westtninkrevival.com/event-info",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.westtninkrevival.com" },
+    { "@type": "ListItem", position: 2, name: "Event Info", item: "https://www.westtninkrevival.com/event-info" },
+  ],
 };
 
 const INFO_BLOCKS = [
@@ -84,6 +98,10 @@ const INFO_BLOCKS = [
 export default function EventInfoPage() {
   return (
     <div className="bg-parchment-light-texture min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Page header */}
       <div className="bg-ink-texture py-16 px-4 relative">
         <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />

@@ -4,9 +4,23 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { EVENT } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Schedule | West TN Ink Revival Expo 2027",
-  description: "Event schedule for West TN Ink Revival Expo — March 12–14, 2027. Full schedule coming soon.",
+  title: "Event Schedule — March 12–14, 2027 | West TN Ink Revival Expo",
+  description: "Event schedule for West TN Ink Revival Expo — three days of tattooing, vendors, food trucks, and live entertainment. March 12 (Friday) · March 13 (Saturday) · March 14 (Sunday), 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Full schedule coming soon.",
   alternates: { canonical: "https://www.westtninkrevival.com/schedule" },
+  openGraph: {
+    title: "Event Schedule — West TN Ink Revival Expo 2027",
+    description: "Three-day tattoo convention schedule: March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, Tennessee. Full schedule coming soon.",
+    url: "https://www.westtninkrevival.com/schedule",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.westtninkrevival.com" },
+    { "@type": "ListItem", position: 2, name: "Schedule", item: "https://www.westtninkrevival.com/schedule" },
+  ],
 };
 
 const EVENT_DAYS = [
@@ -33,6 +47,10 @@ const EVENT_DAYS = [
 export default function SchedulePage() {
   return (
     <div className="bg-parchment-light-texture min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Header */}
       <div className="bg-ink-texture py-16 px-4 relative">
         <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />

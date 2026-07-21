@@ -5,9 +5,23 @@ import { PRICING, REGISTRATION_URLS } from "@/lib/eventData";
 const { sponsorRegistrationUrl } = REGISTRATION_URLS;
 
 export const metadata: Metadata = {
-  title: "Sponsorships | West TN Ink Revival Expo 2027",
-  description: "Sponsor West TN Ink Revival Expo 2027 and place your brand in front of a passionate regional audience.",
+  title: "Sponsorship Packages — Basic $500 · VIP $1,000 | West TN Ink Revival Expo",
+  description: "Sponsor West TN Ink Revival Expo 2027 in Huntingdon, Tennessee. Basic sponsorship $500 and VIP sponsorship $1,000. Place your brand in front of tattoo enthusiasts, artists, and the West Tennessee community at West Tennessee's first tattoo convention.",
   alternates: { canonical: "https://www.westtninkrevival.com/sponsors" },
+  openGraph: {
+    title: "Sponsorship Packages — West TN Ink Revival Expo 2027",
+    description: "Basic $500 · VIP $1,000. Sponsor West Tennessee's first tattoo convention and reach a passionate regional audience. March 12–14, 2027, Huntingdon, TN.",
+    url: "https://www.westtninkrevival.com/sponsors",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.westtninkrevival.com" },
+    { "@type": "ListItem", position: 2, name: "Sponsorships", item: "https://www.westtninkrevival.com/sponsors" },
+  ],
 };
 
 const WHY = [
@@ -20,6 +34,10 @@ const WHY = [
 export default function SponsorsPage() {
   return (
     <div className="bg-parchment-light-texture min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Header */}
       <div className="bg-ink-texture py-16 px-4 relative">
         <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />

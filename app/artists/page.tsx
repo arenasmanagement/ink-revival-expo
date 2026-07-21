@@ -4,9 +4,23 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { TATTOO_SPECIALTIES, PRICING } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Tattoo Artists | West TN Ink Revival Expo 2027",
-  description: "Discover tattoo artists at West TN Ink Revival Expo 2027. Apply as a tattoo artist or browse our featured artists.",
+  title: "Tattoo Artists — Apply & Featured Lineup | West TN Ink Revival Expo",
+  description: "Tattoo artists at West TN Ink Revival Expo 2027 in Huntingdon, Tennessee. Apply as a tattoo artist for West Tennessee's first tattoo convention. Booth space available for American Traditional, Black and Gray, Realism, Fine Line, and more.",
   alternates: { canonical: "https://www.westtninkrevival.com/artists" },
+  openGraph: {
+    title: "Tattoo Artists — West TN Ink Revival Expo 2027 | Huntingdon, Tennessee",
+    description: "Apply as a tattoo artist for West Tennessee's first tattoo convention. March 12–14, 2027 at the Carroll County TN Fairgrounds, Huntingdon, TN.",
+    url: "https://www.westtninkrevival.com/artists",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.westtninkrevival.com" },
+    { "@type": "ListItem", position: 2, name: "Tattoo Artists", item: "https://www.westtninkrevival.com/artists" },
+  ],
 };
 
 // Placeholder slots until real artist data is available.
@@ -22,6 +36,10 @@ const PLACEHOLDER_ARTISTS = Array.from({ length: 8 }, (_, i) => ({
 export default function ArtistsPage() {
   return (
     <div className="bg-parchment-light-texture min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       {/* ── Page header ── */}
       <div className="bg-ink-texture py-16 px-4 relative">

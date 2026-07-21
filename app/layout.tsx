@@ -37,23 +37,30 @@ export const metadata: Metadata = {
   // to absolute URLs when the metadata is consumed by social platforms.
   metadataBase: new URL("https://www.westtninkrevival.com"),
 
-  title: "West TN Ink Revival Expo 2027 | Tattoo Convention in Huntingdon, Tennessee",
+  title: {
+    default: "West TN Ink Revival Expo 2027 | Tattoo Convention — Huntingdon, Tennessee",
+    template: "%s | West TN Ink Revival Expo",
+  },
   description:
-    "Join the first annual West TN Ink Revival Expo, March 12–14, 2027, at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Discover tattoo artists, vendors, food, sponsors, and three days celebrating tattoo culture.",
+    "West TN Ink Revival Expo — March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. The first annual West Tennessee tattoo convention featuring tattoo artists, vendors, food trucks, and three days of tattoo culture.",
   keywords: [
     "West TN Ink Revival Expo",
     "tattoo convention Tennessee",
-    "tattoo expo 2027",
-    "Huntingdon Tennessee",
+    "tattoo expo Tennessee 2027",
+    "West Tennessee tattoo convention",
+    "Huntingdon Tennessee tattoo",
+    "Jackson TN tattoo convention",
     "Carroll County fairgrounds",
     "Studio 45 Tattoos",
     "tattoo artists West Tennessee",
-    "tattoo convention 2027",
+    "tattoo festival Tennessee",
+    "tattoo show Tennessee",
+    "tattoo expo 2027",
   ],
   openGraph: {
-    title: "West TN Ink Revival Expo 2027",
+    title: "West TN Ink Revival Expo 2027 — Huntingdon, Tennessee",
     description:
-      "The first annual West TN Ink Revival Expo — March 12–14, 2027 in Huntingdon, Tennessee. Three days of tattoo artistry, vendors, food, and community.",
+      "The first annual West Tennessee tattoo convention. March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, TN. Tattoo artists, vendors, food trucks, and three days of tattoo culture.",
     type: "website",
     locale: "en_US",
     url: "https://www.westtninkrevival.com",
@@ -63,15 +70,26 @@ export const metadata: Metadata = {
         url: "/og-card.png",
         width: 1200,
         height: 630,
-        alt: "West TN Ink Revival Expo 2027 — March 12–14, Huntingdon, Tennessee",
+        alt: "West TN Ink Revival Expo 2027 — March 12–14, Huntingdon, Tennessee tattoo convention",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "West TN Ink Revival Expo 2027",
-    description: "March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, Tennessee",
+    title: "West TN Ink Revival Expo 2027 — Huntingdon, Tennessee",
+    description: "West Tennessee's first tattoo convention. March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, TN",
     images: ["/og-card.png"],
+    site: "@westtninkrevival",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

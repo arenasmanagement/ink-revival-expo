@@ -19,15 +19,15 @@ export default function EventIntro() {
               className="text-ink/80 text-lg leading-relaxed mb-6"
               style={{ fontFamily: "var(--font-garamond, serif)" }}
             >
-              West TN Ink Revival Expo brings tattoo artists, collectors, vendors,
-              businesses, food trucks, and tattoo enthusiasts together for a three-day
-              celebration of tattoo culture in West Tennessee.
+              West TN Ink Revival Expo is West Tennessee&rsquo;s first tattoo convention
+              — a three-day celebration bringing tattoo artists, collectors, vendors,
+              businesses, food trucks, and enthusiasts together in the heart of West Tennessee.
             </p>
             <p
               className="text-ink/70 text-lg leading-relaxed mb-6"
               style={{ fontFamily: "var(--font-garamond, serif)" }}
             >
-              Meet talented artists, discover unique vendors and products, and be
+              Meet talented artists, get tattooed, discover unique vendors and products, and be
               part of a new regional tradition right here in Huntingdon. Additional
               programming and entertainment announcements are coming soon.
             </p>

@@ -6,15 +6,33 @@ import { EVENT, REGISTRATION_URLS } from "@/lib/eventData";
 const { sponsorRegistrationUrl, vendorRegistrationUrl } = REGISTRATION_URLS;
 
 export const metadata: Metadata = {
-  title: "Contact | West TN Ink Revival Expo 2027",
+  title: "Contact — Reach the West TN Ink Revival Expo Team | Huntingdon, TN",
   description:
-    "Get in touch with the West TN Ink Revival Expo team. Send a message or call with questions about attending, applying as an artist, or reserving a vendor booth.",
+    "Contact West TN Ink Revival Expo — call 731-513-4271 or send a message. Questions about attending, tattoo artist applications, vendor booths, food truck spaces, or sponsoring West Tennessee's first tattoo convention (March 12–14, 2027, Huntingdon, TN).",
   alternates: { canonical: "https://www.westtninkrevival.com/contact" },
+  openGraph: {
+    title: "Contact — West TN Ink Revival Expo 2027",
+    description: "Call 731-513-4271 or send a message. Artist applications, vendor booths, sponsorships, and general questions about West Tennessee's first tattoo convention.",
+    url: "https://www.westtninkrevival.com/contact",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.westtninkrevival.com" },
+    { "@type": "ListItem", position: 2, name: "Contact", item: "https://www.westtninkrevival.com/contact" },
+  ],
 };
 
 export default function ContactPage() {
   return (
     <div className="bg-parchment-light-texture min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Header */}
       <div className="bg-ink-texture py-16 px-4 relative">
         <div

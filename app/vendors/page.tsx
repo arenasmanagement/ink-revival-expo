@@ -6,9 +6,23 @@ import { PRICING, REGISTRATION_URLS } from "@/lib/eventData";
 const { vendorRegistrationUrl } = REGISTRATION_URLS;
 
 export const metadata: Metadata = {
-  title: "Vendors & Food Trucks | West TN Ink Revival Expo 2027",
-  description: "Reserve a vendor booth or food truck space at West TN Ink Revival Expo 2027.",
+  title: "Vendor Booths & Food Truck Spaces | West TN Ink Revival Expo 2027",
+  description: "Reserve a vendor booth at West TN Ink Revival Expo — March 12–14, 2027 in Huntingdon, Tennessee. 10×10 booth $250, double booth $400, food truck space $200. Showcase your business at West Tennessee's first tattoo convention.",
   alternates: { canonical: "https://www.westtninkrevival.com/vendors" },
+  openGraph: {
+    title: "Vendor Booths & Food Truck Spaces — West TN Ink Revival Expo 2027",
+    description: "10×10 vendor booth $250 · Double booth $400 · Food truck space $200. March 12–14, 2027 at the Carroll County TN Fairgrounds, Huntingdon, Tennessee.",
+    url: "https://www.westtninkrevival.com/vendors",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.westtninkrevival.com" },
+    { "@type": "ListItem", position: 2, name: "Vendors & Food Trucks", item: "https://www.westtninkrevival.com/vendors" },
+  ],
 };
 
 const VENDOR_TYPES = [
@@ -25,6 +39,10 @@ const VENDOR_TYPES = [
 export default function VendorsPage() {
   return (
     <div className="bg-parchment-light-texture min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       {/* ── Page header ── */}
       <div className="bg-ink-texture py-16 px-4 relative">
