@@ -217,7 +217,7 @@ export default function Navbar() {
 
             {/* Tickets Coming Soon pill */}
             <span
-              className="text-xs tracking-wider uppercase px-4 py-2 bg-crimson/60 text-cream/70 cursor-default select-none flex-shrink-0"
+              className="inline-flex items-center justify-center text-xs tracking-wider uppercase px-4 py-2 bg-crimson/60 text-cream/70 cursor-default select-none flex-shrink-0 leading-none"
               style={{ fontFamily: "var(--font-special-elite, monospace)" }}
               aria-disabled="true"
               title="Ticket sales have not yet opened"
