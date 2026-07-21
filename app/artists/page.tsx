@@ -70,25 +70,6 @@ export default function ArtistsPage() {
           className="mt-10 sm:mt-14 mb-10"
         />
 
-        {/* Specialty filter (visual — interactivity added later) */}
-        <div className="flex flex-wrap gap-2 justify-center mb-8">
-          <button
-            className="text-xs px-3 py-1.5 bg-crimson text-cream uppercase tracking-wider"
-            style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-          >
-            All
-          </button>
-          {TATTOO_SPECIALTIES.map((s) => (
-            <button
-              key={s}
-              className="text-xs px-3 py-1.5 border border-ink/20 text-ink/60 uppercase tracking-wider hover:border-crimson hover:text-crimson transition-colors"
-              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-
         {/* Artist placeholder cards — replaced with real data once lineup is confirmed */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10 sm:mb-14 max-w-3xl mx-auto">
           {PLACEHOLDER_ARTISTS.map((a) => (

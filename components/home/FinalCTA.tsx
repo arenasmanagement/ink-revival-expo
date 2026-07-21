@@ -66,7 +66,7 @@ export default function FinalCTA() {
             className="px-8 py-4 bg-crimson text-cream uppercase tracking-widest text-sm hover:bg-crimson-dark transition-all duration-200 active:scale-95"
             style={{ fontFamily: "var(--font-special-elite, monospace)" }}
           >
-            Apply to Participate
+            Artist Information
           </Link>
           <a
             href={sponsorRegistrationUrl}

@@ -74,7 +74,7 @@ export default function VendorsPage() {
                 {[
                   "10×10 ft of dedicated vendor space",
                   "Three-day event (March 12–14, 2027)",
-                  "Access to thousands of attendees",
+                  "Access to visitors from across West Tennessee and the surrounding region",
                   "Included in event vendor directory",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-2 text-ink/70 text-sm" style={{ fontFamily: "var(--font-garamond, serif)" }}>

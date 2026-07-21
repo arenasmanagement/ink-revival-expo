@@ -129,7 +129,7 @@ export default function Hero() {
           className="animate-fade-up delay-400 text-ink/68 text-base sm:text-[1.15rem] max-w-[30rem] mx-auto mb-7 leading-relaxed"
           style={{ fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}
         >
-          Experience three unforgettable days of world-class tattoo artists,
+          Experience three unforgettable days of talented tattoo artists,
           custom artwork, vendors, food, and the growing
           tattoo community of West Tennessee.
         </p>
@@ -159,7 +159,7 @@ export default function Hero() {
                 <p className="text-gold/60 text-[9px] tracking-[0.32em] uppercase mb-0.5"
                    style={{ fontFamily: "var(--font-special-elite, monospace)" }}>Where</p>
                 <p className="text-ink text-sm sm:text-base"
-                   style={{ fontFamily: "var(--font-rye, serif)" }}>Carroll County Fairgrounds</p>
+                   style={{ fontFamily: "var(--font-rye, serif)" }}>Carroll County TN Fairgrounds</p>
                 <p className="text-ink/45 text-[10px] tracking-[0.18em] uppercase mt-0.5"
                    style={{ fontFamily: "var(--font-special-elite, monospace)" }}>Huntingdon, Tennessee</p>
               </div>

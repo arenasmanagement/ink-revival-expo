@@ -23,7 +23,7 @@ const CARDS = [
   {
     title: "Food Trucks",
     icon: "🚚",
-    body: "Serve attendees throughout a three-day event and support West Tennessee's tattoo and creative community. Connect with thousands of engaged attendees.",
+    body: "Serve attendees throughout a three-day event and support West Tennessee's tattoo and creative community. Connect with visitors from across West Tennessee and the region.",
     details: ["Food Truck Space — $200", "3-day exposure", "High-traffic event location"],
     cta: "Apply as a Food Truck",
     href: "/vendors#food-trucks",

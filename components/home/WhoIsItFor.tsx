@@ -35,7 +35,7 @@ const AUDIENCE: AudienceCard[] = [
   {
     svg: StarBadgeIcon,
     title: "Vendors & Makers",
-    desc: "Reach thousands of passionate attendees with your apparel, art, accessories, and handmade goods.",
+    desc: "Reach passionate attendees from across West Tennessee and the region with your apparel, art, accessories, and handmade goods.",
     cta: "View Vendor Options",
     href: "/vendors",
 
