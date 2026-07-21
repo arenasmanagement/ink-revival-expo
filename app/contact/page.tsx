@@ -12,15 +12,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.westtninkrevival.com/contact" },
 };
 
-// ── Form activation gate ───────────────────────────────────────────────────
-// The contact form is only rendered once RESEND_API_KEY is present in the
-// Vercel environment AND westtninkrevival.com is verified in Resend.
-// Until then the "Online Form Coming Soon" notice stays visible.
-// To activate: add RESEND_API_KEY to the Vercel project env vars and redeploy.
-// No code change is needed at that point — this check handles it automatically.
-const FORM_ACTIVE = Boolean(process.env.RESEND_API_KEY);
-
 export default function ContactPage() {
+  // Read at request time (server component runs per-request in Next.js App Router).
+  // Form renders when RESEND_API_KEY is present in the Vercel environment.
+  const FORM_ACTIVE = Boolean(process.env.RESEND_API_KEY);
   return (
     <div className="bg-parchment-light-texture min-h-screen">
       {/* Header */}
