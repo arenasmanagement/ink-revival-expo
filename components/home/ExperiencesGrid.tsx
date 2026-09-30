@@ -106,19 +106,16 @@ export default function ExperiencesGrid() {
           Ink, art, cars, food, and live music — all under one fairground, all three days.
         </p>
 
-        {/* 7-card grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {/* 7-card grid — 3 cols at lg+. Card 7 (Entertainment) is centered via col-start-2 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {EXPERIENCES.map((exp, i) => (
             <div
               key={exp.title}
-              className="flex flex-col"
+              className={`flex flex-col${i === 6 ? " lg:col-start-2" : ""}`}
               style={{
                 backgroundColor: "#201408",
                 borderTop:       `3px solid ${exp.color}`,
                 padding:         "1.5rem",
-                /* Make the 7th card span full width on the last row in 4-col,
-                   or behave naturally in smaller breakpoints */
-                ...(i === 6 ? { gridColumn: "span 1" } : {}),
               }}
             >
               <div

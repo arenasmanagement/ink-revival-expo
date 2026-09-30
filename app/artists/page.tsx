@@ -185,7 +185,16 @@ export default function ArtistsPage() {
         {/* ── Artist Application ── */}
         <section id="apply" className="max-w-2xl mx-auto">
           <SectionHeading eyebrow="Join Us" title="Apply as a Tattoo Artist" className="mb-8" />
-          <ArtistApplicationForm />
+          {/* Form requires a dark background — all text/border colors are cream for dark bg */}
+          <div
+            style={{
+              backgroundColor: "#1A1008",
+              padding:         "2rem 1.5rem",
+              borderTop:       "3px solid #E07830",
+            }}
+          >
+            <ArtistApplicationForm />
+          </div>
         </section>
       </div>
     </div>

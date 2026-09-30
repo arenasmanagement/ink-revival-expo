@@ -68,9 +68,9 @@ const TYPE_META: Record<string, { label: string; next: string; isApplication: bo
     isApplication: false,
   },
   sponsor: {
-    label: "Sponsorship",
-    next:  "You will be redirected to our secure payment page to complete your sponsorship.",
-    isApplication: false,
+    label: "Sponsorship Interest",
+    next:  "The festival team will review your submission and send a formal sponsorship agreement within 3–5 business days. Payment is collected only after the agreement is finalized.",
+    isApplication: true,
   },
   "car-show": {
     label: "Car Show Entry",
@@ -203,7 +203,8 @@ export async function POST(request: NextRequest) {
     categoryId  = boothSize === "double" ? "vendor_10x20" : "vendor_10x10";
   }
   if (type === "sponsor") {
-    const pkg = String(data.sponsorPackage ?? "basic");
+    // Accept both "package" (new native form) and "sponsorPackage" (legacy)
+    const pkg = String(data.package ?? data.sponsorPackage ?? "basic");
     pricingKey = `sponsor_${pkg}`;
     categoryId = pkg === "vip" ? "sponsor_vip" : null;
   }

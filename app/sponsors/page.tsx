@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { PRICING, REGISTRATION_URLS } from "@/lib/eventData";
-
-const { sponsorPath } = REGISTRATION_URLS;
+import SponsorApplicationForm from "@/components/registration/SponsorApplicationForm";
+import { PRICING } from "@/lib/eventData";
 
 export const metadata: Metadata = {
   title: "Sponsorship Packages — Basic $500 · VIP $1,000 | West TN Tattoo and Art Festival",
@@ -82,11 +81,11 @@ export default function SponsorsPage() {
                 ))}
               </ul>
               <a
-                href={sponsorPath}
+                href="#apply"
                 className="block text-center py-3 bg-gold text-ink uppercase tracking-wider text-sm hover:bg-gold-light transition-all active:scale-95"
                 style={{ fontFamily: "var(--font-special-elite, monospace)" }}
               >
-                Register as a Sponsor
+                Apply as a Sponsor
               </a>
             </div>
 
@@ -106,11 +105,11 @@ export default function SponsorsPage() {
                 ))}
               </ul>
               <a
-                href={sponsorPath}
+                href="#apply"
                 className="block text-center py-3 bg-crimson text-cream uppercase tracking-wider text-sm hover:bg-crimson-dark transition-all active:scale-95"
                 style={{ fontFamily: "var(--font-special-elite, monospace)" }}
               >
-                Register as a Sponsor
+                Apply as a Sponsor
               </a>
             </div>
           </div>
@@ -121,9 +120,20 @@ export default function SponsorsPage() {
               Final benefits, specifications, deadlines, and logo-placement details are subject to confirmation in the sponsorship agreement.
             </p>
           </div>
-          <p className="text-center text-ink/45 text-xs italic mt-4" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-            Registration is completed through our official Jotform. Submissions are subject to review and confirmation.
-          </p>
+        </section>
+
+        {/* ── Native Sponsor Application Form ── */}
+        <section id="apply" className="max-w-2xl mx-auto mb-12">
+          <SectionHeading eyebrow="Get Started" title="Apply as a Sponsor" className="mb-8" />
+          <div
+            style={{
+              backgroundColor: "#1A1008",
+              padding:         "2rem 1.5rem",
+              borderTop:       "3px solid #C89030",
+            }}
+          >
+            <SponsorApplicationForm />
+          </div>
         </section>
 
         {/* Custom partnerships */}
