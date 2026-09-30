@@ -95,12 +95,12 @@ export default function Navbar() {
               className="text-cream/80 text-[10px] tracking-[0.3em] uppercase pr-16"
               style={{ fontFamily: "var(--font-special-elite, monospace)" }}
             >
-              ★ Tickets: Fri $15 · Sat $20 · Sun $15 · 3-Day $40 · Kids 12 &amp; Under FREE &nbsp;·&nbsp; March 12–14, 2027 · Huntingdon, Tennessee &nbsp;·&nbsp; 35 Artist Booths · 35 Vendor Booths · Car Show · Competitions &nbsp;
+              ★ West TN Tattoo &amp; Art Festival &nbsp;·&nbsp; March 12–14, 2027 · Huntingdon, Tennessee &nbsp;·&nbsp; Tickets: Fri $15 · Sat $20 · Sun $15 · Weekend $40 · Kids FREE &nbsp;·&nbsp; 35 Artist Booths · Vendors · Car Show · Food Trucks · Competitions &nbsp;
             </span>
           ))}
         </div>
         <p className="sr-only">
-          West TN Ink Revival Expo — March 12–14, 2027 · Huntingdon, Tennessee — Tickets: Fri $15, Sat $20, Sun $15, 3-Day Pass $40, Children 12 & Under Free
+          West TN Tattoo and Art Festival — March 12–14, 2027 · Huntingdon, Tennessee — Tickets: Fri $15, Sat $20, Sun $15, Weekend Pass $40, Children 12 & Under Free
         </p>
       </div>
 
@@ -108,7 +108,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 lg:h-[70px]">
 
           {/* ── Logo → Home ── */}
-          <Link href="/" className="flex-shrink-0 group" aria-label="West TN Ink Revival Expo — Home">
+          <Link href="/" className="flex-shrink-0 group" aria-label="West TN Tattoo and Art Festival — Home">
             <div className="flex flex-col leading-none">
               <span
                 className="text-gold text-xs tracking-[0.2em] uppercase opacity-80 group-hover:opacity-100 transition-opacity"
@@ -120,13 +120,13 @@ export default function Navbar() {
                 className="text-cream text-lg leading-tight group-hover:text-gold transition-colors duration-200"
                 style={{ fontFamily: "var(--font-rye, 'Rye', serif)" }}
               >
-                Ink Revival
+                Tattoo &amp; Art
               </span>
               <span
                 className="text-gold-light text-[10px] tracking-[0.18em] uppercase opacity-70 group-hover:opacity-100 transition-opacity"
                 style={{ fontFamily: "var(--font-special-elite, monospace)" }}
               >
-                Expo 2027
+                Festival 2027
               </span>
             </div>
           </Link>

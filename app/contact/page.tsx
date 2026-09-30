@@ -3,15 +3,15 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import ContactForm from "@/components/contact/ContactForm";
 import { EVENT, REGISTRATION_URLS } from "@/lib/eventData";
 
-const { sponsorRegistrationUrl, vendorRegistrationUrl } = REGISTRATION_URLS;
+const { sponsorPath, vendorApplicationPath } = REGISTRATION_URLS;
 
 export const metadata: Metadata = {
-  title: "Contact — Reach the West TN Ink Revival Expo Team | Huntingdon, TN",
+  title: "Contact — Reach the West TN Tattoo and Art Festival Team | Huntingdon, TN",
   description:
-    "Contact West TN Ink Revival Expo — call 731-513-4271 or send a message. Questions about attending, tattoo artist applications, vendor booths, food truck spaces, or sponsoring West Tennessee's first tattoo convention (March 12–14, 2027, Huntingdon, TN).",
+    "Contact West TN Tattoo and Art Festival — call 731-513-4271 or send a message. Questions about attending, tattoo artist applications, vendor booths, food truck spaces, or sponsoring West Tennessee's first tattoo convention (March 12–14, 2027, Huntingdon, TN).",
   alternates: { canonical: "https://www.westtninkrevival.com/contact" },
   openGraph: {
-    title: "Contact — West TN Ink Revival Expo 2027",
+    title: "Contact — West TN Tattoo and Art Festival 2027",
     description: "Call 731-513-4271 or send a message. Artist applications, vendor booths, sponsorships, and general questions about West Tennessee's first tattoo convention.",
     url: "https://www.westtninkrevival.com/contact",
   },
@@ -51,8 +51,8 @@ export default function ContactPage() {
         />
         <SectionHeading
           eyebrow="Reach Out"
-          title="Contact West TN Ink Revival Expo"
-          subtitle="Get in touch with the West TN Ink Revival Expo team."
+          title="Contact West TN Tattoo and Art Festival"
+          subtitle="Get in touch with the West TN Tattoo and Art Festival team."
           light
           as="h1"
           className="max-w-4xl mx-auto"
@@ -158,7 +158,7 @@ export default function ContactPage() {
                   },
                   {
                     label: "Reserve a Vendor Booth",
-                    href: vendorRegistrationUrl,
+                    href: vendorApplicationPath,
                     external: true,
                   },
                   {
@@ -168,7 +168,7 @@ export default function ContactPage() {
                   },
                   {
                     label: "Register as a Sponsor",
-                    href: sponsorRegistrationUrl,
+                    href: sponsorPath,
                     external: true,
                   },
                 ].map((l) => (

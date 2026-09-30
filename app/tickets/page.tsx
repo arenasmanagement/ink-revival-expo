@@ -4,12 +4,12 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { ADMISSION, EVENT } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Tickets — General Admission Pricing | West TN Ink Revival Expo 2027",
+  title: "Tickets — General Admission Pricing | West TN Tattoo and Art Festival 2027",
   description:
-    "Buy tickets to West TN Ink Revival Expo 2027 in Huntingdon, Tennessee. Friday $15, Saturday $20, Sunday $15, 3-day pass $40. Children 12 & under FREE. March 12–14, 2027 at the Carroll County TN Fairgrounds.",
+    "Buy tickets to West TN Tattoo and Art Festival 2027 in Huntingdon, Tennessee. Friday $15, Saturday $20, Sunday $15, 3-day pass $40. Children 12 & under FREE. March 12–14, 2027 at the Carroll County TN Fairgrounds.",
   alternates: { canonical: "https://www.westtninkrevival.com/tickets" },
   openGraph: {
-    title: "Tickets — West TN Ink Revival Expo 2027 | Huntingdon, Tennessee",
+    title: "Tickets — West TN Tattoo and Art Festival 2027 | Huntingdon, Tennessee",
     description:
       "General admission tickets: Friday $15 · Saturday $20 · Sunday $15 · 3-Day Pass $40 · Kids 12 & under FREE. West Tennessee's first tattoo & art festival, March 12–14, 2027.",
     url: "https://www.westtninkrevival.com/tickets",
@@ -99,7 +99,7 @@ export default function TicketsPage() {
           <SectionHeading
             eyebrow="General Admission"
             title="Get Your Tickets"
-            subtitle="West TN Ink Revival Expo — March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, Tennessee"
+            subtitle="West TN Tattoo and Art Festival — March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, Tennessee"
             light
             as="h1"
           />

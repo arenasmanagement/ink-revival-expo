@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 /*
- * MascotSection — "Spirit of the Expo"
+ * MascotSection — "Spirit of the Festival"
  *
  * portrait-ink.png is 1122×1402 RGBA — the complete official mascot portrait:
  * oval gold frame, orange/magenta sunset gradient, frog full scene, expo banner.
@@ -180,7 +180,7 @@ export default function MascotSection() {
               <div className="relative z-10 w-full animate-mascot-float" style={{ overflow: "visible" }}>
                 <Image
                   src="/portrait-ink.png"
-                  alt="West TN Ink Revival Expo official mascot portrait — 2027"
+                  alt="West TN Tattoo and Art Festival official mascot portrait — 2027"
                   width={1122}
                   height={1402}
                   sizes="(max-width: 768px) 92vw, (max-width: 1024px) 48vw, 500px"
@@ -227,7 +227,7 @@ export default function MascotSection() {
                 fontSize: "clamp(1.8rem, 3.8vw, 2.8rem)",
               }}
             >
-              The Spirit of the Expo
+              The Spirit of the Festival
             </h2>
 
             <p

@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Hero from "@/components/home/Hero";
 
 export const metadata: Metadata = {
-  title: "West TN Ink Revival Expo 2027 | Tattoo & Art Festival — Huntingdon, Tennessee",
+  title: "West TN Tattoo and Art Festival 2027 | Huntingdon, Tennessee",
   description:
-    "West TN Ink Revival Expo — March 12–14, 2027 at the Carroll County TN Fairgrounds, Huntingdon, Tennessee. West Tennessee's first tattoo & art festival featuring 35 tattoo artists, vendors, food trucks, car show, competitions, and three days of ink culture. Tickets: Fri $15, Sat $20, Sun $15, 3-Day $40.",
+    "West TN Tattoo and Art Festival — March 12–14, 2027 at the Carroll County TN Fairgrounds, Huntingdon, Tennessee. West Tennessee's first tattoo & art festival featuring 35 tattoo artists, vendors, food trucks, car show, competitions, and three days of ink culture. Tickets: Fri $15, Sat $20, Sun $15, 3-Day $40.",
   alternates: { canonical: "https://www.westtninkrevival.com" },
   openGraph: {
-    title: "West TN Ink Revival Expo 2027 — Tattoo & Art Festival · Huntingdon, Tennessee",
+    title: "West TN Tattoo and Art Festival 2027 — Huntingdon, Tennessee",
     description:
       "March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, TN. West Tennessee's first tattoo & art festival — 35 artist booths, car show, vendors, food trucks, competitions. Tickets from $15.",
     url: "https://www.westtninkrevival.com",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
         url: "/og-card.png",
         width: 1200,
         height: 630,
-        alt: "West TN Ink Revival Expo 2027 — Tattoo & Art Festival, Huntingdon, Tennessee",
+        alt: "West TN Tattoo and Art Festival 2027 — Huntingdon, Tennessee",
       },
     ],
   },
@@ -36,9 +36,9 @@ import EmailSignup from "@/components/home/EmailSignup";
 const eventJsonLd = {
   "@context": "https://schema.org",
   "@type": "Event",
-  name: "West TN Ink Revival Expo 2027",
+  name: "West TN Tattoo and Art Festival 2027",
   description:
-    "West TN Ink Revival Expo 2027 — West Tennessee's first tattoo & art festival. Three days of tattoo artistry, art, vendors, food trucks, car show, competitions, and entertainment at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Tickets from $15.",
+    "West TN Tattoo and Art Festival 2027 — West Tennessee's first tattoo & art festival. Three days of tattoo artistry, art, vendors, food trucks, car show, competitions, and entertainment at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Tickets from $15.",
   startDate: "2027-03-12",
   endDate: "2027-03-14",
   eventStatus: "https://schema.org/EventScheduled",
@@ -71,17 +71,17 @@ const eventJsonLd = {
     "https://www.westtninkrevival.com/og-card.png",
     "https://www.westtninkrevival.com/hero-trans.png",
   ],
-  keywords: "tattoo convention Tennessee, West Tennessee tattoo expo, tattoo festival Tennessee, tattoo show Huntingdon TN, car show Tennessee 2027, tattoo and art festival Tennessee, West TN tattoo convention, Huntingdon TN events 2027",
+  keywords: "tattoo convention Tennessee, West Tennessee tattoo festival, tattoo and art festival Tennessee, tattoo show Huntingdon TN, car show Tennessee 2027, West TN Tattoo and Art Festival, West TN tattoo convention, Huntingdon TN events 2027",
 };
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "West TN Ink Revival Expo",
+  name: "West TN Tattoo and Art Festival",
   url: "https://www.westtninkrevival.com",
   logo: "https://www.westtninkrevival.com/og-card.png",
   image: "https://www.westtninkrevival.com/og-card.png",
-  description: "The first annual West Tennessee tattoo convention, produced by Studio 45 Tattoos. March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
+  description: "The first annual West Tennessee Tattoo and Art Festival, produced by Studio 45 Tattoos. March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
   telephone: "+17315134271",
   address: {
     "@type": "PostalAddress",
@@ -99,9 +99,9 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "West TN Ink Revival Expo",
+  name: "West TN Tattoo and Art Festival",
   url: "https://www.westtninkrevival.com",
-  description: "Official website for West TN Ink Revival Expo — West Tennessee's first annual tattoo convention, March 12–14, 2027.",
+  description: "Official website for West TN Tattoo and Art Festival — West Tennessee's first annual tattoo & art festival, March 12–14, 2027.",
   potentialAction: {
     "@type": "SearchAction",
     target: {

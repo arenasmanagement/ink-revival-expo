@@ -9,7 +9,7 @@ import { CAPACITY, ADMISSION, PRICING } from "@/lib/eventData";
 const ADMIN_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN ?? "studio45";
 
 const CAPACITY_ROWS = [
-  { category: "Tattoo Artist Booths",  total: CAPACITY.tattooArtistBooths, price: "Permit-based — no fixed booth fee",                      type: "artist" },
+  { category: "Tattoo Artist Booths",  total: CAPACITY.tattooArtistBooths, price: `$${PRICING.tattooArtist.single.price} / $${PRICING.tattooArtist.double.price} (single/double) + permit`, type: "artist" },
   { category: "Vendor Booths",         total: CAPACITY.vendorBooths,        price: `$${PRICING.vendor.single.price} / $${PRICING.vendor.double.price} (single/double)`, type: "vendor" },
   { category: "Food Truck Spaces",     total: CAPACITY.foodTrucks,          price: `$${PRICING.foodTruck.space.price}`,                       type: "food-truck" },
   { category: "Sponsor Booths",        total: CAPACITY.sponsorBooths,       price: "Custom packages",                                         type: "sponsor" },
@@ -54,7 +54,7 @@ export default function AdminPage() {
             className="text-ink text-2xl mb-6"
             style={{ fontFamily: "var(--font-rye, serif)" }}
           >
-            West TN Ink Revival<br />Admin Panel
+            West TN Tattoo and Art Festival<br />Admin Panel
           </h1>
           <form onSubmit={handleLogin} className="space-y-4">
             <input
@@ -102,7 +102,7 @@ export default function AdminPage() {
               className="text-cream text-2xl"
               style={{ fontFamily: "var(--font-rye, serif)" }}
             >
-              West TN Ink Revival Expo 2027
+              West TN Tattoo and Art Festival 2027
             </h1>
           </div>
           <button

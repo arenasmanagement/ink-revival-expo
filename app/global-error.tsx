@@ -40,7 +40,7 @@ export default function GlobalError({
             lineHeight: 1.2,
           }}
         >
-          West TN Ink Revival Expo
+          West TN Tattoo and Art Festival
         </h2>
         <p style={{ color: "rgba(245,237,216,0.6)", maxWidth: "36rem", marginBottom: "2rem" }}>
           An unexpected error occurred. Please refresh the page or try again

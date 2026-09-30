@@ -1,7 +1,7 @@
 import SectionHeading from "@/components/ui/SectionHeading";
 import { REGISTRATION_URLS } from "@/lib/eventData";
 
-const { sponsorRegistrationUrl } = REGISTRATION_URLS;
+const { sponsorPath } = REGISTRATION_URLS;
 
 export default function SponsorPreview() {
   return (
@@ -23,7 +23,7 @@ export default function SponsorPreview() {
             className="text-cream/50 text-base leading-relaxed mb-3"
             style={{ fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}
           >
-            Sponsor logos will appear here as our founding partners join the West TN Ink Revival Expo.
+            Sponsor logos will appear here as our founding partners join the West TN Tattoo and Art Festival.
           </p>
           <p
             className="text-cream/35 text-sm"
@@ -45,9 +45,7 @@ export default function SponsorPreview() {
             Interested in becoming a sponsor? Two packages available — Basic ($500) and VIP ($1,000).
           </p>
           <a
-            href={sponsorRegistrationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={sponsorPath}
             className="inline-block px-8 py-3 border-2 border-gold text-gold uppercase tracking-widest text-sm hover:bg-gold hover:text-ink transition-all duration-200 active:scale-95"
             style={{ fontFamily: "var(--font-special-elite, monospace)" }}
           >

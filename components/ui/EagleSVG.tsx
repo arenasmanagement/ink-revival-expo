@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 // ─── PRIMARY BRAND MARK: Full Vintage Crest ──────────────────────────────────
-// This is the official logo for West TN Ink Revival Expo.
+// This is the official logo for West TN Tattoo and Art Festival.
 // Use EagleCrest (default export) everywhere branding appears.
 // Use EagleOnly for single-color / embroidery / icon contexts.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -25,7 +25,7 @@ export default function EagleCrest({
       height={height}
       className={className}
       role="img"
-      aria-label="West TN Ink Revival Expo — Official Eagle Crest"
+      aria-label="West TN Tattoo and Art Festival — Official Eagle Crest"
       {...props}
     >
       {/* ══ BACKGROUND OVAL ══ */}
@@ -255,7 +255,7 @@ export function EagleOnly({ width = "100%", height, className, ...props }: Eagle
   return (
     <svg viewBox="60 155 400 330" xmlns="http://www.w3.org/2000/svg"
          width={width} height={height} className={className}
-         role="img" aria-label="West TN Ink Revival Expo Eagle"
+         role="img" aria-label="West TN Tattoo and Art Festival Eagle"
          {...props}>
       <path d="M255,262 C240,250 220,232 192,210 C165,188 132,170 82,162 C104,182 122,204 140,228 C158,253 175,270 196,284 C218,298 240,305 255,307 Z" fill="#1A1008" stroke="#1A1008" strokeWidth="3"/>
       <path d="M252,272 C238,262 222,250 202,236 C185,222 166,214 146,210 C158,226 169,242 181,255 C196,270 211,280 226,288 C239,296 250,300 252,302 Z" fill="#2E1E0E"/>

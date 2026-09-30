@@ -8,7 +8,7 @@ export default function EventIntro() {
       <div className="max-w-4xl mx-auto">
         <SectionHeading
           eyebrow="Welcome"
-          title="The First Annual West TN Ink Revival Expo"
+          title="The First Annual West TN Tattoo and Art Festival"
           className="mb-10"
         />
 
@@ -19,7 +19,7 @@ export default function EventIntro() {
               className="text-ink/80 text-lg leading-relaxed mb-6"
               style={{ fontFamily: "var(--font-garamond, serif)" }}
             >
-              West TN Ink Revival Expo is West Tennessee&rsquo;s first tattoo convention
+              West TN Tattoo and Art Festival is West Tennessee&rsquo;s first tattoo &amp; art festival
               — a three-day celebration bringing tattoo artists, collectors, vendors,
               businesses, food trucks, and enthusiasts together in the heart of West Tennessee.
             </p>
@@ -59,7 +59,7 @@ export default function EventIntro() {
           >
             <Image
               src="/ink-image.png"
-              alt="Tattoo artist tattooing an arm at the West TN Ink Revival Expo 2027 in Huntingdon, Tennessee"
+              alt="Tattoo artist tattooing an arm at the West TN Tattoo and Art Festival 2027 in Huntingdon, Tennessee"
               width={1402}
               height={1122}
               className="w-full h-auto block"

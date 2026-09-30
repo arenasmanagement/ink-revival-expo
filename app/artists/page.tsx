@@ -4,12 +4,12 @@ import ArtistApplicationForm from "@/components/registration/ArtistApplicationFo
 import { TATTOO_SPECIALTIES, PRICING, CAPACITY } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Tattoo Artists — Apply for a Booth | West TN Ink Revival Expo 2027",
+  title: "Tattoo Artists — Apply for a Booth | West TN Tattoo and Art Festival 2027",
   description:
-    "Apply as a tattoo artist at West TN Ink Revival Expo 2027 in Huntingdon, Tennessee. 35 artist booths available. 10×10 and 10×20 booth space for American Traditional, Black and Gray, Realism, Fine Line, Japanese, and more. March 12–14, 2027.",
+    "Apply as a tattoo artist at West TN Tattoo and Art Festival 2027 in Huntingdon, Tennessee. 35 artist booths available. 10×10 and 10×20 booth space for American Traditional, Black and Gray, Realism, Fine Line, Japanese, and more. March 12–14, 2027.",
   alternates: { canonical: "https://www.westtninkrevival.com/artists" },
   openGraph: {
-    title: "Tattoo Artists — Apply for a Booth | West TN Ink Revival Expo 2027",
+    title: "Tattoo Artists — Apply for a Booth | West TN Tattoo and Art Festival 2027",
     description:
       "35 artist booths available at West Tennessee's first tattoo & art festival. 10×10 and 10×20 spaces. Application required — no upfront payment until approved. March 12–14, 2027.",
     url: "https://www.westtninkrevival.com/artists",

@@ -106,7 +106,7 @@ export default function WhoIsItFor() {
         <SectionHeading
           eyebrow="Who It's For"
           title="Something for Everyone"
-          subtitle="West TN Ink Revival Expo is built for artists, enthusiasts, businesses, and the whole West Tennessee community."
+          subtitle="West TN Tattoo and Art Festival is built for artists, enthusiasts, businesses, and the whole West Tennessee community."
           className="mb-14"
         />
 

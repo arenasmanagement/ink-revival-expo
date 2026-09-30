@@ -73,7 +73,7 @@ export default function VenueMap({ directionsUrl, containerClassName }: VenueMap
       ) : (
         <iframe
           src={mapEmbedUrl}
-          title="Carroll County TN Fairgrounds — West TN Ink Revival Expo venue"
+          title="Carroll County TN Fairgrounds — West TN Tattoo and Art Festival venue"
           width="100%"
           height="100%"
           style={{ border: 0, display: "block" }}

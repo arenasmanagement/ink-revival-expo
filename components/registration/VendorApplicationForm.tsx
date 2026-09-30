@@ -5,8 +5,8 @@ import { useState, FormEvent } from "react";
 type FormState = "idle" | "submitting" | "success" | "error";
 
 const VENDOR_BOOTH_OPTIONS = [
-  { value: "single", label: "10×10 Standard Booth — $250" },
-  { value: "double", label: "Double Booth (10×20) — $400" },
+  { value: "single", label: "10×10 Standard Booth — $150" },
+  { value: "double", label: "Double Booth (10×20) — $300" },
 ];
 
 const VENDOR_CATEGORIES = [

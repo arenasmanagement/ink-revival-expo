@@ -79,7 +79,7 @@ export default function ParticipationCards() {
         <SectionHeading
           eyebrow="Join Us"
           title="Ways to Participate"
-          subtitle="Whether you're an artist, vendor, food truck, or local business, there's a place for you at West TN Ink Revival Expo."
+          subtitle="Whether you're an artist, vendor, food truck, or local business, there's a place for you at West TN Tattoo and Art Festival."
           light
           className="mb-14"
         />

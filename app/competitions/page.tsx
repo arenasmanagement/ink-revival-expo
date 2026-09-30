@@ -4,12 +4,12 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { EVENT } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Tattoo & Car Show Competitions | West TN Ink Revival Expo 2027",
+  title: "Tattoo & Car Show Competitions | West TN Tattoo and Art Festival 2027",
   description:
-    "Tattoo competitions and car show awards at West TN Ink Revival Expo 2027. Best of show, style categories, car awards. March 12–14, 2027 at Carroll County TN Fairgrounds, Huntingdon, Tennessee.",
+    "Tattoo competitions and car show awards at West TN Tattoo and Art Festival 2027. Best of show, style categories, car awards. March 12–14, 2027 at Carroll County TN Fairgrounds, Huntingdon, Tennessee.",
   alternates: { canonical: "https://www.westtninkrevival.com/competitions" },
   openGraph: {
-    title: "Competitions — West TN Ink Revival Expo 2027 | Huntingdon, Tennessee",
+    title: "Competitions — West TN Tattoo and Art Festival 2027 | Huntingdon, Tennessee",
     description:
       "Tattoo contests and car show awards. Best tattoo by style, people's choice, best of show. March 12–14, 2027 at Carroll County TN Fairgrounds.",
     url: "https://www.westtninkrevival.com/competitions",
@@ -101,7 +101,7 @@ export default function CompetitionsPage() {
               className="text-ink/65 text-base leading-relaxed"
               style={{ fontFamily: "var(--font-garamond, serif)" }}
             >
-              West TN Ink Revival Expo features competitions for both tattoo artists and car show entrants.
+              West TN Tattoo and Art Festival features competitions for both tattoo artists and car show entrants.
               Competition entry details, judging criteria, and registration will be announced as the event approaches.
             </p>
           </div>

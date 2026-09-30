@@ -207,7 +207,7 @@ export default function FoodTruckApplicationForm() {
         </button>
 
         <p className="text-ink/40 text-xs text-center italic" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-          Space fee: $200. No payment collected until your space is confirmed. Only 10 spaces available.
+          Space fee: $250. No payment collected until your space is confirmed. Only 10 spaces available.
         </p>
       </form>
     </div>

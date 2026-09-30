@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { REGISTRATION_URLS } from "@/lib/eventData";
 
-const { sponsorRegistrationUrl } = REGISTRATION_URLS;
+const { sponsorPath } = REGISTRATION_URLS;
 
 export default function FinalCTA() {
   return (
@@ -69,9 +69,7 @@ export default function FinalCTA() {
             Artist Information
           </Link>
           <a
-            href={sponsorRegistrationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={sponsorPath}
             className="px-8 py-4 border-2 border-gold text-gold uppercase tracking-widest text-sm hover:bg-gold hover:text-ink transition-all duration-200 active:scale-95"
             style={{ fontFamily: "var(--font-special-elite, monospace)" }}
           >

@@ -4,12 +4,12 @@ import FAQAccordion from "@/components/faq/FAQAccordion";
 import { FAQ_ITEMS } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "FAQ — Tattoo Convention Questions Answered | West TN Ink Revival Expo",
+  title: "FAQ — Tattoo Convention Questions Answered | West TN Tattoo and Art Festival",
   description:
-    "Answers to the most common questions about West TN Ink Revival Expo 2027 — tickets, venue address, artist applications, vendor booths, food trucks, sponsorships, parking, age policy, and more. West Tennessee's first tattoo convention, March 12–14, 2027 in Huntingdon, TN.",
+    "Answers to the most common questions about West TN Tattoo and Art Festival 2027 — tickets, venue address, artist applications, vendor booths, food trucks, sponsorships, parking, age policy, and more. West Tennessee's first tattoo convention, March 12–14, 2027 in Huntingdon, TN.",
   alternates: { canonical: "https://www.westtninkrevival.com/faq" },
   openGraph: {
-    title: "FAQ — West TN Ink Revival Expo 2027 | Huntingdon, Tennessee",
+    title: "FAQ — West TN Tattoo and Art Festival 2027 | Huntingdon, Tennessee",
     description:
       "Tickets, venue, artists, vendors, sponsorships, parking — all your questions about West Tennessee's first tattoo convention answered.",
     url: "https://www.westtninkrevival.com/faq",
@@ -62,7 +62,7 @@ export default function FAQPage() {
         <SectionHeading
           eyebrow="Answers"
           title="Frequently Asked Questions"
-          subtitle="Everything you need to know about West TN Ink Revival Expo."
+          subtitle="Everything you need to know about West TN Tattoo and Art Festival."
           light
           as="h1"
           className="max-w-4xl mx-auto"

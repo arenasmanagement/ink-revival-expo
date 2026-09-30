@@ -4,11 +4,11 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { EVENT } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Event Schedule — March 12–14, 2027 | West TN Ink Revival Expo",
-  description: "Event schedule for West TN Ink Revival Expo — three days of tattooing, vendors, food trucks, and live entertainment. March 12 (Friday) · March 13 (Saturday) · March 14 (Sunday), 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Full schedule coming soon.",
+  title: "Event Schedule — March 12–14, 2027 | West TN Tattoo and Art Festival",
+  description: "Event schedule for West TN Tattoo and Art Festival — three days of tattooing, vendors, food trucks, and live entertainment. March 12 (Friday) · March 13 (Saturday) · March 14 (Sunday), 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee. Full schedule coming soon.",
   alternates: { canonical: "https://www.westtninkrevival.com/schedule" },
   openGraph: {
-    title: "Event Schedule — West TN Ink Revival Expo 2027",
+    title: "Event Schedule — West TN Tattoo and Art Festival 2027",
     description: "Three-day tattoo convention schedule: March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, Tennessee. Full schedule coming soon.",
     url: "https://www.westtninkrevival.com/schedule",
   },

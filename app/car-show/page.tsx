@@ -5,12 +5,12 @@ import CarShowRegistrationForm from "@/components/car-show/CarShowRegistrationFo
 import { CAPACITY, EVENT } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Car Show — Register Your Vehicle | West TN Ink Revival Expo 2027",
+  title: "Car Show — Register Your Vehicle | West TN Tattoo and Art Festival 2027",
   description:
-    "Enter the West TN Ink Revival Expo car show in Huntingdon, Tennessee. 75 vehicle spaces available. Custom cars, trucks, motorcycles, and classics welcome. March 12–14, 2027 at the Carroll County TN Fairgrounds.",
+    "Enter the West TN Tattoo and Art Festival car show in Huntingdon, Tennessee. 75 vehicle spaces available. Custom cars, trucks, motorcycles, and classics welcome. March 12–14, 2027 at the Carroll County TN Fairgrounds.",
   alternates: { canonical: "https://www.westtninkrevival.com/car-show" },
   openGraph: {
-    title: "Car Show — West TN Ink Revival Expo 2027 | Huntingdon, Tennessee",
+    title: "Car Show — West TN Tattoo and Art Festival 2027 | Huntingdon, Tennessee",
     description:
       "75 car show spaces. Custom builds, classics, trucks, motorcycles welcome. March 12–14, 2027 at Carroll County TN Fairgrounds, Huntingdon, TN.",
     url: "https://www.westtninkrevival.com/car-show",
@@ -138,7 +138,7 @@ export default function CarShowPage() {
               className="text-ink text-xl mb-5"
               style={{ fontFamily: "var(--font-rye, serif)" }}
             >
-              Why Show at West TN Ink Revival?
+              Why Show at West TN Tattoo and Art Festival?
             </h2>
             <div className="grid sm:grid-cols-2 gap-3">
               {WHY_ENTER.map((reason) => (

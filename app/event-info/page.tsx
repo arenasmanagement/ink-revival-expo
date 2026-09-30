@@ -6,11 +6,11 @@ import { EVENT, ADMISSION, CAPACITY } from "@/lib/eventData";
 import VenueMap from "@/components/ui/VenueMap";
 
 export const metadata: Metadata = {
-  title: "Event Info — Dates, Venue & Details | West TN Ink Revival Expo",
-  description: "West TN Ink Revival Expo details: March 12–14, 2027 at the Carroll County TN Fairgrounds, 201 Fairgrounds Road, Huntingdon, Tennessee. Parking, accessibility, hotels, and everything you need to plan your visit to the West Tennessee tattoo convention.",
+  title: "Event Info — Dates, Venue & Details | West TN Tattoo and Art Festival",
+  description: "West TN Tattoo and Art Festival details: March 12–14, 2027 at the Carroll County TN Fairgrounds, 201 Fairgrounds Road, Huntingdon, Tennessee. Parking, accessibility, hotels, and everything you need to plan your visit to the West Tennessee tattoo convention.",
   alternates: { canonical: "https://www.westtninkrevival.com/event-info" },
   openGraph: {
-    title: "Event Details — West TN Ink Revival Expo 2027, Huntingdon, Tennessee",
+    title: "Event Details — West TN Tattoo and Art Festival 2027, Huntingdon, Tennessee",
     description: "Dates: March 12–14, 2027. Location: Carroll County TN Fairgrounds, 201 Fairgrounds Road, Huntingdon, TN 38344. Plan your visit to West Tennessee's first tattoo convention.",
     url: "https://www.westtninkrevival.com/event-info",
   },
@@ -114,7 +114,7 @@ export default function EventInfoPage() {
           <SectionHeading
             eyebrow="Details"
             title="Event Information"
-            subtitle="Everything you need to know about West TN Ink Revival Expo 2027."
+            subtitle="Everything you need to know about West TN Tattoo and Art Festival 2027."
             light
             as="h1"
           />
@@ -128,7 +128,7 @@ export default function EventInfoPage() {
             className="text-ink/75 text-lg leading-relaxed"
             style={{ fontFamily: "var(--font-garamond, serif)" }}
           >
-            West TN Ink Revival Expo is a three-day tattoo &amp; art festival held at the Carroll County
+            West TN Tattoo and Art Festival is a three-day tattoo &amp; art festival held at the Carroll County
             TN Fairgrounds in Huntingdon, Tennessee. Featuring tattoo artists, vendors, food trucks,
             a car show, competitions, and live entertainment — presented and produced by Studio 45 Tattoos.
           </p>

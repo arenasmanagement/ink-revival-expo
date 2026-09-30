@@ -51,7 +51,7 @@ export default function FlashCards() {
         <SectionHeading
           eyebrow="What to Expect"
           title="Three Days of Everything"
-          subtitle="West TN Ink Revival Expo is built to deliver — art, community, food, music, and culture."
+          subtitle="West TN Tattoo and Art Festival is built to deliver — art, community, food, music, and culture."
           className="mb-12"
         />
 

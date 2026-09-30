@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { PRICING, REGISTRATION_URLS } from "@/lib/eventData";
 
-const { sponsorRegistrationUrl } = REGISTRATION_URLS;
+const { sponsorPath } = REGISTRATION_URLS;
 
 export const metadata: Metadata = {
-  title: "Sponsorship Packages — Basic $500 · VIP $1,000 | West TN Ink Revival Expo",
-  description: "Sponsor West TN Ink Revival Expo 2027 in Huntingdon, Tennessee. Basic sponsorship $500 and VIP sponsorship $1,000. Place your brand in front of tattoo enthusiasts, artists, and the West Tennessee community at West Tennessee's first tattoo convention.",
+  title: "Sponsorship Packages — Basic $500 · VIP $1,000 | West TN Tattoo and Art Festival",
+  description: "Sponsor West TN Tattoo and Art Festival 2027 in Huntingdon, Tennessee. Basic sponsorship $500 and VIP sponsorship $1,000. Place your brand in front of tattoo enthusiasts, artists, and the West Tennessee community at West Tennessee's first tattoo convention.",
   alternates: { canonical: "https://www.westtninkrevival.com/sponsors" },
   openGraph: {
-    title: "Sponsorship Packages — West TN Ink Revival Expo 2027",
+    title: "Sponsorship Packages — West TN Tattoo and Art Festival 2027",
     description: "Basic $500 · VIP $1,000. Sponsor West Tennessee's first tattoo convention and reach a passionate regional audience. March 12–14, 2027, Huntingdon, TN.",
     url: "https://www.westtninkrevival.com/sponsors",
   },
@@ -42,7 +42,7 @@ export default function SponsorsPage() {
       <div className="bg-ink-texture py-16 px-4 relative">
         <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />
-        <SectionHeading eyebrow="Partnerships" title="Sponsorship Opportunities" subtitle="Partner with West TN Ink Revival Expo and place your business in front of a passionate regional audience." light as="h1" className="max-w-4xl mx-auto" />
+        <SectionHeading eyebrow="Partnerships" title="Sponsorship Opportunities" subtitle="Partner with West TN Tattoo and Art Festival and place your business in front of a passionate regional audience." light as="h1" className="max-w-4xl mx-auto" />
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-10 sm:py-14">
@@ -82,9 +82,7 @@ export default function SponsorsPage() {
                 ))}
               </ul>
               <a
-                href={sponsorRegistrationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={sponsorPath}
                 className="block text-center py-3 bg-gold text-ink uppercase tracking-wider text-sm hover:bg-gold-light transition-all active:scale-95"
                 style={{ fontFamily: "var(--font-special-elite, monospace)" }}
               >
@@ -108,9 +106,7 @@ export default function SponsorsPage() {
                 ))}
               </ul>
               <a
-                href={sponsorRegistrationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={sponsorPath}
                 className="block text-center py-3 bg-crimson text-cream uppercase tracking-wider text-sm hover:bg-crimson-dark transition-all active:scale-95"
                 style={{ fontFamily: "var(--font-special-elite, monospace)" }}
               >
@@ -137,7 +133,7 @@ export default function SponsorsPage() {
           <p className="text-gold/70 text-xs tracking-[0.3em] uppercase mb-3" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>★ Custom Partnerships ★</p>
           <h2 className="text-cream text-2xl sm:text-3xl mb-3" style={{ fontFamily: "var(--font-rye, serif)" }}>Looking for Something Bigger?</h2>
           <p className="text-cream/60 text-base mb-6 max-w-lg mx-auto" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-            Contact the West TN Ink Revival team to discuss additional opportunities tailored to your business.
+            Contact the West TN Tattoo and Art Festival team to discuss additional opportunities tailored to your business.
           </p>
           <a href="tel:731-513-4271" className="inline-block px-8 py-3 border-2 border-gold text-gold uppercase tracking-widest text-sm hover:bg-gold hover:text-ink transition-all active:scale-95" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
             Call 731-513-4271

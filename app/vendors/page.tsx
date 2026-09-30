@@ -6,12 +6,12 @@ import FoodTruckApplicationForm from "@/components/registration/FoodTruckApplica
 import { PRICING, CAPACITY } from "@/lib/eventData";
 
 export const metadata: Metadata = {
-  title: "Vendor Booths & Food Truck Spaces | West TN Ink Revival Expo 2027",
-  description: `Reserve a vendor booth at West TN Ink Revival Expo — March 12–14, 2027 in Huntingdon, Tennessee. ${CAPACITY.vendorBooths} vendor booths and ${CAPACITY.foodTrucks} food truck spaces available. 10×10 booth $250, double booth $400, food truck space $200. Showcase your business at West Tennessee's first tattoo & art festival.`,
+  title: "Vendor Booths & Food Truck Spaces | West TN Tattoo and Art Festival 2027",
+  description: `Reserve a vendor booth at West TN Tattoo and Art Festival — March 12–14, 2027 in Huntingdon, Tennessee. ${CAPACITY.vendorBooths} vendor booths and ${CAPACITY.foodTrucks} food truck spaces available. 10×10 booth $150, double booth $300, food truck space $250. Showcase your business at West Tennessee's first tattoo & art festival.`,
   alternates: { canonical: "https://www.westtninkrevival.com/vendors" },
   openGraph: {
-    title: "Vendor Booths & Food Truck Spaces — West TN Ink Revival Expo 2027",
-    description: `${CAPACITY.vendorBooths} vendor booths · ${CAPACITY.foodTrucks} food truck spaces · 10×10 booth $250 · Double booth $400 · Food truck space $200. March 12–14, 2027 at the Carroll County TN Fairgrounds, Huntingdon, Tennessee.`,
+    title: "Vendor Booths & Food Truck Spaces — West TN Tattoo and Art Festival 2027",
+    description: `${CAPACITY.vendorBooths} vendor booths · ${CAPACITY.foodTrucks} food truck spaces · 10×10 booth $150 · Double booth $300 · Food truck space $250. March 12–14, 2027 at the Carroll County TN Fairgrounds, Huntingdon, Tennessee.`,
     url: "https://www.westtninkrevival.com/vendors",
   },
 };
@@ -241,7 +241,7 @@ export default function VendorsPage() {
                 className="text-ink/60 text-base leading-relaxed mb-4"
                 style={{ fontFamily: "var(--font-garamond, serif)" }}
               >
-                West TN Ink Revival Expo draws tattoo enthusiasts, artists, families, and locals from across West Tennessee.
+                West TN Tattoo and Art Festival draws tattoo enthusiasts, artists, families, and locals from across West Tennessee.
                 Only {CAPACITY.foodTrucks} food truck spaces are available — apply early to secure yours.
               </p>
               <p

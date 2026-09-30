@@ -3,8 +3,8 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Page Not Found | West TN Ink Revival Expo",
-  description: "The page you were looking for doesn't exist. Head back to the West TN Ink Revival Expo homepage.",
+  title: "Page Not Found | West TN Tattoo and Art Festival",
+  description: "The page you were looking for doesn't exist. Head back to the West TN Tattoo and Art Festival homepage.",
 };
 
 const LINKS = [
@@ -67,7 +67,7 @@ export default function NotFound() {
       <div className="mb-6 opacity-80">
         <Image
           src="/mascot-2027.jpg"
-          alt="The West TN Ink Revival Expo mascot looking confused"
+          alt="The West TN Tattoo and Art Festival mascot looking confused"
           width={180}
           height={220}
           className="mx-auto"

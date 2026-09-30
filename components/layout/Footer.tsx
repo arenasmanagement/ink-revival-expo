@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { EVENT, NAV_LINKS, REGISTRATION_URLS } from "@/lib/eventData";
 
-const { sponsorRegistrationUrl, vendorRegistrationUrl } = REGISTRATION_URLS;
+const { vendorApplicationPath, sponsorPath, artistApplicationPath, foodTruckApplicationPath } = REGISTRATION_URLS;
 
 const SOCIAL_ICON = {
   facebook: (
@@ -44,7 +44,7 @@ export default function Footer() {
               className="text-gold text-2xl leading-tight mb-1"
               style={{ fontFamily: "var(--font-rye, 'Rye', serif)" }}
             >
-              West TN Ink Revival Expo
+              West TN Tattoo &amp; Art Festival
             </h2>
             <p
               className="text-cream/50 text-xs tracking-widest uppercase mb-4"
@@ -75,7 +75,7 @@ export default function Footer() {
                     <a
                       key={s}
                       href={EVENT.social[s]}
-                      aria-label={`${s} — West TN Ink Revival Expo`}
+                      aria-label={`${s} — West TN Tattoo and Art Festival`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-cream/40 hover:text-gold transition-colors duration-200"
@@ -122,9 +122,11 @@ export default function Footer() {
             <div className="divider-gold mb-4" />
             <ul className="space-y-3">
               {[
-                { label: "Apply as a Tattoo Artist", href: "/artists" },
-                { label: "Food Truck Application", href: "/vendors#food-trucks" },
-                { label: "Contact the Expo", href: "/contact" },
+                { label: "Apply as a Tattoo Artist", href: artistApplicationPath },
+                { label: "Reserve a Vendor Booth",   href: vendorApplicationPath },
+                { label: "Food Truck Application",   href: foodTruckApplicationPath },
+                { label: "Sponsorship Packages",     href: sponsorPath },
+                { label: "Contact the Festival",     href: "/contact" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link
@@ -136,28 +138,6 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <a
-                  href={vendorRegistrationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cream/60 hover:text-cream text-sm transition-colors duration-200 flex items-center gap-2"
-                >
-                  <span className="text-crimson text-xs">★</span>
-                  Reserve a Vendor Booth
-                </a>
-              </li>
-              <li>
-                <a
-                  href={sponsorRegistrationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cream/60 hover:text-cream text-sm transition-colors duration-200 flex items-center gap-2"
-                >
-                  <span className="text-crimson text-xs">★</span>
-                  Register as a Sponsor
-                </a>
-              </li>
             </ul>
           </div>
         </div>
@@ -165,7 +145,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-cream/30">
           <p style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            © 2026 West TN Ink Revival Expo. All rights reserved.
+            © 2026–2027 West TN Tattoo and Art Festival. All rights reserved.
           </p>
           <p style={{ fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}>
             Website by{" "}

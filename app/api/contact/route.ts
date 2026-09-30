@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-// Sender identity for West TN Ink Revival Expo.
+// Sender identity for West TN Tattoo and Art Festival.
 // westtninkrevival.com must be verified as a sending domain in the Resend
 // account before this address will work.  Do NOT change this to the AMC or
 // Lambuth domain — this address belongs to this project only.
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
       from: FROM_EMAIL,
       to: TO_EMAIL,
       replyTo: email,
-      subject: `[West TN Ink Revival] ${reason} — message from ${name}`,
+      subject: `[West TN Tattoo & Art Festival] ${reason} — message from ${name}`,
       html: `
         <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;color:#1A1008;">
           <div style="background:#1A1008;padding:28px 32px;">
@@ -98,7 +98,7 @@ export async function POST(req: Request) {
           </div>
           <div style="background:#1A1008;padding:16px 32px;text-align:center;">
             <p style="color:rgba(196,144,42,0.5);font-size:12px;margin:0;">
-              West TN Ink Revival Expo · westtninkrevival.com
+              West TN Tattoo and Art Festival · westtninkrevival.com
             </p>
           </div>
         </div>

@@ -88,7 +88,7 @@ function buildAdminEmail(data: RegistrationData, orderId: string): string {
         <tbody>${rows}</tbody>
       </table>
       <p style="margin-top:16px;color:#555;font-size:12px">
-        West TN Ink Revival Expo — ${new Date().toLocaleString()}
+        West TN Tattoo and Art Festival — ${new Date().toLocaleString()}
       </p>
     </div>
   `;
@@ -132,7 +132,7 @@ function buildConfirmationEmail(data: RegistrationData, orderId: string): string
     <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:20px;background:#faf7f2">
       <div style="text-align:center;padding:24px 20px;background:#1A1008;margin-bottom:24px">
         <h1 style="color:#C4902A;font-size:20px;margin:0 0 6px;letter-spacing:0.05em">
-          West TN Ink Revival Expo
+          West TN Tattoo and Art Festival
         </h1>
         <p style="color:#fff;opacity:0.6;margin:0;font-size:12px;letter-spacing:0.15em;text-transform:uppercase">
           March 12–14, 2027 · Huntingdon, Tennessee
@@ -141,7 +141,7 @@ function buildConfirmationEmail(data: RegistrationData, orderId: string): string
 
       <h2 style="color:#1A1008;font-size:16px;margin-bottom:8px">${info.label} Received</h2>
       <p style="color:#444;line-height:1.7;margin-bottom:16px">
-        Hi ${data.firstName}, thank you for your interest in West TN Ink Revival Expo 2027.
+        Hi ${data.firstName}, thank you for your interest in West TN Tattoo and Art Festival 2027.
         We have received your ${info.label.toLowerCase()} and your reference ID is:
       </p>
 
@@ -169,7 +169,7 @@ function buildConfirmationEmail(data: RegistrationData, orderId: string): string
 
       <div style="border-top:1px solid #ddd;margin-top:24px;padding-top:16px;text-align:center">
         <p style="color:#999;font-size:11px;margin:0">
-          West TN Ink Revival Expo · westtninkrevival.com
+          West TN Tattoo and Art Festival · westtninkrevival.com
         </p>
       </div>
     </div>
@@ -234,7 +234,7 @@ export async function POST(request: NextRequest) {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: data.email,
-      subject: `${typeLabel} Received — West TN Ink Revival Expo 2027 (${orderId})`,
+      subject: `${typeLabel} Received — West TN Tattoo and Art Festival 2027 (${orderId})`,
       html: buildConfirmationEmail(data, orderId),
     });
 
