@@ -1,0 +1,304 @@
+import type { SVGProps } from "react";
+
+// ─── PRIMARY BRAND MARK: Full Vintage Crest ──────────────────────────────────
+// This is the official logo for West TN Ink Revival Expo.
+// Use EagleCrest (default export) everywhere branding appears.
+// Use EagleOnly for single-color / embroidery / icon contexts.
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface EagleCrestProps extends SVGProps<SVGSVGElement> {
+  width?: string | number;
+  height?: string | number;
+}
+
+export default function EagleCrest({
+  width = "100%",
+  height,
+  className,
+  ...props
+}: EagleCrestProps) {
+  return (
+    <svg
+      viewBox="0 0 520 640"
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      className={className}
+      role="img"
+      aria-label="West TN Ink Revival Expo — Official Eagle Crest"
+      {...props}
+    >
+      {/* ══ BACKGROUND OVAL ══ */}
+      <ellipse cx="260" cy="298" rx="246" ry="278" fill="#EDE0C4"/>
+
+      {/* ══ BORDER RINGS ══ */}
+      <ellipse cx="260" cy="298" rx="246" ry="278" fill="none" stroke="#1A1008" strokeWidth="8"/>
+      <ellipse cx="260" cy="298" rx="233" ry="265" fill="none" stroke="#C4902A" strokeWidth="2.5"/>
+      <ellipse cx="260" cy="298" rx="229" ry="261" fill="none" stroke="#1A1008" strokeWidth="1.5"/>
+
+      {/* ══ TOP ARC TEXT ══ */}
+      <path id="crestTopArc" d="M118,128 A155,148 0 0,1 402,128" fill="none"/>
+      <text fill="#1A1008" fontFamily="Georgia,Palatino,serif" fontSize="10.5" letterSpacing="2.8" opacity="0.75">
+        <textPath href="#crestTopArc" startOffset="50%" textAnchor="middle">
+          ★  FIRST ANNUAL  ·  HUNTINGDON, TENNESSEE  ★
+        </textPath>
+      </text>
+
+      {/* ══ FIVE STARS ══ */}
+      <polygon points="260,25 263.8,36.2 275.6,36.2 266.3,43.0 269.9,54.2 260,47.5 250.1,54.2 253.7,43.0 244.4,36.2 256.2,36.2"
+               fill="#C4902A" stroke="#1A1008" strokeWidth="1.5" strokeLinejoin="round"/>
+      <polygon points="162,50 165.8,61.2 177.6,61.2 168.3,68.0 171.9,79.2 162,72.5 152.1,79.2 155.7,68.0 146.4,61.2 158.2,61.2"
+               fill="#C4902A" stroke="#1A1008" strokeWidth="1.5" strokeLinejoin="round"/>
+      <polygon points="358,50 361.8,61.2 373.6,61.2 364.3,68.0 367.9,79.2 358,72.5 348.1,79.2 351.7,68.0 342.4,61.2 354.2,61.2"
+               fill="#C4902A" stroke="#1A1008" strokeWidth="1.5" strokeLinejoin="round"/>
+      <polygon points="92,110 94.5,118 102.8,118 96.3,122.8 98.6,130.8 92,126.2 85.4,130.8 87.7,122.8 81.2,118 89.5,118"
+               fill="#C4902A" stroke="#1A1008" strokeWidth="1.5" strokeLinejoin="round"/>
+      <polygon points="428,110 430.5,118 438.8,118 432.3,122.8 434.6,130.8 428,126.2 421.4,130.8 423.7,122.8 417.2,118 425.5,118"
+               fill="#C4902A" stroke="#1A1008" strokeWidth="1.5" strokeLinejoin="round"/>
+      {/* Connecting lines */}
+      <path d="M103,121 Q128,96 148,80"  fill="none" stroke="#1A1008" strokeWidth="1.3" opacity="0.55"/>
+      <path d="M172,66  Q216,46 250,40"  fill="none" stroke="#1A1008" strokeWidth="1.3" opacity="0.55"/>
+      <path d="M270,40  Q304,46 348,66"  fill="none" stroke="#1A1008" strokeWidth="1.3" opacity="0.55"/>
+      <path d="M368,80  Q392,96 417,121" fill="none" stroke="#1A1008" strokeWidth="1.3" opacity="0.55"/>
+      {/* Diamond ornaments */}
+      <polygon points="128,106 133,111 128,116 123,111" fill="#C4902A" stroke="#1A1008" strokeWidth="1"/>
+      <polygon points="210,50  215,55  210,60  205,55"  fill="#C4902A" stroke="#1A1008" strokeWidth="1"/>
+      <polygon points="310,50  315,55  310,60  305,55"  fill="#C4902A" stroke="#1A1008" strokeWidth="1"/>
+      <polygon points="392,106 397,111 392,116 387,111" fill="#C4902A" stroke="#1A1008" strokeWidth="1"/>
+
+      {/* ══ LEFT WING ══ */}
+      <path d="M255,262 C240,250 220,232 192,210 C165,188 132,170 82,162 C104,182 122,204 140,228 C158,253 175,270 196,284 C218,298 240,305 255,307 Z"
+            fill="#1A1008" stroke="#1A1008" strokeWidth="3"/>
+      <path d="M252,272 C238,262 222,250 202,236 C185,222 166,214 146,210 C158,226 169,242 181,255 C196,270 211,280 226,288 C239,296 250,300 252,302 Z"
+            fill="#2E1E0E"/>
+      <path d="M87,169 C74,189 62,210 52,232 C67,226 83,218 97,206 Z"    fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M104,172 C90,194 80,218 72,242 C86,234 102,224 115,210 Z"  fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M121,177 C108,200 100,224 95,250 C108,240 121,228 132,214 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M87,169 C80,184 75,200 70,218"   fill="none" stroke="#B8461A" strokeWidth="3.5" strokeLinecap="round" opacity="0.6"/>
+      <path d="M104,172 C97,190 91,208 87,228"  fill="none" stroke="#B8461A" strokeWidth="3"   strokeLinecap="round" opacity="0.5"/>
+      <path d="M244,266 C224,256 200,240 172,218" fill="none" stroke="#C4902A" strokeWidth="1.2" strokeLinecap="round" opacity="0.75"/>
+      <path d="M241,278 C220,270 194,256 162,234" fill="none" stroke="#C4902A" strokeWidth="1.0" strokeLinecap="round" opacity="0.65"/>
+      <path d="M240,290 C218,284 192,270 158,250" fill="none" stroke="#C4902A" strokeWidth="1.0" strokeLinecap="round" opacity="0.55"/>
+
+      {/* ══ RIGHT WING (mirror) ══ */}
+      <path d="M265,262 C280,250 300,232 328,210 C355,188 388,170 438,162 C416,182 398,204 380,228 C362,253 345,270 324,284 C302,298 280,305 265,307 Z"
+            fill="#1A1008" stroke="#1A1008" strokeWidth="3"/>
+      <path d="M268,272 C282,262 298,250 318,236 C335,222 354,214 374,210 C362,226 351,242 339,255 C324,270 309,280 294,288 C281,296 270,300 268,302 Z"
+            fill="#2E1E0E"/>
+      <path d="M433,169 C446,189 458,210 468,232 C453,226 437,218 423,206 Z"    fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M416,172 C430,194 440,218 448,242 C434,234 418,224 405,210 Z"  fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M399,177 C412,200 420,224 425,250 C412,240 399,228 388,214 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M433,169 C440,184 445,200 450,218"  fill="none" stroke="#B8461A" strokeWidth="3.5" strokeLinecap="round" opacity="0.6"/>
+      <path d="M416,172 C423,190 429,208 433,228"  fill="none" stroke="#B8461A" strokeWidth="3"   strokeLinecap="round" opacity="0.5"/>
+      <path d="M276,266 C296,256 320,240 348,218"  fill="none" stroke="#C4902A" strokeWidth="1.2" strokeLinecap="round" opacity="0.75"/>
+      <path d="M279,278 C300,270 326,256 358,234"  fill="none" stroke="#C4902A" strokeWidth="1.0" strokeLinecap="round" opacity="0.65"/>
+      <path d="M280,290 C302,284 328,270 362,250"  fill="none" stroke="#C4902A" strokeWidth="1.0" strokeLinecap="round" opacity="0.55"/>
+
+      {/* ══ EAGLE BODY / CHEST ══ */}
+      <ellipse cx="260" cy="346" rx="70" ry="90" fill="#1A1008" stroke="#1A1008" strokeWidth="2.5"/>
+      <path d="M222,302 Q260,292 298,302" fill="none" stroke="#2E1E0E" strokeWidth="3.5" opacity="0.85"/>
+      <path d="M218,318 Q260,307 302,318" fill="none" stroke="#2E1E0E" strokeWidth="3.0" opacity="0.75"/>
+      <path d="M216,334 Q260,322 304,334" fill="none" stroke="#2E1E0E" strokeWidth="2.5" opacity="0.65"/>
+      <path d="M218,350 Q260,338 302,350" fill="none" stroke="#2E1E0E" strokeWidth="2.0" opacity="0.55"/>
+      <path d="M220,366 Q260,354 300,366" fill="none" stroke="#2E1E0E" strokeWidth="1.5" opacity="0.45"/>
+      <path d="M224,382 Q260,370 296,382" fill="none" stroke="#2E1E0E" strokeWidth="1.5" opacity="0.35"/>
+
+      {/* ══ EAGLE HEAD ══ */}
+      <ellipse cx="262" cy="222" rx="44" ry="52" fill="#F5E6C8" stroke="#1A1008" strokeWidth="3"/>
+      <path d="M238,210 Q262,201 286,210" fill="none" stroke="#C4902A" strokeWidth="1.0" opacity="0.35"/>
+      <path d="M235,224 Q262,214 290,224" fill="none" stroke="#C4902A" strokeWidth="0.9" opacity="0.28"/>
+      {/* Neck join */}
+      <path d="M232,264 C240,274 250,278 260,278 C270,278 280,274 288,264 L288,298 C278,302 260,306 242,302 Z"
+            fill="#1A1008"/>
+
+      {/* ══ BEAK (hooks right — American eagle convention) ══ */}
+      <path d="M274,238 C284,242 298,254 298,270 C298,278 292,284 284,284 C278,281 272,274 264,265"
+            fill="#C4902A" stroke="#1A1008" strokeWidth="2.5"/>
+      <path d="M276,252 C284,258 292,266 292,274 C292,280 287,283 283,280 C277,276 271,268 264,260"
+            fill="#9E7218" stroke="#1A1008" strokeWidth="1.8"/>
+      <path d="M297,270 C300,278 298,288 291,292 C286,295 281,292 280,285"
+            fill="#C4902A" stroke="#1A1008" strokeWidth="2"/>
+      <ellipse cx="285" cy="248" rx="4.5" ry="3" fill="#9E7218" stroke="#1A1008" strokeWidth="1.2"/>
+
+      {/* ══ EAGLE EYE ══ */}
+      <circle cx="270" cy="218" r="14"  fill="#B8461A" stroke="#1A1008" strokeWidth="2.5"/>
+      <circle cx="270" cy="218" r="9.5" fill="#C4902A" stroke="#1A1008" strokeWidth="1.5"/>
+      <circle cx="270" cy="218" r="4.5" fill="#1A1008"/>
+      <circle cx="272" cy="215" r="2"   fill="#F5E6C8" opacity="0.92"/>
+      {/* Fierce brow ridge */}
+      <path d="M252,207 C258,201 266,198 278,200 C285,202 290,209 286,214"
+            fill="none" stroke="#1A1008" strokeWidth="4" strokeLinecap="round"/>
+
+      {/* ══ TAIL FEATHERS ══ */}
+      <path d="M212,415 C215,432 220,448 228,458 C237,470 246,474 260,474 C274,474 283,470 292,458 C300,448 305,432 308,415 Z"
+            fill="#F5E6C8" stroke="#1A1008" strokeWidth="2.5"/>
+      <path d="M220,417 C222,438 226,455 231,462" fill="none" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M235,416 C236,438 237,456 240,466" fill="none" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M260,415 L260,474"                  fill="none" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M285,416 C284,438 283,456 280,466" fill="none" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M300,417 C298,438 294,455 289,462" fill="none" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M212,415 C207,432 206,448 208,460 C213,452 220,436 222,416 Z" fill="#C4902A" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M308,415 C313,432 314,448 312,460 C307,452 300,436 298,416 Z" fill="#C4902A" stroke="#1A1008" strokeWidth="1.5"/>
+
+      {/* ══ LEGS & TALONS ══ */}
+      <path d="M237,420 L228,450" stroke="#C4902A" strokeWidth="8"   strokeLinecap="round"/>
+      <path d="M237,420 L228,450" stroke="#1A1008" strokeWidth="2.2" strokeLinecap="round"/>
+      <path d="M228,450 C214,458 202,462 190,460" stroke="#C4902A" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C221,465 218,476 218,488"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C225,466 224,478 225,490"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C231,466 234,478 238,488"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C214,458 202,462 190,460" stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C221,465 218,476 218,488"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C225,466 224,478 225,490"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C231,466 234,478 238,488"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M283,420 L292,450" stroke="#C4902A" strokeWidth="8"   strokeLinecap="round"/>
+      <path d="M283,420 L292,450" stroke="#1A1008" strokeWidth="2.2" strokeLinecap="round"/>
+      <path d="M292,450 C306,458 318,462 330,460" stroke="#C4902A" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C299,465 302,476 302,488"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C295,466 296,478 295,490"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C289,466 286,478 282,488"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C306,458 318,462 330,460" stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C299,465 302,476 302,488"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C295,466 296,478 295,490"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C289,466 286,478 282,488"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+
+      {/* ══ LEFT ROSE ══ */}
+      <path d="M112,348 C110,366 111,380 113,395" stroke="#2D4A1E" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+      <path d="M112,355 C102,348 94,344 92,336 C98,338 108,342 112,350 Z"  fill="#2D4A1E" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M112,370 C122,363 130,359 132,351 C126,353 116,357 112,365 Z" fill="#2D4A1E" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M94,324 C86,315 86,302 94,295 C100,302 100,316 94,324 Z"    fill="#7A1714" stroke="#1A1008" strokeWidth="1.8"/>
+      <path d="M130,324 C138,315 138,302 130,295 C124,302 124,316 130,324 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="1.8"/>
+      <path d="M112,316 C108,306 108,293 112,286 C116,293 116,306 112,316 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="1.8"/>
+      <path d="M95,334 C85,337 79,330 78,322 C88,320 96,326 95,334 Z"    fill="#9B2020" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M129,334 C139,337 145,330 146,322 C136,320 128,326 129,334 Z" fill="#9B2020" stroke="#1A1008" strokeWidth="1.5"/>
+      <circle cx="112" cy="324" r="20"  fill="#7A1714" stroke="#1A1008" strokeWidth="2.2"/>
+      <path d="M112,311 C119,315 124,320 124,327 C124,333 119,337 112,337 C105,337 100,333 100,327 C100,320 105,315 112,311 Z"
+            fill="#9B2020" stroke="#1A1008" strokeWidth="1.5"/>
+      <circle cx="112" cy="324" r="9"   fill="#5C100F" stroke="#1A1008" strokeWidth="1.2"/>
+      <circle cx="112" cy="324" r="4.5" fill="#7A1714"/>
+      <ellipse cx="109" cy="319" rx="3.5" ry="2.5" fill="#9B2020" opacity="0.55"/>
+
+      {/* ══ RIGHT ROSE (mirror) ══ */}
+      <path d="M408,348 C410,366 409,380 407,395" stroke="#2D4A1E" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+      <path d="M408,355 C418,348 426,344 428,336 C422,338 412,342 408,350 Z"  fill="#2D4A1E" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M408,370 C398,363 390,359 388,351 C394,353 404,357 408,365 Z" fill="#2D4A1E" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M390,324 C382,315 382,302 390,295 C396,302 396,316 390,324 Z"    fill="#7A1714" stroke="#1A1008" strokeWidth="1.8"/>
+      <path d="M426,324 C434,315 434,302 426,295 C420,302 420,316 426,324 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="1.8"/>
+      <path d="M408,316 C404,306 404,293 408,286 C412,293 412,306 408,316 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="1.8"/>
+      <path d="M391,334 C381,337 375,330 374,322 C384,320 392,326 391,334 Z"    fill="#9B2020" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M425,334 C435,337 441,330 442,322 C432,320 424,326 425,334 Z" fill="#9B2020" stroke="#1A1008" strokeWidth="1.5"/>
+      <circle cx="408" cy="324" r="20"  fill="#7A1714" stroke="#1A1008" strokeWidth="2.2"/>
+      <path d="M408,311 C415,315 420,320 420,327 C420,333 415,337 408,337 C401,337 396,333 396,327 C396,320 401,315 408,311 Z"
+            fill="#9B2020" stroke="#1A1008" strokeWidth="1.5"/>
+      <circle cx="408" cy="324" r="9"   fill="#5C100F" stroke="#1A1008" strokeWidth="1.2"/>
+      <circle cx="408" cy="324" r="4.5" fill="#7A1714"/>
+      <ellipse cx="405" cy="319" rx="3.5" ry="2.5" fill="#9B2020" opacity="0.55"/>
+
+      {/* ══ SIDE FLOURISHES & CONNECTORS ══ */}
+      <path d="M42,270 C50,255 58,244 65,236"    fill="none" stroke="#C4902A" strokeWidth="1.5" opacity="0.5"/>
+      <path d="M478,270 C470,255 462,244 455,236" fill="none" stroke="#C4902A" strokeWidth="1.5" opacity="0.5"/>
+      <path d="M200,488 C192,498 186,506 175,510" fill="none" stroke="#C4902A" strokeWidth="1.5" opacity="0.6"/>
+      <path d="M320,488 C328,498 334,506 345,510" fill="none" stroke="#C4902A" strokeWidth="1.5" opacity="0.6"/>
+      <polygon points="172,508 174,515 181,515 175.5,519 177.5,526 172,522 166.5,526 168.5,519 163,515 170,515"
+               fill="#C4902A" stroke="#1A1008" strokeWidth="1" opacity="0.8"/>
+      <polygon points="348,508 350,515 357,515 351.5,519 353.5,526 348,522 342.5,526 344.5,519 339,515 346,515"
+               fill="#C4902A" stroke="#1A1008" strokeWidth="1" opacity="0.8"/>
+
+      {/* ══ SCROLL BANNER ══ */}
+      <rect x="78" y="538" width="364" height="68" rx="10" ry="10"
+            fill="rgba(0,0,0,0.18)" transform="translate(3,3)"/>
+      <rect x="78" y="535" width="364" height="68" rx="10" ry="10"
+            fill="#7A1714" stroke="#1A1008" strokeWidth="3"/>
+      <path d="M86,543 L434,543" fill="none" stroke="rgba(255,210,160,0.13)" strokeWidth="1.5"/>
+      {/* Left curls */}
+      <path d="M88,535 C72,526 56,520 50,531 C44,542 56,560 78,560"  fill="#9B2020" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M50,531 C52,540 60,552 70,558"  fill="none" stroke="#5C100F" strokeWidth="1.5"/>
+      <path d="M88,603 C72,612 56,618 50,607 C44,596 56,578 78,578"  fill="#9B2020" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M50,607 C52,598 60,586 70,580"  fill="none" stroke="#5C100F" strokeWidth="1.5"/>
+      {/* Right curls */}
+      <path d="M442,535 C458,526 474,520 480,531 C486,542 474,560 452,560" fill="#9B2020" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M480,531 C478,540 470,552 460,558" fill="none" stroke="#5C100F" strokeWidth="1.5"/>
+      <path d="M442,603 C458,612 474,618 480,607 C486,596 474,578 452,578" fill="#9B2020" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M480,607 C478,598 470,586 460,580" fill="none" stroke="#5C100F" strokeWidth="1.5"/>
+      {/* Rule lines */}
+      <path d="M90,568 L430,568" fill="none" stroke="rgba(196,144,42,0.22)" strokeWidth="1"/>
+      <path d="M90,554  L138,554"  fill="none" stroke="#C4902A" strokeWidth="1" opacity="0.55"/>
+      <path d="M382,554 L430,554" fill="none" stroke="#C4902A" strokeWidth="1" opacity="0.55"/>
+      <path d="M90,585  L138,585"  fill="none" stroke="#C4902A" strokeWidth="1" opacity="0.55"/>
+      <path d="M382,585 L430,585" fill="none" stroke="#C4902A" strokeWidth="1" opacity="0.55"/>
+      {/* Banner text */}
+      <text x="260" y="558" textAnchor="middle" fill="#F5E6C8"
+            fontFamily="Georgia,'Times New Roman',serif" fontSize="13.5" fontWeight="bold" letterSpacing="3.5">
+        WEST TN INK REVIVAL
+      </text>
+      <text x="260" y="587" textAnchor="middle" fill="#C4902A"
+            fontFamily="Georgia,'Times New Roman',serif" fontSize="16.5" fontWeight="bold" letterSpacing="5">
+        EXPO · 2027
+      </text>
+
+      {/* ══ BOTTOM ARC DATE ══ */}
+      <path id="crestBottomArc" d="M138,618 A148,85 0 0,0 382,618" fill="none"/>
+      <text fill="#1A1008" fontFamily="Georgia,serif" fontSize="9" letterSpacing="2" opacity="0.55">
+        <textPath href="#crestBottomArc" startOffset="50%" textAnchor="middle">
+          MARCH 12–14  ·  CARROLL COUNTY FAIRGROUNDS
+        </textPath>
+      </text>
+    </svg>
+  );
+}
+
+// Alias export
+export { EagleCrest };
+
+// Standalone eagle (no border/banner — for icons, apparel, embroidery)
+export function EagleOnly({ width = "100%", height, className, ...props }: EagleCrestProps) {
+  return (
+    <svg viewBox="60 155 400 330" xmlns="http://www.w3.org/2000/svg"
+         width={width} height={height} className={className}
+         role="img" aria-label="West TN Ink Revival Expo Eagle"
+         {...props}>
+      <path d="M255,262 C240,250 220,232 192,210 C165,188 132,170 82,162 C104,182 122,204 140,228 C158,253 175,270 196,284 C218,298 240,305 255,307 Z" fill="#1A1008" stroke="#1A1008" strokeWidth="3"/>
+      <path d="M252,272 C238,262 222,250 202,236 C185,222 166,214 146,210 C158,226 169,242 181,255 C196,270 211,280 226,288 C239,296 250,300 252,302 Z" fill="#2E1E0E"/>
+      <path d="M87,169 C74,189 62,210 52,232 C67,226 83,218 97,206 Z"   fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M104,172 C90,194 80,218 72,242 C86,234 102,224 115,210 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M265,262 C280,250 300,232 328,210 C355,188 388,170 438,162 C416,182 398,204 380,228 C362,253 345,270 324,284 C302,298 280,305 265,307 Z" fill="#1A1008" stroke="#1A1008" strokeWidth="3"/>
+      <path d="M268,272 C282,262 298,250 318,236 C335,222 354,214 374,210 C362,226 351,242 339,255 C324,270 309,280 294,288 C281,296 270,300 268,302 Z" fill="#2E1E0E"/>
+      <path d="M433,169 C446,189 458,210 468,232 C453,226 437,218 423,206 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <path d="M416,172 C430,194 440,218 448,242 C434,234 418,224 405,210 Z" fill="#7A1714" stroke="#1A1008" strokeWidth="2"/>
+      <ellipse cx="260" cy="346" rx="70" ry="90" fill="#1A1008" stroke="#1A1008" strokeWidth="2.5"/>
+      <path d="M222,302 Q260,292 298,302" fill="none" stroke="#2E1E0E" strokeWidth="3.5" opacity="0.85"/>
+      <path d="M218,318 Q260,307 302,318" fill="none" stroke="#2E1E0E" strokeWidth="3.0" opacity="0.75"/>
+      <path d="M216,334 Q260,322 304,334" fill="none" stroke="#2E1E0E" strokeWidth="2.5" opacity="0.65"/>
+      <ellipse cx="262" cy="222" rx="44" ry="52" fill="#F5E6C8" stroke="#1A1008" strokeWidth="3"/>
+      <path d="M232,264 C240,274 250,278 260,278 C270,278 280,274 288,264 L288,298 C278,302 260,306 242,302 Z" fill="#1A1008"/>
+      <path d="M274,238 C284,242 298,254 298,270 C298,278 292,284 284,284 C278,281 272,274 264,265" fill="#C4902A" stroke="#1A1008" strokeWidth="2.5"/>
+      <path d="M297,270 C300,278 298,288 291,292 C286,295 281,292 280,285" fill="#C4902A" stroke="#1A1008" strokeWidth="2"/>
+      <circle cx="270" cy="218" r="14"  fill="#B8461A" stroke="#1A1008" strokeWidth="2.5"/>
+      <circle cx="270" cy="218" r="9.5" fill="#C4902A" stroke="#1A1008" strokeWidth="1.5"/>
+      <circle cx="270" cy="218" r="4.5" fill="#1A1008"/>
+      <circle cx="272" cy="215" r="2"   fill="#F5E6C8" opacity="0.92"/>
+      <path d="M252,207 C258,201 266,198 278,200 C285,202 290,209 286,214" fill="none" stroke="#1A1008" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M212,415 C215,432 220,448 228,458 C237,470 246,474 260,474 C274,474 283,470 292,458 C300,448 305,432 308,415 Z" fill="#F5E6C8" stroke="#1A1008" strokeWidth="2.5"/>
+      <path d="M260,415 L260,474" fill="none" stroke="#1A1008" strokeWidth="1.5"/>
+      <path d="M237,420 L228,450" stroke="#C4902A" strokeWidth="8"   strokeLinecap="round"/>
+      <path d="M237,420 L228,450" stroke="#1A1008" strokeWidth="2.2" strokeLinecap="round"/>
+      <path d="M228,450 C214,458 202,462 190,460" stroke="#C4902A" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C221,465 218,476 218,488"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C214,458 202,462 190,460" stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M228,450 C221,465 218,476 218,488"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M283,420 L292,450" stroke="#C4902A" strokeWidth="8"   strokeLinecap="round"/>
+      <path d="M283,420 L292,450" stroke="#1A1008" strokeWidth="2.2" strokeLinecap="round"/>
+      <path d="M292,450 C306,458 318,462 330,460" stroke="#C4902A" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C299,465 302,476 302,488"  stroke="#C4902A" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C306,458 318,462 330,460" stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M292,450 C299,465 302,476 302,488"  stroke="#1A1008" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+
+export const StarIcon = ({ size = 16, color = "#C4902A" }: { size?: number; color?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true">
+    <polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"
+             fill={color} stroke="#1A1008" strokeWidth="1" strokeLinejoin="round"/>
+  </svg>
+);
