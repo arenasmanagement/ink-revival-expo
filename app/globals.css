@@ -1,208 +1,560 @@
 @import "tailwindcss";
 
-/* ─── Custom color tokens (Tailwind v4) ─── */
+/* ══════════════════════════════════════════════════════════════════
+   WEST TN TATTOO & ART FESTIVAL — Design System
+   Color source: frog artwork (hero-expanded.png dominant palette)
+   Direction: American Traditional tattoo · Handmade festival poster
+              West Tennessee character · Modern web execution
+   ══════════════════════════════════════════════════════════════════ */
+
 @theme {
-  --color-parchment:       #D4B483;
-  --color-parchment-light: #EDE0C4;
-  --color-parchment-dark:  #C2A06A;
-  --color-parchment-deep:  #A8874A;
+  /* ── Sunset Orange — primary energy, from the sky in the hero ── */
+  --color-sunset:        #E07830;
+  --color-sunset-bright: #F0923C;
+  --color-sunset-deep:   #B85A18;
+  --color-sunset-pale:   #F5C898;
 
-  --color-ink:             #1A1008;
-  --color-ink-light:       #2E1E0E;
+  /* ── Teal — the frog's body, the festival's identity color ── */
+  --color-teal:          #3D8878;
+  --color-teal-bright:   #4EA898;
+  --color-teal-light:    #7EC4B4;
+  --color-teal-deep:     #1E5048;
+  --color-teal-ink:      #0E2820;
 
-  --color-crimson:         #7A1714;
-  --color-crimson-dark:    #5C100F;
-  --color-crimson-light:   #9B2020;
+  /* ── Magenta — hot pink horizon line in the artwork ── */
+  --color-magenta:       #CC3578;
+  --color-magenta-deep:  #8C1E50;
 
-  --color-gold:            #C4902A;
-  --color-gold-light:      #D4A843;
-  --color-gold-dark:       #9E7218;
+  /* ── Crimson — traditional tattoo red ── */
+  --color-crimson:       #C42828;
+  --color-crimson-deep:  #7A1414;
+  --color-crimson-light: #E03A3A;
 
-  --color-cream:           #F5E6C8;
-  --color-cream-dark:      #E8D4A8;
+  /* ── Amber / Gold — sunset warmth, traditional flash ── */
+  --color-amber:         #C89030;
+  --color-amber-bright:  #E0A840;
+  --color-amber-warm:    #D4982A;
+  --color-amber-pale:    #F5D898;
 
-  --color-forest:          #2D4A1E;
-  --color-forest-light:    #3D6228;
+  /* ── Sage / Olive — from the reeds and vegetation ── */
+  --color-sage:          #5A6A32;
+  --color-sage-muted:    #7A8A4A;
+  --color-sage-light:    #A0B06A;
 
-  --color-rust:            #B8461A;
-  --color-rust-light:      #D45A25;
+  /* ── Pond Blue — the water surface ── */
+  --color-pond:          #3A7BA0;
+  --color-pond-deep:     #204860;
 
-  /* ─── Mascot palette additions ─── */
-  --color-burnt-orange:    #C4581A;
-  --color-amber:           #D4841A;
-  --color-olive:           #4A5A20;
-  --color-pine:            #1A3010;
-  --color-brass:           #8B7340;
-  --color-oxblood:         #5C1010;
-  --color-sunset:          #7B3208;
+  /* ── Cream — paper, banner, warmth ── */
+  --color-cream:         #F5EDD8;
+  --color-cream-warm:    #EDDFBC;
+  --color-cream-aged:    #DFD0A0;
+  --color-cream-dark:    #C8B888;
+
+  /* ── Ink / Black — primary dark surfaces ── */
+  --color-ink:           #1A1008;
+  --color-ink-light:     #2A1C0E;
+  --color-ink-warm:      #201408;
+  --color-ink-deep:      #0E0804;
+
+  /* ── Neutral warm greys ── */
+  --color-warm-grey:     #8A7A68;
+  --color-warm-grey-dark: #5A4E3C;
+
+  /* ── Fonts ── */
+  --font-bebas:          var(--font-bebas-neue);
+  --font-rye:            var(--font-rye);
+  --font-playfair:       var(--font-playfair);
+  --font-garamond:       var(--font-garamond);
+  --font-special-elite:  var(--font-special-elite);
 }
 
-/* ─── Base ─── */
-*, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* ══════════════════════════════════════════════════════════════════
+   BASE STYLES
+   ══════════════════════════════════════════════════════════════════ */
 
-body {
-  background-color: #EDE0C4;
-  color: #1A1008;
-  font-family: 'EB Garamond', Georgia, serif;
-  font-size: 18px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
-/* Subtle grain overlay */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  opacity: 0.6;
-  mix-blend-mode: multiply;
-}
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-/* ─── Font helpers ─── */
-.font-display  { font-family: var(--font-rye, 'Rye', Georgia, serif); }
-.font-heading  { font-family: var(--font-playfair, 'Playfair Display', Georgia, serif); }
-.font-body     { font-family: var(--font-garamond, 'EB Garamond', Georgia, serif); }
-.font-accent   { font-family: var(--font-special-elite, 'Special Elite', 'Courier New', monospace); }
+  body {
+    background-color: #1A1008;
+    color: #F5EDD8;
+    font-family: var(--font-garamond, Georgia, serif);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 
-/* ─── Background textures ─── */
-.bg-parchment-texture {
-  background-color: #D4B483;
-  background-image:
-    radial-gradient(ellipse at 20% 80%, rgba(140,85,20,0.15) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 20%, rgba(140,85,20,0.10) 0%, transparent 55%);
-}
-.bg-parchment-light-texture {
-  background-color: #EDE0C4;
-  background-image:
-    radial-gradient(ellipse at 30% 70%, rgba(140,85,20,0.10) 0%, transparent 55%),
-    radial-gradient(ellipse at 70% 30%, rgba(140,85,20,0.07) 0%, transparent 55%);
-}
-.bg-ink-texture {
-  background-color: #1A1008;
-  background-image:
-    radial-gradient(ellipse at 50% 50%, rgba(122,23,20,0.18) 0%, transparent 70%);
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  ::selection {
+    background: #E07830;
+    color: #1A1008;
+  }
 }
 
-/* ─── Crimson banner gradient ─── */
-.banner-crimson {
-  background: linear-gradient(180deg,#9B2020 0%,#7A1714 35%,#5C100F 55%,#7A1714 75%,#9B2020 100%);
-  box-shadow: inset 0 1px 0 rgba(255,215,160,0.15), inset 0 -1px 0 rgba(0,0,0,0.25);
+/* ══════════════════════════════════════════════════════════════════
+   SECTION BACKGROUNDS — the site's visual rhythm / chapters
+   ══════════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Deep ink — primary dark backdrop, navbar, hero overlay, footer */
+  .section-ink {
+    background-color: #1A1008;
+    color: #F5EDD8;
+  }
+
+  /* Deepest ink — for maximum contrast moments */
+  .section-ink-deep {
+    background-color: #0E0804;
+    color: #F5EDD8;
+  }
+
+  /* Warm ink — slightly warmer dark, for alternating dark sections */
+  .section-ink-warm {
+    background-color: #201408;
+    color: #F5EDD8;
+  }
+
+  /* Cream — the light section. Paper. Breathe. */
+  .section-cream {
+    background-color: #F5EDD8;
+    color: #1A1008;
+  }
+
+  /* Aged cream — more weathered, warmer */
+  .section-cream-aged {
+    background-color: #E8D8B0;
+    color: #1A1008;
+  }
+
+  /* Teal — mascot, email signup, identity moments */
+  .section-teal {
+    background-color: #1E5048;
+    color: #F5EDD8;
+  }
+
+  /* Deep teal — tickets, strong conversion sections */
+  .section-teal-deep {
+    background-color: #0E2820;
+    color: #F5EDD8;
+  }
+
+  /* Sunset — the most energetic section (use sparingly) */
+  .section-sunset {
+    background-color: #B85A18;
+    color: #F5EDD8;
+  }
+
+  /* ── Text utilities ── */
+  .text-display {
+    font-family: var(--font-bebas-neue, var(--font-bebas), Impact, sans-serif);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 0.9;
+  }
+
+  .text-rye {
+    font-family: var(--font-rye, Georgia, serif);
+    line-height: 1.0;
+  }
+
+  .text-garamond {
+    font-family: var(--font-garamond, Georgia, serif);
+  }
+
+  .text-stamp {
+    font-family: var(--font-special-elite, monospace);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ── Dividers ── */
+  .divider-sunset {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #E07830, transparent);
+  }
+
+  .divider-teal {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3D8878, transparent);
+  }
+
+  .divider-amber {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #C89030, transparent);
+  }
+
+  .divider-cream {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,237,216,0.4), transparent);
+  }
+
+  .divider-ink {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(26,16,8,0.4), transparent);
+  }
+
+  /* ── Cards ── */
+  .card-ink {
+    background-color: #201408;
+    border: 1px solid rgba(200,144,48,0.15);
+  }
+
+  .card-cream {
+    background-color: #F5EDD8;
+    border: 1px solid rgba(26,16,8,0.12);
+  }
+
+  .card-teal {
+    background-color: #1E5048;
+    border: 1px solid rgba(61,136,120,0.25);
+  }
+
+  /* Traditional tattoo card — ink border, cream interior */
+  .card-traditional {
+    background-color: #F0E8CC;
+    border: 2px solid #1A1008;
+    box-shadow: 4px 4px 0 #1A1008;
+  }
+
+  /* ── Buttons ── */
+  .btn-sunset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E07830;
+    color: #0E0804;
+    font-family: var(--font-bebas-neue, Impact, sans-serif);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-sunset:hover {
+    background-color: #F0923C;
+  }
+
+  .btn-sunset:active {
+    transform: scale(0.97);
+  }
+
+  .btn-teal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3D8878;
+    color: #F5EDD8;
+    font-family: var(--font-bebas-neue, Impact, sans-serif);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-teal:hover {
+    background-color: #4EA898;
+  }
+
+  .btn-teal:active {
+    transform: scale(0.97);
+  }
+
+  .btn-outline-cream {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #F5EDD8;
+    font-family: var(--font-bebas-neue, Impact, sans-serif);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.8rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    border: 1.5px solid rgba(245,237,216,0.5);
+    transition: border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    cursor: pointer;
+  }
+
+  .btn-outline-cream:hover {
+    border-color: #F5EDD8;
+    color: #F5EDD8;
+  }
+
+  .btn-outline-cream:active {
+    transform: scale(0.97);
+  }
+
+  .btn-outline-sunset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #E07830;
+    font-family: var(--font-bebas-neue, Impact, sans-serif);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.8rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    border: 1.5px solid #E07830;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    cursor: pointer;
+  }
+
+  .btn-outline-sunset:hover {
+    background-color: #E07830;
+    color: #0E0804;
+  }
+
+  .btn-outline-sunset:active {
+    transform: scale(0.97);
+  }
+
+  /* ── Form elements (shared across inner pages) ── */
+  .field-ink {
+    width: 100%;
+    background-color: rgba(14, 8, 4, 0.6);
+    border: 1px solid rgba(245,237,216,0.2);
+    color: #F5EDD8;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-garamond, Georgia, serif);
+    font-size: 1rem;
+    transition: border-color 0.15s ease;
+    outline: none;
+    border-radius: 0;
+  }
+
+  .field-ink::placeholder {
+    color: rgba(245,237,216,0.35);
+  }
+
+  .field-ink:focus {
+    border-color: #E07830;
+  }
+
+  /* ── Layout helpers ── */
+  .container-festival {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-festival {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-festival {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+
+  /* ── Large number display (capacity section) ── */
+  .stat-number {
+    font-family: var(--font-bebas-neue, Impact, sans-serif);
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.85;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Eyebrow labels (tiny all-caps stamp above headings) ── */
+  .eyebrow {
+    font-family: var(--font-special-elite, monospace);
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.6em;
+  }
+
+  .eyebrow-sunset {
+    color: #E07830;
+  }
+
+  .eyebrow-teal {
+    color: #4EA898;
+  }
+
+  .eyebrow-amber {
+    color: #C89030;
+  }
+
+  .eyebrow-cream-dim {
+    color: rgba(245,237,216,0.55);
+  }
+
+  .eyebrow-ink-dim {
+    color: rgba(26,16,8,0.5);
+  }
 }
 
-/* ─── Dividers ─── */
-.divider-ink {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #1A1008 20%, #1A1008 80%, transparent);
+/* ══════════════════════════════════════════════════════════════════
+   ANNOUNCEMENT BAR — scrolling ticker
+   ══════════════════════════════════════════════════════════════════ */
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
-.divider-gold {
+
+.ticker-animate {
+  animation: ticker-scroll 32s linear infinite;
+  display: flex;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   HERO ANIMATIONS
+   ══════════════════════════════════════════════════════════════════ */
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-in {
+  opacity: 0;
+  animation: hero-fade-up 0.7s ease forwards;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FROG / MASCOT FLOAT ANIMATION
+   ══════════════════════════════════════════════════════════════════ */
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  40%       { transform: translateY(-10px) rotate(0.5deg); }
+  70%       { transform: translateY(-5px) rotate(-0.5deg); }
+}
+
+.mascot-float {
+  animation: float-gentle 5s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   WATER RIPPLE (decorative, pond sections)
+   ══════════════════════════════════════════════════════════════════ */
+
+@keyframes ripple {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.ripple {
+  animation: ripple 2.4s ease-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   NAV OPEN — prevent body scroll
+   ══════════════════════════════════════════════════════════════════ */
+
+body.nav-open {
+  overflow: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SCROLLWORK / ORNAMENTAL HELPERS
+   ══════════════════════════════════════════════════════════════════ */
+
+.ornament-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ornament-line::before,
+.ornament-line::after {
+  content: "";
+  flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #C4902A 20%, #C4902A 80%, transparent);
+  background: currentColor;
+  opacity: 0.25;
 }
 
-/* ─── Countdown panel ─── */
-.countdown-panel {
-  background: linear-gradient(180deg,#2E1E0E 0%,#1A1008 50%,#2E1E0E 100%);
-  border: 3px solid #C4902A;
-  box-shadow: inset 0 1px 0 rgba(255,215,160,0.08), 0 4px 16px rgba(0,0,0,0.45);
+/* ══════════════════════════════════════════════════════════════════
+   ADMIN PAGE — keeps old token names working for the admin panel
+   ══════════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Legacy aliases so admin page doesn't break */
+  .bg-parchment-light-texture { background-color: #F5EDD8; }
+  .bg-ink-texture             { background-color: #1A1008; }
+  .text-parchment             { color: #D4B483; }
+  .text-gold                  { color: #C89030; }
+  .text-gold-light            { color: #E0A840; }
+  .text-crimson               { color: #C42828; }
+  .text-crimson-dark          { color: #7A1414; }
+  .text-rust                  { color: #B8461A; }
+  .text-rust-light            { color: #D45A25; }
+  .bg-gold                    { background-color: #C89030; }
+  .bg-crimson                 { background-color: #C42828; }
+  .bg-crimson-dark            { background-color: #7A1414; }
+  .border-gold                { border-color: #C89030; }
+  .border-gold\/40            { border-color: rgba(200,144,48,0.4); }
+  .text-ink                   { color: #1A1008; }
+  .bg-cream                   { background-color: #F5EDD8; }
+  .text-cream                 { color: #F5EDD8; }
+  .border-ink\/15             { border-color: rgba(26,16,8,0.15); }
+  .border-crimson\/40         { border-color: rgba(196,40,40,0.4); }
+  .bg-ink\/8                  { background-color: rgba(26,16,8,0.08); }
+  .bg-cream\/40               { background-color: rgba(245,237,216,0.4); }
+  .bg-cream\/50               { background-color: rgba(245,237,216,0.5); }
+  .bg-cream\/60               { background-color: rgba(245,237,216,0.6); }
+  .bg-cream\/70               { background-color: rgba(245,237,216,0.7); }
+  .bg-cream\/80               { background-color: rgba(245,237,216,0.8); }
+  .bg-cream\/90               { background-color: rgba(245,237,216,0.9); }
+  .bg-gold\/10                { background-color: rgba(200,144,48,0.1); }
+  .bg-gold\/20                { background-color: rgba(200,144,48,0.2); }
+  .bg-crimson\/10             { background-color: rgba(196,40,40,0.1); }
+  .bg-crimson\/15             { background-color: rgba(196,40,40,0.15); }
+  .bg-rust                    { background-color: #B8461A; }
+  .text-gold-dark             { color: #9E7218; }
+  .divider-gold               { height: 1px; background: linear-gradient(90deg, transparent, #C89030, transparent); }
+  .card-vintage               { border-radius: 0; }
+  .border-rust\/40            { border-color: rgba(184,70,26,0.4); }
+  .text-green-700             { color: #15803d; }
+  .bg-green-100               { background-color: #dcfce7; }
 }
-
-/* ─── Input ─── */
-.input-vintage {
-  background: rgba(245,230,200,0.85);
-  border: 2px solid rgba(26,16,8,0.35);
-  color: #1A1008;
-  font-family: var(--font-garamond, 'EB Garamond', Georgia, serif);
-  font-size: 1rem;
-  padding: 0.65rem 1rem;
-  width: 100%;
-  transition: border-color 0.2s, background 0.2s;
-}
-.input-vintage:focus {
-  outline: none;
-  border-color: #7A1714;
-  background: #F5E6C8;
-}
-.input-vintage::placeholder { color: rgba(26,16,8,0.4); font-style: italic; }
-
-/* ─── Card hover ─── */
-.card-vintage { transition: transform 0.25s ease, box-shadow 0.25s ease; }
-.card-vintage:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(26,16,8,0.18); }
-
-/* ─── Ornament frame ─── */
-.ornament-frame {
-  border: 3px solid #1A1008;
-  box-shadow: inset 0 0 0 5px rgba(196,144,42,0.25), 0 0 0 2px #1A1008;
-}
-
-/* ─── Scrollbar ─── */
-::-webkit-scrollbar       { width: 8px; }
-::-webkit-scrollbar-track { background: #D4B483; }
-::-webkit-scrollbar-thumb { background: #7A1714; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #9B2020; }
-
-/* ─── Background textures ─── */
-.bg-sunset-texture {
-  background-color: #3D1A06;
-  background-image:
-    radial-gradient(ellipse at 65% 0%, rgba(180,80,20,0.55) 0%, transparent 55%),
-    radial-gradient(ellipse at 30% 20%, rgba(140,60,10,0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(10,5,2,0.8) 0%, transparent 60%);
-}
-
-/* ─── Flash card ─── */
-.flash-card {
-  background-color: #EDE0C4;
-  background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(140,85,20,0.12) 0%, transparent 70%);
-  border: 3px solid #1A1008;
-  box-shadow: 4px 4px 0 #1A1008, inset 0 0 0 1px rgba(196,144,42,0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.flash-card:hover {
-  transform: translateY(-4px) rotate(-0.5deg);
-  box-shadow: 6px 8px 0 #1A1008, inset 0 0 0 1px rgba(196,144,42,0.4);
-}
-
-/* ─── Animations ─── */
-@keyframes fadeInUp    { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeIn      { from{opacity:0} to{opacity:1} }
-@keyframes bannerDrop  { from{opacity:0;transform:translateY(-24px) scaleX(0.92)} to{opacity:1;transform:translateY(0) scaleX(1)} }
-@keyframes eagleSoar   { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
-@keyframes pulseGold   { 0%,100%{box-shadow:0 0 0 0 rgba(196,144,42,0.4)} 50%{box-shadow:0 0 0 10px rgba(196,144,42,0)} }
-@keyframes bounceSlow  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
-@keyframes shimmer     { 0%{opacity:0.6} 50%{opacity:1} 100%{opacity:0.6} }
-@keyframes mascotFloat { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(0.4deg)} }
-@keyframes bobblerBob  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
-@keyframes tickerScroll{ 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-@keyframes heroFadeIn  { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-@keyframes mascotIn    { from{opacity:0;transform:translateX(40px) scale(0.94)} to{opacity:1;transform:translateX(0) scale(1)} }
-
-.animate-fade-up     { animation: fadeInUp 0.7s ease both; }
-.animate-fade-in     { animation: fadeIn 0.6s ease both; }
-.animate-banner      { animation: bannerDrop 0.85s cubic-bezier(0.34,1.56,0.64,1) both; }
-.animate-eagle       { animation: eagleSoar 1s ease both; }
-.animate-pulse-gold  { animation: pulseGold 2.2s ease-in-out infinite; }
-.animate-bounce-slow { animation: bounceSlow 3s ease-in-out infinite; }
-.animate-shimmer     { animation: shimmer 2.5s ease-in-out infinite; }
-.animate-mascot-float{ animation: mascotFloat 6s ease-in-out infinite; }
-.animate-bobber      { animation: bobblerBob 2.2s ease-in-out infinite; }
-.animate-hero-in     { animation: heroFadeIn 0.9s ease both; }
-.animate-mascot-in   { animation: mascotIn 1s ease both; }
-
-.delay-100 { animation-delay: 0.1s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-400 { animation-delay: 0.4s; }
-.delay-500 { animation-delay: 0.5s; }
-.delay-600 { animation-delay: 0.6s; }
-.delay-700 { animation-delay: 0.7s; }
-.delay-800 { animation-delay: 0.8s; }
-.delay-900 { animation-delay: 0.9s; }
-
-/* Mobile nav lock */
-.nav-open { overflow: hidden; }

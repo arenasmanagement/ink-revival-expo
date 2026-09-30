@@ -1,11 +1,26 @@
 import type { Metadata } from "next";
-import { Rye, Playfair_Display, EB_Garamond, Special_Elite } from "next/font/google";
+import {
+  Bebas_Neue,
+  Rye,
+  Playfair_Display,
+  EB_Garamond,
+  Special_Elite,
+} from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 
+/* ── Display / Headline — bold condensed festival poster type ── */
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bebas-neue",
+  display: "swap",
+});
+
+/* ── Decorative / Wordmark — kept for special moments ── */
 const rye = Rye({
   weight: "400",
   subsets: ["latin"],
@@ -19,12 +34,14 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+/* ── Body copy — elegant, readable serif ── */
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
   variable: "--font-garamond",
   display: "swap",
 });
 
+/* ── Labels, stamps, all-caps UI text ── */
 const specialElite = Special_Elite({
   weight: "400",
   subsets: ["latin"],
@@ -33,10 +50,7 @@ const specialElite = Special_Elite({
 });
 
 export const metadata: Metadata = {
-  // metadataBase is required for Next.js to resolve relative OG/Twitter image URLs
-  // to absolute URLs when the metadata is consumed by social platforms.
   metadataBase: new URL("https://www.westtninkrevival.com"),
-
   title: {
     default: "West TN Tattoo and Art Festival 2027 | Huntingdon, Tennessee",
     template: "%s | West TN Tattoo and Art Festival",
@@ -77,7 +91,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "West TN Tattoo and Art Festival 2027 — Huntingdon, Tennessee",
-    description: "West Tennessee's first tattoo & art festival. March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, TN",
+    description:
+      "West Tennessee's first tattoo & art festival. March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, TN",
     images: ["/og-card.png"],
     site: "@westtninkrevival",
   },
@@ -101,9 +116,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${rye.variable} ${playfair.variable} ${ebGaramond.variable} ${specialElite.variable} h-full`}
+      className={`${bebasNeue.variable} ${rye.variable} ${playfair.variable} ${ebGaramond.variable} ${specialElite.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-ink" style={{ backgroundColor: "#1A1008" }}>
         <AnnouncementBar />
         <Navbar />
         <main className="flex-1">{children}</main>

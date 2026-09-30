@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Hero from "@/components/home/Hero";
 
 export const metadata: Metadata = {
   title: "West TN Tattoo and Art Festival 2027 | Huntingdon, Tennessee",
@@ -22,17 +21,16 @@ export const metadata: Metadata = {
   },
 };
 
-import Countdown from "@/components/home/Countdown";
-import MascotSection from "@/components/home/MascotSection";
-import FlashCards from "@/components/home/FlashCards";
-import FeaturedArtists from "@/components/home/FeaturedArtists";
-import EventIntro from "@/components/home/EventIntro";
-import LocationSection from "@/components/home/LocationSection";
-import EmailSignup from "@/components/home/EmailSignup";
+import Hero             from "@/components/home/Hero";
+import FestivalIntro    from "@/components/home/FestivalIntro";
+import ExperiencesGrid  from "@/components/home/ExperiencesGrid";
+import TicketsSection   from "@/components/home/TicketsSection";
+import MascotSection    from "@/components/home/MascotSection";
+import ParticipateSection from "@/components/home/ParticipateSection";
+import EventInfoSection from "@/components/home/EventInfoSection";
+import EmailSignup      from "@/components/home/EmailSignup";
 
-// ── Structured data (schema.org) ──────────────────────────────────────────
-// Only confirmed facts included. No ticket prices, hours, performers, or
-// attendance figures until those details are officially announced.
+/* ── Structured data (schema.org) ── */
 const eventJsonLd = {
   "@context": "https://schema.org",
   "@type": "Event",
@@ -71,7 +69,8 @@ const eventJsonLd = {
     "https://www.westtninkrevival.com/og-card.png",
     "https://www.westtninkrevival.com/hero-trans.png",
   ],
-  keywords: "tattoo convention Tennessee, West Tennessee tattoo festival, tattoo and art festival Tennessee, tattoo show Huntingdon TN, car show Tennessee 2027, West TN Tattoo and Art Festival, West TN tattoo convention, Huntingdon TN events 2027",
+  keywords:
+    "tattoo convention Tennessee, West Tennessee tattoo festival, tattoo and art festival Tennessee, tattoo show Huntingdon TN, car show Tennessee 2027",
 };
 
 const organizationJsonLd = {
@@ -81,7 +80,8 @@ const organizationJsonLd = {
   url: "https://www.westtninkrevival.com",
   logo: "https://www.westtninkrevival.com/og-card.png",
   image: "https://www.westtninkrevival.com/og-card.png",
-  description: "The first annual West Tennessee Tattoo and Art Festival, produced by Studio 45 Tattoos. March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
+  description:
+    "The first annual West Tennessee Tattoo and Art Festival, produced by Studio 45 Tattoos. March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
   telephone: "+17315134271",
   address: {
     "@type": "PostalAddress",
@@ -91,9 +91,7 @@ const organizationJsonLd = {
     postalCode: "38344",
     addressCountry: "US",
   },
-  sameAs: [
-    "https://www.westtninkrevival.com",
-  ],
+  sameAs: ["https://www.westtninkrevival.com"],
 };
 
 const websiteJsonLd = {
@@ -101,21 +99,14 @@ const websiteJsonLd = {
   "@type": "WebSite",
   name: "West TN Tattoo and Art Festival",
   url: "https://www.westtninkrevival.com",
-  description: "Official website for West TN Tattoo and Art Festival — West Tennessee's first annual tattoo & art festival, March 12–14, 2027.",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: "https://www.westtninkrevival.com/faq",
-    },
-    "query-input": "required name=search_term_string",
-  },
+  description:
+    "Official website for West TN Tattoo and Art Festival — West Tennessee's first annual tattoo & art festival, March 12–14, 2027.",
 };
 
 export default function HomePage() {
   return (
     <>
-      {/* Inject structured data for search engines */}
+      {/* ── Structured data ── */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
@@ -128,13 +119,29 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
+
+      {/* ── 01 Hero ── */}
       <Hero />
-      <Countdown />
+
+      {/* ── 02 Festival Introduction (cream) ── */}
+      <FestivalIntro />
+
+      {/* ── 03 Experiences Grid (ink) ── */}
+      <ExperiencesGrid />
+
+      {/* ── 04 Tickets (teal-deep) ── */}
+      <TicketsSection />
+
+      {/* ── 05 Mascot (cream) ── */}
       <MascotSection />
-      <FlashCards />
-      <FeaturedArtists />
-      <EventIntro />
-      <LocationSection />
+
+      {/* ── 06 Participate — capacity + CTAs (ink) ── */}
+      <ParticipateSection />
+
+      {/* ── 07 Event Info + Location (aged cream) ── */}
+      <EventInfoSection />
+
+      {/* ── 08 Email Signup (teal) ── */}
       <EmailSignup />
     </>
   );
