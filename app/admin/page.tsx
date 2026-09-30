@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CAPACITY, ADMISSION, PRICING } from "@/lib/eventData";
 
 // Simple client-side PIN gate — not cryptographic, just keeps casual visitors out.
-// The real data is in Studio 45's email (studio45tattoo2025@gmail.com).
+// Registration data is routed to the admin email (studio45tattoo2025@gmail.com — update when festival email is confirmed).
 // Replace with proper auth (NextAuth / Supabase Auth) when Supabase is wired.
 const ADMIN_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN ?? "studio45";
 
@@ -14,7 +14,7 @@ const CAPACITY_ROWS = [
   { category: "Food Truck Spaces",     total: CAPACITY.foodTrucks,          price: `$${PRICING.foodTruck.space.price}`,                       type: "food-truck" },
   { category: "Sponsor Booths",        total: CAPACITY.sponsorBooths,       price: "Custom packages",                                         type: "sponsor" },
   { category: "Car Show Vehicles",     total: CAPACITY.carShowVehicles,     price: "See car-show page",                                       type: "car-show" },
-  { category: "VIP Sponsors",          total: CAPACITY.vipSponsors,         price: "TBD — confirm with Studio 45",                            type: "sponsor" },
+  { category: "VIP Sponsors",          total: CAPACITY.vipSponsors,         price: "TBD — confirm before publishing",                         type: "sponsor" },
 ];
 
 const ADMISSION_ROWS = [
@@ -68,7 +68,7 @@ export default function AdminPage() {
             />
             {error && (
               <p className="text-crimson text-xs" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                Incorrect PIN. Contact Studio 45.
+                Incorrect PIN. Contact the festival administrator.
               </p>
             )}
             <button
@@ -276,7 +276,7 @@ export default function AdminPage() {
               { name: "Email (Resend)",          status: "live",    note: "Requires RESEND_API_KEY env var in Vercel" },
               { name: "Ticket Sales (Stripe)",   status: "pending", note: "Awaiting Stripe account setup — add STRIPE_SECRET_KEY to Vercel" },
               { name: "Inventory Tracking",      status: "pending", note: "Awaiting Supabase project setup — tracking via email for now" },
-              { name: "VIP Weekend Ticket",      status: "hold",    note: "Pricing unconfirmed — do not publish until Studio 45 approves" },
+              { name: "VIP Weekend Ticket",      status: "hold",    note: "Pricing unconfirmed — do not publish until confirmed by organizers" },
             ].map((item) => (
               <div key={item.name} className="flex items-start gap-3">
                 <span

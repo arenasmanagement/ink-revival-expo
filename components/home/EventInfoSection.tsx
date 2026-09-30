@@ -64,11 +64,6 @@ export default function EventInfoSection() {
                   color: "#1A1008",
                 },
                 {
-                  label: "Produced by",
-                  value: EVENT.producer,
-                  color: "#1A1008",
-                },
-                {
                   label: "Phone",
                   value: EVENT.contact.phone,
                   isPhone: true,

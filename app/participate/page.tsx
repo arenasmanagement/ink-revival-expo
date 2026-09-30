@@ -13,7 +13,7 @@ const CARDS = [
     emoji:       "🎨",
     title:       "Tattoo Artists",
     subtitle:    "Application → Approval → Payment",
-    desc:        "Apply for a 10×10 or 10×20 booth. Studio 45 reviews all applications. Booth fee collected after approval.",
+    desc:        "Apply for a 10×10 or 10×20 booth. All applications are reviewed. Booth fee collected after approval.",
     pricing:     "From $150 (10×10)",
     cta:         "Apply Now",
     color:       "#E07830",

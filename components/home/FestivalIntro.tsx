@@ -67,8 +67,7 @@ export default function FestivalIntro() {
               fontStyle:  "italic",
             }}
           >
-            Produced by Studio 45 Tattoos — bringing ink culture, handmade art,
-            and West Tennessee community together for the first time.
+            Bringing ink culture, handmade art, and West Tennessee community together for the first time.
           </p>
         </div>
 

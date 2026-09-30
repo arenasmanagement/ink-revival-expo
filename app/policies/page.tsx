@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Policies | West TN Tattoo and Art Festival",
   description:
     "Refund policy, privacy policy, terms of service, and participant terms for the West TN Tattoo and Art Festival.",
-  robots: { index: false }, // keep out of Google until Studio 45 reviews
+  robots: { index: false }, // keep out of Google until organizer details are finalized
 };
 
 const DISPLAY: React.CSSProperties = {
@@ -54,7 +54,7 @@ export default function PoliciesPage() {
 
           <div style={NOTE_BOX}>
             <p style={{ ...BODY, color: "rgba(200,144,48,0.9)", fontSize: "0.85rem" }}>
-              <strong>Note to Studio 45:</strong> These policies are placeholders and must be reviewed and finalized before the site goes live with paid registrations. Sections marked [DEFINE] require your specific terms.
+              <strong>Note:</strong> These policies are placeholders and must be reviewed and finalized before the site goes live with paid registrations. Sections marked [DEFINE] require confirmation of the legal organizing entity and its specific terms.
             </p>
           </div>
 
@@ -74,7 +74,7 @@ export default function PoliciesPage() {
           {/* Privacy Policy */}
           <h2 style={HEADING}>Privacy Policy</h2>
           <div style={BODY}>
-            <p className="mb-3">The West TN Tattoo &amp; Art Festival (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) is operated by Studio 45 Tattoos. We are committed to protecting your personal information.</p>
+            <p className="mb-3">The West TN Tattoo &amp; Art Festival (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) is committed to protecting your personal information. [DEFINE — insert legal operating entity name once confirmed.]</p>
             <p className="mb-2"><strong style={{ color: "#F5EDD8" }}>Information we collect:</strong> Name, email address, phone number, mailing address, and payment information when you register or purchase tickets. We do not store payment card details — all payments are processed securely by Stripe.</p>
             <p className="mb-2"><strong style={{ color: "#F5EDD8" }}>How we use it:</strong> To process registrations, send confirmation emails, communicate festival updates, and improve our services.</p>
             <p className="mb-2"><strong style={{ color: "#F5EDD8" }}>Email marketing:</strong> If you join our email list or register for the festival, you may receive updates about the event. You can unsubscribe at any time.</p>
@@ -88,7 +88,7 @@ export default function PoliciesPage() {
             <p className="mb-3">By accessing this website or registering for the West TN Tattoo &amp; Art Festival, you agree to these terms.</p>
             <p className="mb-2">The information on this site is provided for general information purposes. [DEFINE — add full terms].</p>
             <p className="mb-2">We reserve the right to refuse service to anyone for any reason at any time.</p>
-            <p>[DEFINE — complete terms of service to be drafted by Studio 45 or their legal counsel].</p>
+            <p>[DEFINE — complete terms of service to be drafted by the organizing entity or their legal counsel].</p>
           </div>
 
           {/* Participant Terms */}
@@ -117,7 +117,7 @@ export default function PoliciesPage() {
               </a>.
             </p>
             <p style={{ marginTop: "1rem", color: "rgba(245,237,216,0.3)", fontSize: "0.8rem" }}>
-              Last updated: [DATE — to be set by Studio 45 before launch]
+              Last updated: [DATE — to be finalized before launch]
             </p>
           </div>
 

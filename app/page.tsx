@@ -60,8 +60,7 @@ const eventJsonLd = {
   },
   organizer: {
     "@type": "Organization",
-    name: "Studio 45 Tattoos",
-    telephone: "+17315134271",
+    name: "West TN Tattoo and Art Festival",
     url: "https://www.westtninkrevival.com",
   },
   url: "https://www.westtninkrevival.com",
@@ -81,8 +80,7 @@ const organizationJsonLd = {
   logo: "https://www.westtninkrevival.com/og-card.png",
   image: "https://www.westtninkrevival.com/og-card.png",
   description:
-    "The first annual West Tennessee Tattoo and Art Festival, produced by Studio 45 Tattoos. March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
-  telephone: "+17315134271",
+    "The first annual West Tennessee Tattoo and Art Festival. March 12–14, 2027 at the Carroll County TN Fairgrounds in Huntingdon, Tennessee.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "201 Fairgrounds Road",

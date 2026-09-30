@@ -99,24 +99,6 @@ export default function ContactPage() {
                     className="text-ink font-semibold text-sm uppercase tracking-wider mb-1"
                     style={{ fontFamily: "var(--font-special-elite, monospace)" }}
                   >
-                    Producer
-                  </p>
-                  <p
-                    className="text-ink/70 text-lg"
-                    style={{ fontFamily: "var(--font-garamond, serif)" }}
-                  >
-                    {EVENT.producer}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <span className="text-crimson text-xl flex-shrink-0">★</span>
-                <div>
-                  <p
-                    className="text-ink font-semibold text-sm uppercase tracking-wider mb-1"
-                    style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                  >
                     Event
                   </p>
                   <p

@@ -90,7 +90,7 @@ export default function FAQPage() {
             className="text-ink/60 text-base mb-5"
             style={{ fontFamily: "var(--font-garamond, serif)" }}
           >
-            Reach out to Studio 45 Tattoos with any questions not answered above.
+            Have a question not answered above? Reach out — we&apos;re happy to help.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a

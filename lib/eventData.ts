@@ -25,7 +25,6 @@ export const EVENT = {
     directionsUrl:
       "https://www.google.com/maps/dir/?api=1&destination=201+Fairgrounds+Road%2C+Huntingdon%2C+TN+38344",
   },
-  producer: "Studio 45 Tattoos",
   contact: {
     phone: "731-513-4271",
     email: "contact@westtninkrevival.com",
@@ -54,12 +53,12 @@ export const ADMISSION = {
   sunday:   { label: "Sunday Single-Day",      price: 15,  day: "Sunday, March 14" },
   weekend:  { label: "3-Day Weekend Pass",     price: 40,  days: "March 12–14, 2027" },
   children: { label: "Children (12 & under)",  price: 0,   note: "FREE with a paying adult" },
-  // VIP Weekend — pricing to be confirmed with Studio 45 before publishing
+  // VIP Weekend — pricing TBD, confirm before publishing
   // vipWeekend: { label: "VIP Weekend", price: 75 },
 } as const;
 
 // ─── Participation Pricing ────────────────────────────────────────────────
-// Updated per Studio 45 — confirmed pricing for 2027 event.
+// Confirmed pricing for 2027 event.
 export const PRICING = {
   tattooArtist: {
     single: { label: "Artist Booth 10×10",       price: 150 },
@@ -210,8 +209,8 @@ export const FAQ_ITEMS = [
     a: "Refund and cancellation policies will be published with registration and ticket details. All policies will be included in purchase and application confirmations.",
   },
   {
-    q: "Who is producing the event?",
-    a: "West TN Tattoo and Art Festival is presented and produced by Studio 45 Tattoos. For questions, call 731-513-4271.",
+    q: "How can I contact the festival?",
+    a: "For questions, email contact@westtninkrevival.com or use the Contact page on this website.",
   },
   {
     q: "How many booths and spaces are available?",

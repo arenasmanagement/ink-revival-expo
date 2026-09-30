@@ -37,7 +37,6 @@ export default function EventIntro() {
                 "March 12–14, 2027",
                 EVENT.venue.name,
                 EVENT.venue.fullAddress,
-                `Presented by ${EVENT.producer}`,
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
                   <span className="text-crimson text-base leading-none">★</span>

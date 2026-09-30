@@ -128,7 +128,7 @@ export default function ArtistApplicationForm() {
         </h2>
         <p style={{ ...BODY, color: "rgba(245,237,216,0.65)", maxWidth: "480px", margin: "0 auto 1rem" }}>
           Thank you, {data.firstName}! Your artist application has been submitted.
-          Studio 45 will review it and contact you at <strong style={{ color: "#F5EDD8" }}>{data.email}</strong> within 5–7 business days.
+          The festival team will review it and contact you at <strong style={{ color: "#F5EDD8" }}>{data.email}</strong> within 5–7 business days.
         </p>
         {orderId && (
           <p style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.35)" }}>

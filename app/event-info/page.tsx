@@ -130,7 +130,7 @@ export default function EventInfoPage() {
           >
             West TN Tattoo and Art Festival is a three-day tattoo &amp; art festival held at the Carroll County
             TN Fairgrounds in Huntingdon, Tennessee. Featuring tattoo artists, vendors, food trucks,
-            a car show, competitions, and live entertainment — presented and produced by Studio 45 Tattoos.
+            a car show, competitions, and live entertainment.
           </p>
         </div>
 
@@ -240,29 +240,6 @@ export default function EventInfoPage() {
         </div>
 
         <ScrollworkDivider className="mb-8 sm:mb-10" />
-
-        {/* Producer */}
-        <div className="text-center border-2 border-gold/30 bg-cream/50 p-8 max-w-xl mx-auto mb-10">
-          <p
-            className="text-crimson text-xs tracking-[0.25em] uppercase mb-3"
-            style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-          >
-            ★ Presented By ★
-          </p>
-          <p
-            className="text-ink text-2xl mb-1"
-            style={{ fontFamily: "var(--font-rye, serif)" }}
-          >
-            Studio 45 Tattoos
-          </p>
-          <a
-            href="tel:731-513-4271"
-            className="text-gold hover:text-gold-light transition-colors text-lg"
-            style={{ fontFamily: "var(--font-garamond, serif)" }}
-          >
-            731-513-4271
-          </a>
-        </div>
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

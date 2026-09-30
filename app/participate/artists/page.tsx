@@ -29,12 +29,12 @@ export default function ArtistApplicationPage() {
             Artist Application
           </h1>
           <p style={{ fontFamily: "var(--font-body)", fontSize: "1rem", color: "rgba(245,237,216,0.55)", lineHeight: 1.7, maxWidth: "520px", margin: "0 auto 1rem" }}>
-            Applications are reviewed by Studio 45. Booth fees are collected only after your application is approved.
+            All applications are reviewed by the festival team. Booth fees are collected only after your application is approved.
             We&apos;ll contact you at the email you provide within 5–7 business days.
           </p>
           {/* How-it-works */}
           <div className="flex items-center justify-center gap-4 flex-wrap mt-6">
-            {["Submit Application", "Studio 45 Reviews", "Approval + Payment Link"].map((s, i) => (
+            {["Submit Application", "Application Review", "Approval + Payment Link"].map((s, i) => (
               <div key={s} className="flex items-center gap-3">
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <span style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", color: "#E07830" }}>{i + 1}</span>

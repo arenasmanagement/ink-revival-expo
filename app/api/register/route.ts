@@ -139,8 +139,7 @@ function buildConfirmationEmail(data: Record<string, unknown>, orderId: string):
         <p style="margin:0;color:#333;font-size:14px;line-height:1.8">
           <strong>Dates:</strong> March 12–14, 2027<br/>
           <strong>Venue:</strong> Carroll County TN Fairgrounds<br/>
-          <strong>Address:</strong> 201 Fairgrounds Road, Huntingdon, TN 38344<br/>
-          <strong>Produced by:</strong> Studio 45 Tattoos
+          <strong>Address:</strong> 201 Fairgrounds Road, Huntingdon, TN 38344
         </p>
       </div>
 

@@ -35,7 +35,7 @@ const PLACEHOLDER_ARTISTS = Array.from({ length: 8 }, (_, i) => ({
 
 const HOW_IT_WORKS = [
   { step: "1", title: "Submit Application", desc: "Fill out the form below with your portfolio link and style information." },
-  { step: "2", title: "Review & Approval", desc: "Studio 45 reviews all applications within 3–5 business days." },
+  { step: "2", title: "Review & Approval", desc: "All applications are reviewed within 3–5 business days." },
   { step: "3", title: "Confirmation & Permit", desc: "Approved artists receive booth confirmation and Tennessee permit information." },
   { step: "4", title: "See You There", desc: "Set up your booth March 12–14, 2027 at Carroll County TN Fairgrounds." },
 ];

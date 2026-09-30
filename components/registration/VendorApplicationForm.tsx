@@ -82,7 +82,7 @@ export default function VendorApplicationForm() {
           className="text-ink/60 text-base mb-5 leading-relaxed"
           style={{ fontFamily: "var(--font-garamond, serif)" }}
         >
-          Your vendor application is in. Studio 45 will review and contact you within
+          Your vendor application is in. The festival team will review and contact you within
           3–5 business days. Only 35 vendor booths available.
         </p>
         <div className="bg-white border border-gold/40 py-3 px-6 inline-block mb-5">

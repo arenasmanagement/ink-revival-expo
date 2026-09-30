@@ -38,7 +38,6 @@ export const metadata: Metadata = {
     "Huntingdon Tennessee tattoo",
     "Jackson TN tattoo convention",
     "Carroll County fairgrounds",
-    "Studio 45 Tattoos",
     "tattoo artists West Tennessee",
     "tattoo and art festival Tennessee",
     "tattoo show Tennessee",

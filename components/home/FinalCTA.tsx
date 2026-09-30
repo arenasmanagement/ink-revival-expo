@@ -87,12 +87,12 @@ export default function FinalCTA() {
         {/* Star row */}
         <p className="text-gold/30 text-xl tracking-[1em] mt-10">★ ★ ★</p>
 
-        {/* Producer credit */}
+        {/* Contact */}
         <p
           className="text-cream/25 text-xs tracking-[0.2em] uppercase mt-4"
           style={{ fontFamily: "var(--font-special-elite, monospace)" }}
         >
-          Presented by Studio 45 Tattoos · 731-513-4271
+          West TN Tattoo &amp; Art Festival · Huntingdon, Tennessee
         </p>
       </div>
     </section>
