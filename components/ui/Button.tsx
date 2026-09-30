@@ -55,7 +55,7 @@ export default function Button({
     ${className}
   `;
 
-  const fontStyle = { fontFamily: "var(--font-special-elite, monospace)" };
+  const fontStyle = { fontFamily: "var(--font-body, var(--font-barlow), system-ui, sans-serif)", fontWeight: 600 };
 
   if (href) {
     return external ? (

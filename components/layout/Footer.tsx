@@ -71,8 +71,8 @@ export default function Footer() {
               </div>
               <div
                 style={{
-                  fontFamily: "var(--font-special-elite, monospace)",
-                  fontSize: "0.52rem",
+                  fontFamily: "var(--font-body, system-ui, sans-serif)",
+                  fontSize: "0.6rem",
                   letterSpacing: "0.28em",
                   textTransform: "uppercase",
                   color: "rgba(61,136,120,0.7)",
@@ -88,7 +88,7 @@ export default function Footer() {
             <address
               className="not-italic text-sm leading-7"
               style={{
-                fontFamily: "var(--font-garamond, serif)",
+                fontFamily: "var(--font-body, system-ui, sans-serif)",
                 color: "rgba(245,237,216,0.55)",
               }}
             >
@@ -134,8 +134,9 @@ export default function Footer() {
           <div className="text-center md:text-left">
             <h3
               style={{
-                fontFamily: "var(--font-special-elite, monospace)",
-                fontSize: "0.6rem",
+                fontFamily: "var(--font-body, system-ui, sans-serif)",
+                fontSize: "0.65rem",
+                fontWeight: 600,
                 letterSpacing: "0.3em",
                 textTransform: "uppercase",
                 color: "#E07830",
@@ -152,7 +153,7 @@ export default function Footer() {
                     href={link.href}
                     className="transition-colors duration-150 hover:opacity-100"
                     style={{
-                      fontFamily: "var(--font-garamond, serif)",
+                      fontFamily: "var(--font-body, system-ui, sans-serif)",
                       fontSize: "0.95rem",
                       color: "rgba(245,237,216,0.55)",
                     }}
@@ -170,8 +171,9 @@ export default function Footer() {
           <div className="text-center md:text-left">
             <h3
               style={{
-                fontFamily: "var(--font-special-elite, monospace)",
-                fontSize: "0.6rem",
+                fontFamily: "var(--font-body, system-ui, sans-serif)",
+                fontSize: "0.65rem",
+                fontWeight: 600,
                 letterSpacing: "0.3em",
                 textTransform: "uppercase",
                 color: "#3D8878",
@@ -194,7 +196,7 @@ export default function Footer() {
                     href={item.href}
                     className="flex items-center gap-2 transition-colors duration-150"
                     style={{
-                      fontFamily: "var(--font-garamond, serif)",
+                      fontFamily: "var(--font-body, system-ui, sans-serif)",
                       fontSize: "0.95rem",
                       color: "rgba(245,237,216,0.55)",
                       justifyContent: "center",
@@ -218,8 +220,9 @@ export default function Footer() {
         >
           <p
             style={{
-              fontFamily: "var(--font-special-elite, monospace)",
-              fontSize: "0.58rem",
+              fontFamily: "var(--font-body, system-ui, sans-serif)",
+              fontSize: "0.6rem",
+              fontWeight: 500,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
               color: "rgba(245,237,216,0.22)",
@@ -229,8 +232,7 @@ export default function Footer() {
           </p>
           <p
             style={{
-              fontFamily: "var(--font-garamond, serif)",
-              fontStyle: "italic",
+              fontFamily: "var(--font-body, system-ui, sans-serif)",
               fontSize: "0.8rem",
               color: "rgba(245,237,216,0.22)",
             }}
@@ -240,10 +242,10 @@ export default function Footer() {
               href="https://www.arenasmanagementco.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:opacity-60 transition-opacity not-italic"
+              className="hover:opacity-60 transition-opacity"
               style={{
-                fontFamily: "var(--font-special-elite, monospace)",
-                fontStyle: "normal",
+                fontFamily: "var(--font-body, system-ui, sans-serif)",
+                fontWeight: 600,
               }}
             >
               Arenas Management Co.

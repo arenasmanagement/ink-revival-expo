@@ -62,11 +62,25 @@
   --color-warm-grey-dark: #5A4E3C;
 
   /* ── Fonts ── */
-  --font-bebas:          var(--font-bebas-neue);
-  --font-rye:            var(--font-rye);
-  --font-playfair:       var(--font-playfair);
-  --font-garamond:       var(--font-garamond);
-  --font-special-elite:  var(--font-special-elite);
+  --font-display:        var(--font-bebas-neue);
+  --font-body:           var(--font-barlow);
+
+  /* ── Type scale ── */
+  --text-display-xl:  clamp(4rem,  10vw, 9rem);
+  --text-display-lg:  clamp(2.8rem, 6vw, 5.5rem);
+  --text-display-md:  clamp(2rem,   4vw, 3.5rem);
+  --text-display-sm:  clamp(1.5rem, 3vw, 2.25rem);
+  --text-body-lg:     1.125rem;
+  --text-body-md:     1rem;
+  --text-body-sm:     0.875rem;
+  --text-body-xs:     0.8rem;
+  --text-eyebrow:     0.65rem;
+  --text-label:       0.75rem;
+
+  /* ── Letter spacing ── */
+  --tracking-display:  0.04em;
+  --tracking-eyebrow:  0.22em;
+  --tracking-label:    0.12em;
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -87,9 +101,10 @@
   body {
     background-color: #1A1008;
     color: #F5EDD8;
-    font-family: var(--font-garamond, Georgia, serif);
+    font-family: var(--font-body, var(--font-barlow), system-ui, sans-serif);
     font-size: 1rem;
     line-height: 1.7;
+    font-weight: 400;
   }
 
   h1, h2, h3, h4, h5, h6 {

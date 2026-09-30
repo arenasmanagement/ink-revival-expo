@@ -1,325 +1,538 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { TATTOO_SPECIALTIES } from "@/lib/eventData";
 
-type FormState = "idle" | "submitting" | "success" | "error";
+const BODY: React.CSSProperties = { fontFamily: "var(--font-body, system-ui, sans-serif)" };
+const DISPLAY: React.CSSProperties = {
+  fontFamily:  "var(--font-display, var(--font-bebas-neue), Impact, sans-serif)",
+  letterSpacing: "0.04em",
+  lineHeight:  0.95,
+};
+
+const STEPS = ["Info", "Booth", "Requirements", "Review", "Submit"];
+
+interface FormData {
+  // Step 1
+  firstName:   string;
+  lastName:    string;
+  email:       string;
+  phone:       string;
+  instagram:   string;
+  website:     string;
+  city:        string;
+  state:       string;
+  // Step 2
+  boothSize:   "10x10" | "10x20";
+  additionalBooth: boolean;
+  licenseState: string; // for permit fee
+  specialties: string[];
+  // Step 3
+  yearsExp:    string;
+  portfolio:   string;
+  about:       string;
+  // Agreements
+  termsAgreed: boolean;
+  mediaRelease: boolean;
+}
+
+const INITIAL: FormData = {
+  firstName: "", lastName: "", email: "", phone: "", instagram: "",
+  website: "", city: "", state: "",
+  boothSize: "10x10", additionalBooth: false, licenseState: "",
+  specialties: [],
+  yearsExp: "", portfolio: "", about: "",
+  termsAgreed: false, mediaRelease: false,
+};
+
+const BOOTH_PRICES = { "10x10": 150, "10x20": 300 };
+const PERMIT_FEE = (state: string) =>
+  state.toUpperCase() === "TN" ? 50 : state ? 100 : 0;
+
+function calcTotal(d: FormData): number {
+  let total = BOOTH_PRICES[d.boothSize];
+  if (d.additionalBooth) total += 150;
+  total += PERMIT_FEE(d.licenseState);
+  return total;
+}
+
+const INPUT =
+  "w-full px-4 py-3 bg-transparent border border-[rgba(245,237,216,0.2)] text-cream placeholder:text-[rgba(245,237,216,0.3)] focus:border-sunset focus:outline-none transition-colors";
 
 export default function ArtistApplicationForm() {
-  const [state, setState] = useState<FormState>("idle");
-  const [orderId, setOrderId] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    businessName: "",
-    websiteOrInstagram: "",
-    tattoingYears: "",
-    specialties: "",
-    boothSize: "single" as "single" | "double",
-    message: "",
-  });
+  const [step, setStep]       = useState(0);
+  const [data, setData]       = useState<FormData>(INITIAL);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted]   = useState(false);
+  const [orderId, setOrderId]       = useState("");
+  const [error, setError]           = useState("");
 
-  function set(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
+  const set = (field: keyof FormData, value: unknown) =>
+    setData((p) => ({ ...p, [field]: value }));
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setState("submitting");
-    setErrorMsg("");
+  const toggleSpecialty = (s: string) =>
+    setData((p) => ({
+      ...p,
+      specialties: p.specialties.includes(s)
+        ? p.specialties.filter((x) => x !== s)
+        : [...p.specialties, s],
+    }));
 
+  async function handleSubmit() {
+    setSubmitting(true);
+    setError("");
     try {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "artist", ...form }),
+        body: JSON.stringify({
+          type:          "artist",
+          firstName:     data.firstName,
+          lastName:      data.lastName,
+          email:         data.email,
+          phone:         data.phone,
+          instagram:     data.instagram,
+          website:       data.website,
+          city:          data.city,
+          state:         data.state,
+          boothSize:     data.boothSize,
+          additionalBooth: data.additionalBooth,
+          licenseState:  data.licenseState,
+          specialties:   data.specialties,
+          yearsExp:      data.yearsExp,
+          portfolio:     data.portfolio,
+          about:         data.about,
+          termsAgreed:   data.termsAgreed,
+          mediaRelease:  data.mediaRelease,
+          estimatedTotal: calcTotal(data),
+        }),
       });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        setErrorMsg(data.error ?? "Something went wrong. Please call 731-513-4271.");
-        setState("error");
-        return;
-      }
-
-      setOrderId(data.orderId);
-      setState("success");
-    } catch {
-      setErrorMsg("Network error. Please call 731-513-4271.");
-      setState("error");
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Submission failed");
+      setOrderId(json.orderId ?? "");
+      setSubmitted(true);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setSubmitting(false);
     }
   }
 
-  if (state === "success") {
+  // ── Confirmation screen ──────────────────────────────────────────────
+  if (submitted) {
     return (
-      <div className="border-2 border-gold/40 bg-cream/80 p-8 text-center card-vintage">
-        <p className="text-3xl mb-4">🎨</p>
-        <h3
-          className="text-ink text-2xl mb-2"
-          style={{ fontFamily: "var(--font-rye, serif)" }}
-        >
-          Application Received!
-        </h3>
-        <p
-          className="text-ink/60 text-base mb-5 leading-relaxed"
-          style={{ fontFamily: "var(--font-garamond, serif)" }}
-        >
-          Your artist application is in. Our team will review it and contact you within
-          3–5 business days. No payment is collected until your application is approved.
+      <div className="text-center py-16 px-4">
+        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✅</div>
+        <h2 style={{ ...DISPLAY, fontSize: "3rem", color: "#E07830" }} className="mb-4">
+          Application Received
+        </h2>
+        <p style={{ ...BODY, color: "rgba(245,237,216,0.65)", maxWidth: "480px", margin: "0 auto 1rem" }}>
+          Thank you, {data.firstName}! Your artist application has been submitted.
+          Studio 45 will review it and contact you at <strong style={{ color: "#F5EDD8" }}>{data.email}</strong> within 5–7 business days.
         </p>
-        <div className="bg-white border border-gold/40 py-3 px-6 inline-block mb-5">
-          <p
-            className="text-[10px] uppercase tracking-widest text-ink/40 mb-1"
-            style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-          >
-            Reference ID
+        {orderId && (
+          <p style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.35)" }}>
+            Reference: {orderId}
           </p>
-          <p
-            className="text-2xl text-ink font-bold tracking-wide"
-            style={{ fontFamily: "var(--font-rye, serif)" }}
-          >
-            {orderId}
-          </p>
-        </div>
-        <p
-          className="text-ink/45 text-sm italic"
-          style={{ fontFamily: "var(--font-garamond, serif)" }}
-        >
-          Confirmation sent to your email. Questions? Call 731-513-4271.
+        )}
+        <p style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.4)", marginTop: "1.5rem" }}>
+          Booth fees are collected only <em>after</em> your application is approved.
         </p>
       </div>
     );
   }
 
+  const total = calcTotal(data);
+
   return (
-    <div className="border border-ink/12 bg-cream/70 p-6 sm:p-8 card-vintage" style={{ boxShadow: "0 4px 20px rgba(26,16,8,0.08)" }}>
-      <p
-        className="text-gold/70 text-xs tracking-[0.3em] uppercase mb-5"
-        style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-      >
-        ★ Artist Applications — 35 Booths Available ★
-      </p>
+    <div style={{ maxWidth: "680px", margin: "0 auto", padding: "0 1rem" }}>
+      {/* Progress */}
+      <div className="flex items-center gap-2 mb-10">
+        {STEPS.map((s, i) => (
+          <div key={s} className="flex items-center gap-2 flex-1">
+            <div
+              style={{
+                width: "28px", height: "28px", borderRadius: "50%",
+                backgroundColor: i < step ? "#3D8878" : i === step ? "#E07830" : "transparent",
+                border: `2px solid ${i <= step ? (i < step ? "#3D8878" : "#E07830") : "rgba(245,237,216,0.2)"}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <span style={{ ...BODY, fontSize: "0.7rem", fontWeight: 700, color: i <= step ? "#0E0804" : "rgba(245,237,216,0.3)" }}>
+                {i < step ? "✓" : i + 1}
+              </span>
+            </div>
+            <span style={{ ...BODY, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: i === step ? "#E07830" : "rgba(245,237,216,0.35)", whiteSpace: "nowrap" }}>
+              {s}
+            </span>
+            {i < STEPS.length - 1 && (
+              <div style={{ flex: 1, height: "1px", backgroundColor: i < step ? "#3D8878" : "rgba(245,237,216,0.1)" }} />
+            )}
+          </div>
+        ))}
+      </div>
 
-      <form onSubmit={handleSubmit} noValidate className="space-y-5">
-        {/* Name */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-              First Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={form.firstName}
-              onChange={(e) => set("firstName", e.target.value)}
-              className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60 transition-colors"
-              style={{ fontFamily: "var(--font-garamond, serif)" }}
-            />
+      {/* ── Step 0: Personal Info ── */}
+      {step === 0 && (
+        <div className="space-y-4">
+          <h2 style={{ ...DISPLAY, fontSize: "2.5rem", color: "#F5EDD8" }}>Your Information</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>First Name *</label>
+              <input className={INPUT} value={data.firstName} onChange={(e) => set("firstName", e.target.value)} placeholder="First" />
+            </div>
+            <div>
+              <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Last Name *</label>
+              <input className={INPUT} value={data.lastName} onChange={(e) => set("lastName", e.target.value)} placeholder="Last" />
+            </div>
           </div>
           <div>
-            <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-              Last Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={form.lastName}
-              onChange={(e) => set("lastName", e.target.value)}
-              className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60 transition-colors"
-              style={{ fontFamily: "var(--font-garamond, serif)" }}
-            />
+            <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Email Address *</label>
+            <input className={INPUT} type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@example.com" />
           </div>
-        </div>
-
-        {/* Studio / Business */}
-        <div>
-          <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            Studio / Business Name
-          </label>
-          <input
-            type="text"
-            value={form.businessName}
-            onChange={(e) => set("businessName", e.target.value)}
-            placeholder="Studio name or your artist name"
-            className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60"
-            style={{ fontFamily: "var(--font-garamond, serif)" }}
+          <div>
+            <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Phone</label>
+            <input className={INPUT} type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(555) 000-0000" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Instagram</label>
+              <input className={INPUT} value={data.instagram} onChange={(e) => set("instagram", e.target.value)} placeholder="@handle" />
+            </div>
+            <div>
+              <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Website</label>
+              <input className={INPUT} value={data.website} onChange={(e) => set("website", e.target.value)} placeholder="https://" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>City</label>
+              <input className={INPUT} value={data.city} onChange={(e) => set("city", e.target.value)} placeholder="City" />
+            </div>
+            <div>
+              <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>State</label>
+              <input className={INPUT} value={data.state} onChange={(e) => set("state", e.target.value)} placeholder="TN" maxLength={2} />
+            </div>
+          </div>
+          <NavButtons
+            onNext={() => {
+              if (!data.firstName || !data.lastName || !data.email) {
+                setError("Please fill in your name and email.");
+                return;
+              }
+              setError("");
+              setStep(1);
+            }}
+            showBack={false}
+            error={error}
           />
         </div>
+      )}
 
-        {/* Contact */}
-        <div className="grid grid-cols-2 gap-4">
+      {/* ── Step 1: Booth Options ── */}
+      {step === 1 && (
+        <div className="space-y-6">
+          <h2 style={{ ...DISPLAY, fontSize: "2.5rem", color: "#F5EDD8" }}>Booth Options</h2>
+
           <div>
-            <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-              Email *
-            </label>
-            <input
-              type="email"
-              required
-              value={form.email}
-              onChange={(e) => set("email", e.target.value)}
-              className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60"
-              style={{ fontFamily: "var(--font-garamond, serif)" }}
-            />
-          </div>
-          <div>
-            <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-              Phone *
-            </label>
-            <input
-              type="tel"
-              required
-              value={form.phone}
-              onChange={(e) => set("phone", e.target.value)}
-              className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60"
-              style={{ fontFamily: "var(--font-garamond, serif)" }}
-            />
-          </div>
-        </div>
-
-        {/* Instagram/Portfolio */}
-        <div>
-          <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            Portfolio / Instagram URL
-          </label>
-          <input
-            type="text"
-            value={form.websiteOrInstagram}
-            onChange={(e) => set("websiteOrInstagram", e.target.value)}
-            placeholder="instagram.com/yourhandle or your website"
-            className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60"
-            style={{ fontFamily: "var(--font-garamond, serif)" }}
-          />
-        </div>
-
-        {/* Style specialties */}
-        <div>
-          <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            Tattoo Specialties
-          </label>
-          <select
-            value={form.specialties}
-            onChange={(e) => set("specialties", e.target.value)}
-            className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60"
-            style={{ fontFamily: "var(--font-garamond, serif)" }}
-          >
-            <option value="">Select primary style</option>
-            {TATTOO_SPECIALTIES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-            <option value="Multiple Styles">Multiple Styles</option>
-          </select>
-        </div>
-
-        {/* Years tattooing */}
-        <div>
-          <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            Years Tattooing
-          </label>
-          <select
-            value={form.tattoingYears}
-            onChange={(e) => set("tattoingYears", e.target.value)}
-            className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60"
-            style={{ fontFamily: "var(--font-garamond, serif)" }}
-          >
-            <option value="">Select range</option>
-            <option value="1-2 years">1–2 years</option>
-            <option value="3-5 years">3–5 years</option>
-            <option value="6-10 years">6–10 years</option>
-            <option value="10+ years">10+ years</option>
-          </select>
-        </div>
-
-        {/* Booth size */}
-        <div>
-          <label className="block text-ink/60 text-xs uppercase tracking-wider mb-2" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            Preferred Booth Size
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { value: "single", label: "10×10", sub: "Single space" },
-              { value: "double", label: "10×20", sub: "Double space" },
-            ].map((opt) => (
-              <label
-                key={opt.value}
-                className={`border-2 cursor-pointer p-3 text-center transition-colors ${
-                  form.boothSize === opt.value
-                    ? "border-gold bg-gold/10"
-                    : "border-ink/15 bg-white/50 hover:border-gold/50"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="boothSize"
-                  value={opt.value}
-                  checked={form.boothSize === opt.value}
-                  onChange={(e) => set("boothSize", e.target.value)}
-                  className="sr-only"
-                />
-                <p
-                  className="text-ink text-base font-medium"
-                  style={{ fontFamily: "var(--font-rye, serif)" }}
+            <p style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", marginBottom: "12px" }}>Booth Size *</p>
+            <div className="grid grid-cols-2 gap-4">
+              {(["10x10", "10x20"] as const).map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => set("boothSize", size)}
+                  style={{
+                    border: `2px solid ${data.boothSize === size ? "#E07830" : "rgba(245,237,216,0.15)"}`,
+                    backgroundColor: data.boothSize === size ? "rgba(224,120,48,0.08)" : "transparent",
+                    padding: "1rem",
+                    textAlign: "left",
+                    cursor: "pointer",
+                  }}
                 >
-                  {opt.label}
-                </p>
-                <p
-                  className="text-ink/50 text-xs"
-                  style={{ fontFamily: "var(--font-garamond, serif)" }}
-                >
-                  {opt.sub}
-                </p>
-              </label>
-            ))}
+                  <div style={{ ...DISPLAY, fontSize: "1.5rem", color: data.boothSize === size ? "#E07830" : "#F5EDD8" }}>
+                    {size === "10x10" ? "10 × 10 ft" : "10 × 20 ft"}
+                  </div>
+                  <div style={{ ...BODY, fontSize: "0.9rem", color: "rgba(245,237,216,0.5)", marginTop: "4px" }}>
+                    ${BOOTH_PRICES[size]} · {size === "10x10" ? "Single booth" : "Double booth"}
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-          <p
-            className="text-ink/40 text-xs italic mt-2"
-            style={{ fontFamily: "var(--font-garamond, serif)" }}
-          >
-            Booth size is subject to availability and approval. No booth fee is collected upfront —
-            permit fees apply per Tennessee health department requirements.
-          </p>
-        </div>
 
-        {/* Notes */}
-        <div>
-          <label className="block text-ink/60 text-xs uppercase tracking-wider mb-1.5" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            Notes / Questions
+          <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={data.additionalBooth}
+              onChange={(e) => set("additionalBooth", e.target.checked)}
+              style={{ width: "18px", height: "18px", accentColor: "#E07830" }}
+            />
+            <span style={{ ...BODY, color: "rgba(245,237,216,0.7)" }}>
+              Add additional 10×10 space (+$150)
+            </span>
           </label>
-          <textarea
-            rows={3}
-            value={form.message}
-            onChange={(e) => set("message", e.target.value)}
-            placeholder="Tell us about your work, any special requirements, or questions..."
-            className="w-full border border-ink/20 bg-white/70 px-3 py-2.5 text-ink text-sm focus:outline-none focus:border-gold/60 resize-none"
-            style={{ fontFamily: "var(--font-garamond, serif)" }}
+
+          <div>
+            <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>
+              State you&apos;re licensed in (for permit fee)
+            </label>
+            <input
+              className={INPUT}
+              value={data.licenseState}
+              onChange={(e) => set("licenseState", e.target.value.toUpperCase())}
+              placeholder="TN"
+              maxLength={2}
+              style={{ maxWidth: "120px" }}
+            />
+            {data.licenseState && (
+              <p style={{ ...BODY, fontSize: "0.8rem", color: "#C89030", marginTop: "6px" }}>
+                {data.licenseState === "TN"
+                  ? "In-state permit fee: $50"
+                  : `Out-of-state permit fee: $100`}
+              </p>
+            )}
+          </div>
+
+          {/* Price preview */}
+          <div style={{ borderTop: "1px solid rgba(245,237,216,0.1)", paddingTop: "1rem" }}>
+            <div style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.4)", marginBottom: "4px" }}>
+              Estimated total (collected after approval):
+            </div>
+            <div style={{ ...DISPLAY, fontSize: "2rem", color: "#E07830" }}>${total}</div>
+          </div>
+
+          <NavButtons onBack={() => { setError(""); setStep(0); }} onNext={() => { setError(""); setStep(2); }} error={error} />
+        </div>
+      )}
+
+      {/* ── Step 2: Portfolio / Requirements ── */}
+      {step === 2 && (
+        <div className="space-y-5">
+          <h2 style={{ ...DISPLAY, fontSize: "2.5rem", color: "#F5EDD8" }}>Portfolio & Style</h2>
+
+          <div>
+            <p style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", marginBottom: "10px" }}>Specialties</p>
+            <div className="flex flex-wrap gap-2">
+              {TATTOO_SPECIALTIES.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => toggleSpecialty(s)}
+                  style={{
+                    ...BODY,
+                    fontSize: "0.78rem",
+                    fontWeight: 500,
+                    padding: "5px 14px",
+                    border: `1px solid ${data.specialties.includes(s) ? "#3D8878" : "rgba(245,237,216,0.15)"}`,
+                    backgroundColor: data.specialties.includes(s) ? "rgba(61,136,120,0.15)" : "transparent",
+                    color: data.specialties.includes(s) ? "#3D8878" : "rgba(245,237,216,0.55)",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Years of Experience</label>
+            <input className={INPUT} value={data.yearsExp} onChange={(e) => set("yearsExp", e.target.value)} placeholder="e.g. 7 years" />
+          </div>
+
+          <div>
+            <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Portfolio Link *</label>
+            <input className={INPUT} value={data.portfolio} onChange={(e) => set("portfolio", e.target.value)} placeholder="Instagram, website, or portfolio URL" />
+          </div>
+
+          <div>
+            <label style={{ ...BODY, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,237,216,0.5)", display: "block", marginBottom: "6px" }}>Tell us about yourself & your work *</label>
+            <textarea
+              className={INPUT}
+              rows={4}
+              value={data.about}
+              onChange={(e) => set("about", e.target.value)}
+              placeholder="Brief bio, style, what makes your work stand out..."
+              style={{ resize: "vertical" }}
+            />
+          </div>
+
+          <NavButtons
+            onBack={() => { setError(""); setStep(1); }}
+            onNext={() => {
+              if (!data.portfolio || !data.about) {
+                setError("Please fill in your portfolio link and bio.");
+                return;
+              }
+              setError("");
+              setStep(3);
+            }}
+            error={error}
           />
         </div>
+      )}
 
-        {errorMsg && (
-          <p className="text-crimson text-sm text-center" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-            {errorMsg}
-          </p>
+      {/* ── Step 3: Review ── */}
+      {step === 3 && (
+        <div className="space-y-6">
+          <h2 style={{ ...DISPLAY, fontSize: "2.5rem", color: "#F5EDD8" }}>Review Your Application</h2>
+
+          <ReviewRow label="Name" value={`${data.firstName} ${data.lastName}`} />
+          <ReviewRow label="Email" value={data.email} />
+          {data.phone && <ReviewRow label="Phone" value={data.phone} />}
+          {data.instagram && <ReviewRow label="Instagram" value={data.instagram} />}
+          <ReviewRow label="Location" value={`${data.city}, ${data.state}`} />
+          <ReviewRow label="Booth Size" value={data.boothSize === "10x10" ? "10×10 ft ($150)" : "10×20 ft ($300)"} />
+          {data.additionalBooth && <ReviewRow label="Additional Booth" value="+$150" />}
+          {data.licenseState && (
+            <ReviewRow
+              label="Permit Fee"
+              value={`${data.licenseState === "TN" ? "In-state" : "Out-of-state"} — $${PERMIT_FEE(data.licenseState)}`}
+            />
+          )}
+          {data.specialties.length > 0 && (
+            <ReviewRow label="Specialties" value={data.specialties.join(", ")} />
+          )}
+          <ReviewRow label="Portfolio" value={data.portfolio} />
+
+          <div style={{ borderTop: "2px solid #E07830", paddingTop: "1rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ ...BODY, fontWeight: 600, color: "rgba(245,237,216,0.6)" }}>Estimated Total (due after approval)</span>
+              <span style={{ ...DISPLAY, fontSize: "2rem", color: "#E07830" }}>${total}</span>
+            </div>
+          </div>
+
+          {/* Agreements */}
+          <div className="space-y-4 pt-2">
+            <label style={{ display: "flex", alignItems: "flex-start", gap: "12px", cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={data.termsAgreed}
+                onChange={(e) => set("termsAgreed", e.target.checked)}
+                style={{ width: "18px", height: "18px", marginTop: "2px", accentColor: "#E07830", flexShrink: 0 }}
+              />
+              <span style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.6)" }}>
+                I agree to the West TN Tattoo &amp; Art Festival participant terms, rules, and booth policies. *
+              </span>
+            </label>
+            <label style={{ display: "flex", alignItems: "flex-start", gap: "12px", cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={data.mediaRelease}
+                onChange={(e) => set("mediaRelease", e.target.checked)}
+                style={{ width: "18px", height: "18px", marginTop: "2px", accentColor: "#E07830", flexShrink: 0 }}
+              />
+              <span style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.6)" }}>
+                I consent to photography/video of my booth for festival promotional use.
+              </span>
+            </label>
+          </div>
+
+          {error && (
+            <p style={{ ...BODY, color: "#E03A3A", fontSize: "0.85rem" }}>{error}</p>
+          )}
+
+          <div className="flex gap-4 pt-2">
+            <button
+              type="button"
+              onClick={() => { setError(""); setStep(2); }}
+              style={{ ...BODY, fontWeight: 600, color: "rgba(245,237,216,0.4)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
+              ← Back
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (!data.termsAgreed) {
+                  setError("Please agree to the participant terms to continue.");
+                  return;
+                }
+                setError("");
+                handleSubmit();
+              }}
+              disabled={submitting}
+              style={{
+                flex: 1,
+                backgroundColor: "#E07830",
+                color: "#0E0804",
+                fontFamily: "var(--font-display, Impact, sans-serif)",
+                fontSize: "1.2rem",
+                letterSpacing: "0.08em",
+                padding: "0.9rem",
+                border: "none",
+                cursor: submitting ? "not-allowed" : "pointer",
+                opacity: submitting ? 0.7 : 1,
+              }}
+            >
+              {submitting ? "Submitting…" : "Submit Application"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReviewRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div style={{ display: "flex", gap: "1rem", borderBottom: "1px solid rgba(245,237,216,0.06)", paddingBottom: "0.6rem" }}>
+      <span style={{ fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(245,237,216,0.35)", minWidth: "130px", flexShrink: 0 }}>
+        {label}
+      </span>
+      <span style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", color: "#F5EDD8", wordBreak: "break-word" }}>{value}</span>
+    </div>
+  );
+}
+
+function NavButtons({
+  onBack,
+  onNext,
+  showBack = true,
+  error,
+}: {
+  onBack?:   () => void;
+  onNext?:   () => void;
+  showBack?: boolean;
+  error?:    string;
+}) {
+  return (
+    <div className="pt-4">
+      {error && (
+        <p style={{ fontFamily: "var(--font-body)", color: "#E03A3A", fontSize: "0.85rem", marginBottom: "12px" }}>{error}</p>
+      )}
+      <div className="flex gap-4">
+        {showBack && onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            style={{ fontFamily: "var(--font-body)", fontWeight: 600, color: "rgba(245,237,216,0.4)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            ← Back
+          </button>
         )}
-
-        <button
-          type="submit"
-          disabled={state === "submitting"}
-          className="w-full py-4 bg-crimson text-cream uppercase tracking-widest text-sm hover:bg-crimson-dark transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
-          style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-        >
-          {state === "submitting" ? "Submitting Application…" : "Submit Artist Application"}
-        </button>
-
-        <p
-          className="text-ink/40 text-xs text-center italic"
-          style={{ fontFamily: "var(--font-garamond, serif)" }}
-        >
-          Applications are reviewed by Studio 45 Tattoos. You will be contacted within 3–5 business
-          days. No payment is collected until your application is approved.
-        </p>
-      </form>
+        {onNext && (
+          <button
+            type="button"
+            onClick={onNext}
+            style={{
+              flex:            1,
+              backgroundColor: "#E07830",
+              color:           "#0E0804",
+              fontFamily:      "var(--font-display, Impact, sans-serif)",
+              fontSize:        "1.1rem",
+              letterSpacing:   "0.08em",
+              padding:         "0.85rem",
+              border:          "none",
+              cursor:          "pointer",
+            }}
+          >
+            Continue →
+          </button>
+        )}
+      </div>
     </div>
   );
 }

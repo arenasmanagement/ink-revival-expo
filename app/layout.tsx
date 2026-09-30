@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Bebas_Neue,
-  Rye,
-  Playfair_Display,
-  EB_Garamond,
-  Special_Elite,
-} from "next/font/google";
+import { Bebas_Neue, Barlow } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -20,32 +14,11 @@ const bebasNeue = Bebas_Neue({
   display: "swap",
 });
 
-/* ── Decorative / Wordmark — kept for special moments ── */
-const rye = Rye({
-  weight: "400",
+/* ── Body / UI — clean, versatile sans-serif ── */
+const barlow = Barlow({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-rye",
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
-});
-
-/* ── Body copy — elegant, readable serif ── */
-const ebGaramond = EB_Garamond({
-  subsets: ["latin"],
-  variable: "--font-garamond",
-  display: "swap",
-});
-
-/* ── Labels, stamps, all-caps UI text ── */
-const specialElite = Special_Elite({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-special-elite",
+  variable: "--font-barlow",
   display: "swap",
 });
 
@@ -116,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bebasNeue.variable} ${rye.variable} ${playfair.variable} ${ebGaramond.variable} ${specialElite.variable} h-full`}
+      className={`${bebasNeue.variable} ${barlow.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-ink" style={{ backgroundColor: "#1A1008" }}>
         <AnnouncementBar />

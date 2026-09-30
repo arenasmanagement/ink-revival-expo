@@ -60,9 +60,10 @@ export default function Navbar() {
         href={href}
         className="relative px-3 py-2 transition-colors duration-150"
         style={{
-          fontFamily: "var(--font-special-elite, monospace)",
-          fontSize: "0.65rem",
-          letterSpacing: "0.22em",
+          fontFamily: "var(--font-body, system-ui, sans-serif)",
+          fontSize: "0.7rem",
+          fontWeight: 600,
+          letterSpacing: "0.16em",
           textTransform: "uppercase",
           color: active ? "#E07830" : "rgba(245,237,216,0.75)",
         }}
@@ -129,8 +130,9 @@ export default function Navbar() {
             </span>
             <span
               style={{
-                fontFamily: "var(--font-special-elite, monospace)",
-                fontSize: "0.5rem",
+                fontFamily: "var(--font-body, system-ui, sans-serif)",
+                fontSize: "0.55rem",
+                fontWeight: 500,
                 letterSpacing: "0.28em",
                 textTransform: "uppercase",
                 color: "rgba(61,136,120,0.8)",
@@ -158,9 +160,10 @@ export default function Navbar() {
                 aria-expanded={dropdownOpen}
                 className="relative flex items-center gap-1 px-3 py-2 transition-colors duration-150"
                 style={{
-                  fontFamily: "var(--font-special-elite, monospace)",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.22em",
+                  fontFamily: "var(--font-body, system-ui, sans-serif)",
+                  fontSize: "0.7rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   color: participateActive || dropdownOpen
                     ? "#E07830"
@@ -232,9 +235,10 @@ export default function Navbar() {
                     >
                       <span
                         style={{
-                          fontFamily: "var(--font-special-elite, monospace)",
-                          fontSize: "0.6rem",
-                          letterSpacing: "0.2em",
+                          fontFamily: "var(--font-body, system-ui, sans-serif)",
+                          fontSize: "0.7rem",
+                          fontWeight: 600,
+                          letterSpacing: "0.12em",
                           textTransform: "uppercase",
                           color: isActive ? "#E07830" : "rgba(245,237,216,0.75)",
                           display: "block",
@@ -245,8 +249,7 @@ export default function Navbar() {
                       </span>
                       <span
                         style={{
-                          fontFamily: "var(--font-garamond, serif)",
-                          fontStyle: "italic",
+                          fontFamily: "var(--font-body, system-ui, sans-serif)",
                           fontSize: "0.75rem",
                           color: "rgba(245,237,216,0.3)",
                           display: "block",
@@ -345,7 +348,7 @@ export default function Navbar() {
                 href={link.href}
                 className="py-3 border-b transition-colors duration-150"
                 style={{
-                  fontFamily: "var(--font-special-elite, monospace)",
+                  fontFamily: "var(--font-body, system-ui, sans-serif)",
                   fontSize: "0.7rem",
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
@@ -364,7 +367,7 @@ export default function Navbar() {
               onClick={() => setParticipateOpen((v) => !v)}
               className="w-full flex items-center justify-between py-3"
               style={{
-                fontFamily: "var(--font-special-elite, monospace)",
+                fontFamily: "var(--font-body, system-ui, sans-serif)",
                 fontSize: "0.7rem",
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
@@ -398,7 +401,7 @@ export default function Navbar() {
                     href={item.href}
                     className="flex items-center gap-3 py-3 pl-5"
                     style={{
-                      fontFamily: "var(--font-special-elite, monospace)",
+                      fontFamily: "var(--font-body, system-ui, sans-serif)",
                       fontSize: "0.62rem",
                       letterSpacing: "0.2em",
                       textTransform: "uppercase",
@@ -423,7 +426,7 @@ export default function Navbar() {
                 href={link.href}
                 className="py-3 border-b transition-colors duration-150"
                 style={{
-                  fontFamily: "var(--font-special-elite, monospace)",
+                  fontFamily: "var(--font-body, system-ui, sans-serif)",
                   fontSize: "0.7rem",
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
