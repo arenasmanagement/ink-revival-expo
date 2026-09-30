@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 type Variant = "primary" | "secondary" | "outline" | "ghost" | "gold";
