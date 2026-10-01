@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SectionHeading from "@/components/ui/SectionHeading";
 import SponsorApplicationForm from "@/components/registration/SponsorApplicationForm";
-import { PRICING } from "@/lib/eventData";
 
 export const metadata: Metadata = {
   title: "Sponsorship Packages — Basic $500 · VIP $1,000 | West TN Tattoo and Art Festival",
@@ -60,68 +59,6 @@ export default function SponsorsPage() {
           </div>
         </section>
 
-        {/* Packages */}
-        <section className="mb-10 sm:mb-14">
-          <SectionHeading eyebrow="Packages" title="Sponsorship Packages" className="mb-10" />
-          <div className="grid sm:grid-cols-2 gap-6 mb-6">
-
-            {/* Basic */}
-            <div className="border-2 border-ink/20 bg-cream/70 p-6 sm:p-8 relative card-vintage">
-              <div className="absolute top-0 left-0 right-0 h-[4px] bg-gold" />
-              <div className="banner-crimson inline-block px-4 py-1 mb-4">
-                <span className="text-cream text-xs tracking-[0.2em] uppercase" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>★ Basic ★</span>
-              </div>
-              <p className="text-ink text-3xl font-bold mb-5" style={{ fontFamily: "var(--font-rye, serif)" }}>${PRICING.sponsorship.basic.price}</p>
-              <div className="divider-ink mb-5" style={{ opacity: 0.2 }} />
-              <ul className="space-y-3 mb-6">
-                {PRICING.sponsorship.basic.benefits.map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-ink/70 text-sm" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                    <span className="text-gold text-xs mt-0.5 flex-shrink-0">★</span> {b}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#apply"
-                className="block text-center py-3 bg-gold text-ink uppercase tracking-wider text-sm hover:bg-gold-light transition-all active:scale-95"
-                style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-              >
-                Apply as a Sponsor
-              </a>
-            </div>
-
-            {/* VIP */}
-            <div className="border-2 border-gold/50 bg-cream/70 p-6 sm:p-8 relative card-vintage" style={{ boxShadow: "0 4px 24px rgba(196,144,42,0.15)" }}>
-              <div className="absolute top-0 left-0 right-0 h-[4px] bg-crimson" />
-              <div className="banner-crimson inline-block px-4 py-1 mb-4">
-                <span className="text-cream text-xs tracking-[0.2em] uppercase" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>★ VIP ★</span>
-              </div>
-              <p className="text-crimson text-3xl font-bold mb-5" style={{ fontFamily: "var(--font-rye, serif)" }}>${PRICING.sponsorship.vip.price}</p>
-              <div className="divider-ink mb-5" style={{ opacity: 0.2 }} />
-              <ul className="space-y-3 mb-6">
-                {PRICING.sponsorship.vip.benefits.map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-ink/70 text-sm" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                    <span className="text-crimson text-xs mt-0.5 flex-shrink-0">★</span> {b}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#apply"
-                className="block text-center py-3 bg-crimson text-cream uppercase tracking-wider text-sm hover:bg-crimson-dark transition-all active:scale-95"
-                style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-              >
-                Apply as a Sponsor
-              </a>
-            </div>
-          </div>
-
-          {/* Disclaimer */}
-          <div className="text-center border border-ink/15 bg-cream/40 p-4 max-w-xl mx-auto">
-            <p className="text-ink/50 text-sm italic" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-              Final benefits, specifications, deadlines, and logo-placement details are subject to confirmation in the sponsorship agreement.
-            </p>
-          </div>
-        </section>
-
         {/* ── Native Sponsor Application Form ── */}
         <section id="apply" className="max-w-2xl mx-auto mb-12">
           <SectionHeading eyebrow="Get Started" title="Apply as a Sponsor" className="mb-8" />
@@ -134,6 +71,9 @@ export default function SponsorsPage() {
           >
             <SponsorApplicationForm />
           </div>
+          <p className="text-ink/40 text-xs text-center italic mt-4" style={{ fontFamily: "var(--font-garamond, serif)" }}>
+            Final benefits, specifications, deadlines, and logo-placement details are subject to confirmation in the sponsorship agreement.
+          </p>
         </section>
 
         {/* Custom partnerships */}
