@@ -63,14 +63,20 @@ export default function Countdown() {
               <div className="w-2 h-2 rounded-full bg-gold/40 mb-3" />
 
               <span
-                className="text-gold leading-none block"
+                className="text-gold leading-none"
                 style={{
                   fontFamily: "var(--font-rye, serif)",
                   fontSize: "clamp(2.2rem, 6vw, 3.5rem)",
                   textShadow: "0 2px 8px rgba(196,144,42,0.3)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  textAlign: "center",
+                  letterSpacing: 0,
                 }}
               >
-                {String(value).padStart(2, "0")}
+                {label === "Days" ? String(value) : String(value).padStart(2, "0")}
               </span>
 
               <div className="divider-gold w-full my-2" />
