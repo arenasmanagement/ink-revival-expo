@@ -298,11 +298,11 @@ export default function CompetitionsPage() {
                 Contact the Expo
               </Link>
               <a
-                href={`tel:${EVENT.contact.phone}`}
+                href="/contact"
                 className="px-8 py-3 border-2 border-gold text-gold uppercase tracking-widest text-sm hover:bg-gold hover:text-ink transition-all active:scale-95"
                 style={{ fontFamily: "var(--font-special-elite, monospace)" }}
               >
-                Call {EVENT.contact.phone}
+                Contact Us
               </a>
             </div>
           </div>

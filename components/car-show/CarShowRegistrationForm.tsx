@@ -48,7 +48,7 @@ export default function CarShowRegistrationForm() {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        setErrorMsg(data.error ?? "Something went wrong. Please call 731-513-4271.");
+        setErrorMsg(data.error ?? "Something went wrong. Please try again or use our contact form at westtninkrevival.com/contact.");
         setState("error");
         return;
       }
@@ -56,7 +56,7 @@ export default function CarShowRegistrationForm() {
       setOrderId(data.orderId);
       setState("success");
     } catch {
-      setErrorMsg("Network error. Please call 731-513-4271.");
+      setErrorMsg("Network error — please check your connection and try again.");
       setState("error");
     }
   }
@@ -96,7 +96,7 @@ export default function CarShowRegistrationForm() {
           className="text-ink/45 text-sm italic"
           style={{ fontFamily: "var(--font-garamond, serif)" }}
         >
-          Questions? Call 731-513-4271
+          Questions? Use our contact form at westtninkrevival.com/contact.
         </p>
       </div>
     );

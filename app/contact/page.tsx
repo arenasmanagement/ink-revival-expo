@@ -8,11 +8,11 @@ const { sponsorPath, vendorApplicationPath } = REGISTRATION_URLS;
 export const metadata: Metadata = {
   title: "Contact — Reach the West TN Tattoo and Art Festival Team | Huntingdon, TN",
   description:
-    "Contact West TN Tattoo and Art Festival — call 731-513-4271 or send a message. Questions about attending, tattoo artist applications, vendor booths, food truck spaces, or sponsoring West Tennessee's first tattoo convention (March 12–14, 2027, Huntingdon, TN).",
+    "Contact West TN Tattoo and Art Festival — send a message using our contact form. Questions about attending, tattoo artist applications, vendor booths, food truck spaces, or sponsoring West Tennessee's first tattoo convention (March 12–14, 2027, Huntingdon, TN).",
   alternates: { canonical: "https://www.westtninkrevival.com/contact" },
   openGraph: {
     title: "Contact — West TN Tattoo and Art Festival 2027",
-    description: "Call 731-513-4271 or send a message. Artist applications, vendor booths, sponsorships, and general questions about West Tennessee's first tattoo convention.",
+    description: "Send a message using our contact form. Artist applications, vendor booths, sponsorships, and general questions about West Tennessee's first tattoo convention.",
     url: "https://www.westtninkrevival.com/contact",
   },
 };
@@ -73,25 +73,6 @@ export default function ContactPage() {
             <div className="divider-ink mb-6" style={{ width: "80px" }} />
 
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <span className="text-crimson text-xl flex-shrink-0">★</span>
-                <div>
-                  <p
-                    className="text-ink font-semibold text-sm uppercase tracking-wider mb-1"
-                    style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                  >
-                    Phone
-                  </p>
-                  <a
-                    href={`tel:${EVENT.contact.phone}`}
-                    className="text-ink/70 text-lg hover:text-crimson transition-colors"
-                    style={{ fontFamily: "var(--font-garamond, serif)" }}
-                  >
-                    {EVENT.contact.phone}
-                  </a>
-                </div>
-              </div>
-
               <div className="flex items-start gap-4">
                 <span className="text-crimson text-xl flex-shrink-0">★</span>
                 <div>

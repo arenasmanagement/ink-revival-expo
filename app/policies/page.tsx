@@ -111,9 +111,9 @@ export default function PoliciesPage() {
               <a href="mailto:contact@westtninkrevival.com" style={{ color: "#3D8878" }}>
                 contact@westtninkrevival.com
               </a>{" "}
-              or call{" "}
-              <a href="tel:+17314416044" style={{ color: "#3D8878" }}>
-                (731) 441-6044
+              or use our{" "}
+              <a href="/contact" style={{ color: "#3D8878" }}>
+                contact form
               </a>.
             </p>
             <p style={{ marginTop: "1rem", color: "rgba(245,237,216,0.3)", fontSize: "0.8rem" }}>

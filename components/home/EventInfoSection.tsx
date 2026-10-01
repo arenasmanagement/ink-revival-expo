@@ -63,12 +63,6 @@ export default function EventInfoSection() {
                   value: `${EVENT.venue.address}, ${EVENT.venue.city}, ${EVENT.venue.state} ${EVENT.venue.zip}`,
                   color: "#1A1008",
                 },
-                {
-                  label: "Phone",
-                  value: EVENT.contact.phone,
-                  isPhone: true,
-                  color: "#3D8878",
-                },
               ].map((row) => (
                 <div key={row.label}>
                   <dt
@@ -84,31 +78,16 @@ export default function EventInfoSection() {
                     {row.label}
                   </dt>
                   <dd>
-                    {row.isPhone ? (
-                      <a
-                        href={`tel:${row.value}`}
-                        style={{
-                          fontFamily: "var(--font-garamond, serif)",
-                          fontSize:   "1.05rem",
-                          color:      row.color,
-                          fontWeight: 600,
-                        }}
-                        className="hover:opacity-75 transition-opacity"
-                      >
-                        {row.value}
-                      </a>
-                    ) : (
-                      <span
-                        style={{
-                          fontFamily: "var(--font-garamond, serif)",
-                          fontSize:   "1.05rem",
-                          color:      row.color,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {row.value}
-                      </span>
-                    )}
+                    <span
+                      style={{
+                        fontFamily: "var(--font-garamond, serif)",
+                        fontSize:   "1.05rem",
+                        color:      row.color,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {row.value}
+                    </span>
                   </dd>
                 </div>
               ))}

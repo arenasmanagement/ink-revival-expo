@@ -94,18 +94,11 @@ export default function FAQPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="tel:731-513-4271"
+              href="/contact"
               className="px-6 py-3 bg-crimson text-cream uppercase tracking-wider text-sm hover:bg-crimson-dark transition-all active:scale-95"
               style={{ fontFamily: "var(--font-special-elite, monospace)" }}
             >
-              Call 731-513-4271
-            </a>
-            <a
-              href="/contact"
-              className="px-6 py-3 border-2 border-ink text-ink uppercase tracking-wider text-sm hover:bg-ink hover:text-cream transition-all active:scale-95"
-              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-            >
-              Contact Form
+              Contact Us
             </a>
           </div>
         </div>

@@ -144,8 +144,7 @@ function buildConfirmationEmail(data: Record<string, unknown>, orderId: string):
       </div>
 
       <p style="color:#444;line-height:1.7">
-        Questions? Call us at <a href="tel:+17314416044" style="color:#7A1714">731-441-6044</a>
-        or reply to this email.
+        Questions? Reply to this email or visit <a href="https://www.westtninkrevival.com/contact" style="color:#7A1714">westtninkrevival.com/contact</a>.
       </p>
 
       <div style="border-top:1px solid #ddd;margin-top:24px;padding-top:16px;text-align:center">
@@ -314,7 +313,7 @@ export async function POST(request: NextRequest) {
     } catch (stripeErr) {
       console.error("[/api/register] Stripe error:", stripeErr);
       return NextResponse.json(
-        { error: "Payment session could not be created. Please call 731-441-6044." },
+        { error: "Payment session could not be created. Please try again or contact us at westtninkrevival.com/contact." },
         { status: 500 }
       );
     }

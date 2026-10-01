@@ -221,11 +221,11 @@ export default function CarShowPage() {
             Event Details
           </Link>
           <a
-            href={`tel:${EVENT.contact.phone}`}
+            href="/contact"
             className="px-8 py-3 border border-ink/30 text-ink/60 uppercase tracking-widest text-sm hover:border-ink hover:text-ink transition-all text-center active:scale-95"
             style={{ fontFamily: "var(--font-special-elite, monospace)" }}
           >
-            Call {EVENT.contact.phone}
+            Contact Us
           </a>
         </div>
       </div>

@@ -26,7 +26,6 @@ export const EVENT = {
       "https://www.google.com/maps/dir/?api=1&destination=201+Fairgrounds+Road%2C+Huntingdon%2C+TN+38344",
   },
   contact: {
-    phone: "731-513-4271",
     email: "contact@westtninkrevival.com",
   },
   social: {
@@ -192,7 +191,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "Is there a car show?",
-    a: "Yes! The festival includes a full car show. Vehicle registration is $25. Spectator access is included with general festival admission. Contact us at 731-513-4271 to register your vehicle early.",
+    a: "Yes! The festival includes a full car show. Vehicle registration is $25. Spectator access is included with general festival admission. Visit our Contact page or the Car Show registration page to register your vehicle early.",
   },
   {
     q: "Are there competitions at the event?",

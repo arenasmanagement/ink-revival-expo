@@ -42,7 +42,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
 
           {/* ── Brand column ── */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
+          <div className="flex flex-col items-center text-center">
             {/* Wordmark */}
             <div className="mb-4">
               <div
@@ -97,13 +97,6 @@ export default function Footer() {
               <div>
                 {EVENT.venue.city}, {EVENT.venue.state}
               </div>
-              <a
-                href={`tel:${EVENT.contact.phone}`}
-                style={{ color: "#3D8878" }}
-                className="hover:opacity-80 transition-opacity"
-              >
-                {EVENT.contact.phone}
-              </a>
             </address>
 
             {/* Social icons */}

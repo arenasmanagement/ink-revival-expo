@@ -145,8 +145,8 @@ export default function SponsorsPage() {
           <p className="text-cream/60 text-base mb-6 max-w-lg mx-auto" style={{ fontFamily: "var(--font-garamond, serif)" }}>
             Contact the West TN Tattoo and Art Festival team to discuss additional opportunities tailored to your business.
           </p>
-          <a href="tel:731-513-4271" className="inline-block px-8 py-3 border-2 border-gold text-gold uppercase tracking-widest text-sm hover:bg-gold hover:text-ink transition-all active:scale-95" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-            Call 731-513-4271
+          <a href="/contact" className="inline-block px-8 py-3 border-2 border-gold text-gold uppercase tracking-widest text-sm hover:bg-gold hover:text-ink transition-all active:scale-95" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
+            Contact Us
           </a>
         </section>
       </div>

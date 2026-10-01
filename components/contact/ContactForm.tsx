@@ -64,15 +64,7 @@ export default function ContactForm() {
           className="text-ink/65 text-base leading-relaxed mb-6"
           style={{ fontFamily: "var(--font-garamond, serif)" }}
         >
-          Thank you for reaching out. We&rsquo;ll be in touch soon. If you need
-          a quick answer, give us a call at{" "}
-          <a
-            href="tel:731-513-4271"
-            className="text-crimson hover:underline"
-          >
-            731-513-4271
-          </a>
-          .
+          Thank you for reaching out. We&rsquo;ll be in touch soon — we typically respond within 1–2 business days.
         </p>
         <button
           onClick={() => setStatus("idle")}
