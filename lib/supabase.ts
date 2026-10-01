@@ -1,16 +1,33 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Lazy singleton — defers createClient() until first use so Next.js can
+// import this module at build time without env vars present.
+let _publicClient: SupabaseClient | undefined;
+
+function getPublicClient(): SupabaseClient {
+  if (!_publicClient) {
+    _publicClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
+  }
+  return _publicClient;
+}
 
 /** Public client — use in Client Components for capacity reads */
-export const supabase = createClient(supabaseUrl, supabaseAnon);
+export const supabase: SupabaseClient = new Proxy({} as SupabaseClient, {
+  get(_target, prop) {
+    return getPublicClient()[prop as keyof SupabaseClient];
+  },
+});
 
 /** Server client with service_role key — use only in API routes (server-side) */
 export function createServiceClient() {
+  const url        = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url)        throw new Error("NEXT_PUBLIC_SUPABASE_URL is not set");
   if (!serviceKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set");
-  return createClient(supabaseUrl, serviceKey, {
+  return createClient(url, serviceKey, {
     auth: { persistSession: false },
   });
 }
