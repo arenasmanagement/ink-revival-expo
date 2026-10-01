@@ -42,7 +42,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
 
           {/* ── Brand column ── */}
-          <div className="flex flex-col items-center text-center">
+          <div className="flex flex-col items-start text-left">
             {/* Wordmark */}
             <div className="mb-4">
               <div
@@ -124,7 +124,7 @@ export default function Footer() {
           </div>
 
           {/* ── Quick links ── */}
-          <div className="text-center md:text-left">
+          <div className="text-left">
             <h3
               style={{
                 fontFamily: "var(--font-body, system-ui, sans-serif)",
@@ -161,7 +161,7 @@ export default function Footer() {
           </div>
 
           {/* ── Participate ── */}
-          <div className="text-center md:text-left">
+          <div className="text-left">
             <h3
               style={{
                 fontFamily: "var(--font-body, system-ui, sans-serif)",
@@ -192,7 +192,7 @@ export default function Footer() {
                       fontFamily: "var(--font-body, system-ui, sans-serif)",
                       fontSize: "0.95rem",
                       color: "rgba(245,237,216,0.55)",
-                      justifyContent: "center",
+                      justifyContent: "flex-start",
                     }}
                     onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#F5EDD8"; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(245,237,216,0.55)"; }}
