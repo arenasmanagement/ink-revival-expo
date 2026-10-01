@@ -48,13 +48,30 @@ export const CAPACITY = {
 
 // ─── Admission / Ticket Pricing ───────────────────────────────────────────
 export const ADMISSION = {
-  friday:   { label: "Friday Single-Day",      price: 15,  day: "Friday, March 12" },
-  saturday: { label: "Saturday Single-Day",    price: 20,  day: "Saturday, March 13" },
-  sunday:   { label: "Sunday Single-Day",      price: 15,  day: "Sunday, March 14" },
-  weekend:  { label: "3-Day Weekend Pass",     price: 40,  days: "March 12–14, 2027" },
-  children: { label: "Children (12 & under)",  price: 0,   note: "FREE with a paying adult" },
-  // VIP Weekend — pricing TBD, confirm before publishing
-  // vipWeekend: { label: "VIP Weekend", price: 75 },
+  friday:        { label: "Friday Single-Day",      price: 15,  day: "Friday, March 12" },
+  saturday:      { label: "Saturday Single-Day",    price: 20,  day: "Saturday, March 13" },
+  sunday:        { label: "Sunday Single-Day",      price: 15,  day: "Sunday, March 14" },
+  weekend:       { label: "3-Day Weekend Pass",     price: 40,  days: "March 12–14, 2027" },
+  children:      { label: "Children (12 & under)",  price: 0,   note: "FREE with a paying adult" },
+  // ─ VIP ATTENDEE TICKET (internal ID: ticket_vip_weekend) ─────────────────
+  // Confirmed price: $75. Confirmed benefits: NOT YET PROVIDED by organizers.
+  // Do NOT advertise specific benefits until confirmed. Show "details coming soon."
+  // Distinct from sponsorship_vip ($1,000 VIP Sponsor package).
+  // Do NOT open online sales until benefits are confirmed and organizer approves.
+  // ─ UNRESOLVED ITEM: "ad 100" from source material — meaning unknown ──────
+  // A "$100" line item appears in source material context "Vip weekend ad 100".
+  // This has NOT been confirmed as any ticket, add-on, or package.
+  // FLAG FOR ORGANIZER CLARIFICATION before associating with any product.
+  // ─────────────────────────────────────────────────────────────────────────
+  ticketVipWeekend: {
+    label:       "VIP Weekend Pass",
+    internalId:  "ticket_vip_weekend",  // NEVER use bare "vip" — see sponsorship_vip below
+    price:       75,
+    days:        "March 12–14, 2027",
+    benefits:    null,  // Benefits not yet confirmed by organizer — do not invent
+    salesActive: false, // Set true only when organizer confirms benefits + approves sales
+    note:        "VIP package details coming soon.",
+  },
 } as const;
 
 // ─── Participation Pricing ────────────────────────────────────────────────
@@ -98,7 +115,8 @@ export const PRICING = {
       ],
     },
     vip: {
-      label: "VIP Sponsorship",
+      label:      "VIP Sponsorship",
+      internalId: "sponsorship_vip",  // NEVER use bare "vip" — distinct from ticket_vip_weekend
       price: 1000,
       benefits: [
         "Everything in Basic Sponsorship",

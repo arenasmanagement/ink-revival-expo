@@ -3,6 +3,11 @@ import Link from "next/link";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { ADMISSION, EVENT } from "@/lib/eventData";
 
+// VIP Weekend Pass (ticket_vip_weekend) — $75, salesActive: false
+// Benefits NOT yet confirmed by organizer. Do NOT show specific perks.
+// This card is intentionally shown as "coming soon" to build awareness
+// without making promises. Activate when organizer confirms + approves.
+
 export const metadata: Metadata = {
   title: "Tickets — General Admission Pricing | West TN Tattoo and Art Festival 2027",
   description:
@@ -255,6 +260,101 @@ export default function TicketsPage() {
           ))}
         </div>
 
+        {/* ── VIP Weekend Pass — coming soon ── */}
+        <div className="max-w-2xl mx-auto mb-12">
+          <div
+            className="relative border border-ink/20 bg-cream/60 p-8 text-center card-vintage"
+            style={{ boxShadow: "0 4px 24px rgba(204,53,120,0.08)" }}
+          >
+            <div
+              className="absolute top-0 left-0 right-0 h-[3px]"
+              style={{ background: "linear-gradient(90deg,#CC3578,#E07830,#CC3578)" }}
+            />
+            {/* Coming soon badge */}
+            <div className="flex justify-center mb-4">
+              <span
+                className="inline-block px-4 py-1 text-[9px] tracking-[0.35em] uppercase"
+                style={{
+                  fontFamily: "var(--font-special-elite, monospace)",
+                  backgroundColor: "rgba(204,53,120,0.08)",
+                  color: "#CC3578",
+                  border: "1px solid rgba(204,53,120,0.25)",
+                }}
+              >
+                ★ Details Coming Soon ★
+              </span>
+            </div>
+            <h2
+              className="text-ink text-3xl mb-1"
+              style={{ fontFamily: "var(--font-rye, serif)" }}
+            >
+              VIP Weekend Pass
+            </h2>
+            <p
+              className="text-ink/50 text-sm mb-5"
+              style={{ fontFamily: "var(--font-garamond, serif)" }}
+            >
+              {EVENT.dates.display} · All Three Days
+            </p>
+            <div className="flex items-end justify-center gap-2 mb-5">
+              <span
+                className="text-6xl font-bold leading-none"
+                style={{ fontFamily: "var(--font-rye, serif)", color: "#CC3578" }}
+              >
+                $75
+              </span>
+              <span
+                className="text-ink/40 text-base pb-1"
+                style={{ fontFamily: "var(--font-garamond, serif)" }}
+              >
+                / person
+              </span>
+            </div>
+            {/* Benefits placeholder — organizer has not confirmed what's included */}
+            <div
+              className="border border-ink/10 bg-ink/3 py-4 px-5 mb-5 text-center"
+            >
+              <p
+                className="text-ink/50 text-sm mb-1"
+                style={{ fontFamily: "var(--font-rye, serif)" }}
+              >
+                VIP Package Details
+              </p>
+              <p
+                className="text-ink/40 text-xs italic leading-relaxed"
+                style={{ fontFamily: "var(--font-garamond, serif)" }}
+              >
+                We&apos;re finalizing what makes VIP special. Package details will be
+                announced before tickets go on sale — check back soon.
+              </p>
+            </div>
+            {/* Purchase not yet active */}
+            <div
+              className="border border-ink/15 bg-ink/4 py-3 px-4 mb-4 text-center"
+            >
+              <p
+                className="text-ink/40 text-xs uppercase tracking-widest mb-1"
+                style={{ fontFamily: "var(--font-special-elite, monospace)" }}
+              >
+                ★ Sales Opening Soon ★
+              </p>
+              <p
+                className="text-ink/35 text-xs italic"
+                style={{ fontFamily: "var(--font-garamond, serif)" }}
+              >
+                VIP tickets will be available online once package details are confirmed.
+              </p>
+            </div>
+            <Link
+              href="/contact"
+              className="block py-3 border border-ink/25 text-ink/50 uppercase tracking-wider text-xs hover:border-ink hover:text-ink transition-all active:scale-95"
+              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
+            >
+              Questions? Contact Us
+            </Link>
+          </div>
+        </div>
+
         {/* ── Children FREE banner ── */}
         <div
           className="max-w-xl mx-auto mb-12 border border-gold/30 bg-gold/8 p-5 text-center"
@@ -287,24 +387,35 @@ export default function TicketsPage() {
           </div>
           <div className="divide-y divide-ink/10">
             {[
-              { label: "Friday, March 12", price: "$15" },
+              { label: "Friday, March 12",   price: "$15" },
               { label: "Saturday, March 13", price: "$20" },
-              { label: "Sunday, March 14", price: "$15" },
-              { label: "3-Day Weekend Pass", price: "$40", highlight: true },
+              { label: "Sunday, March 14",   price: "$15" },
+              { label: "3-Day Weekend Pass", price: "$40",  highlight: true },
+              { label: "VIP Weekend Pass",   price: "$75",  note: "Details coming soon" },
               { label: "Children 12 & Under", price: "FREE" },
             ].map((row) => (
               <div
                 key={row.label}
                 className={`flex justify-between items-center px-5 py-3 ${row.highlight ? "bg-gold/10" : ""}`}
               >
+                <div>
+                  <span
+                    className="text-ink/70 text-sm"
+                    style={{ fontFamily: "var(--font-garamond, serif)" }}
+                  >
+                    {row.label}
+                  </span>
+                  {"note" in row && row.note && (
+                    <span
+                      className="block text-ink/35 text-xs italic"
+                      style={{ fontFamily: "var(--font-garamond, serif)" }}
+                    >
+                      {row.note}
+                    </span>
+                  )}
+                </div>
                 <span
-                  className="text-ink/70 text-sm"
-                  style={{ fontFamily: "var(--font-garamond, serif)" }}
-                >
-                  {row.label}
-                </span>
-                <span
-                  className={`text-base font-bold ${row.highlight ? "text-gold" : "text-ink"}`}
+                  className={`text-base font-bold ${row.highlight ? "text-gold" : "text-ink/80"}`}
                   style={{ fontFamily: "var(--font-rye, serif)" }}
                 >
                   {row.price}

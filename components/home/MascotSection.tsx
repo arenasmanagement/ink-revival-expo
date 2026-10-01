@@ -17,7 +17,7 @@ export default function MascotSection() {
           <div className="flex items-center justify-center order-2 lg:order-1">
             <div
               className="relative"
-              style={{ maxWidth: "380px", width: "100%" }}
+              style={{ maxWidth: "420px", width: "100%" }}
             >
               {/* Decorative circle behind the frog */}
               <div
@@ -42,10 +42,10 @@ export default function MascotSection() {
               />
 
               <Image
-                src="/frog.png"
-                alt="The West TN Tattoo and Art Festival mascot — a hand-drawn teal frog"
-                width={380}
-                height={380}
+                src="/frog-tattoo-art.png"
+                alt="The West TN Ink Revival Expo mascot — a hand-drawn teal frog in orange pants and red suspenders, holding a paintbrush in one hand and a tattoo machine in the other, with a panther tattoo on his chest and a boater hat"
+                width={420}
+                height={630}
                 className="mascot-float relative"
                 style={{
                   objectFit: "contain",
@@ -103,8 +103,9 @@ export default function MascotSection() {
               }}
             >
               Every great festival has a spirit. Ours is this frog — teal green, hand-drawn,
-              and at home on the pond just like West Tennessee itself. He&apos;s been watching
-              from the cattails, and now it&apos;s time to come out for the show.
+              with a panther tattoo on his chest, a paintbrush in one hand, and a tattoo machine
+              in the other. He&apos;s got both worlds covered, and now it&apos;s time to bring
+              the whole swamp out for the show.
             </p>
 
             <p
