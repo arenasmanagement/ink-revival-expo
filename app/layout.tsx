@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Barlow } from "next/font/google";
+import { Bebas_Neue, Barlow, Rye, Special_Elite, EB_Garamond } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -19,6 +19,31 @@ const barlow = Barlow({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-barlow",
+  display: "swap",
+});
+
+/* ── Rye — western serif used for countdown numbers, headings, prices ── */
+const rye = Rye({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-rye",
+  display: "swap",
+});
+
+/* ── Special Elite — typewriter style used for labels and eyebrows ── */
+const specialElite = Special_Elite({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-special-elite",
+  display: "swap",
+});
+
+/* ── EB Garamond — classic serif for body copy and descriptions ── */
+const ebGaramond = EB_Garamond({
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-garamond",
   display: "swap",
 });
 
@@ -88,7 +113,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bebasNeue.variable} ${barlow.variable} h-full`}
+      className={`${bebasNeue.variable} ${barlow.variable} ${rye.variable} ${specialElite.variable} ${ebGaramond.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-ink" style={{ backgroundColor: "#1A1008" }}>
         <AnnouncementBar />

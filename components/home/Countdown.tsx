@@ -62,17 +62,21 @@ export default function Countdown() {
               {/* Top rivet */}
               <div className="w-2 h-2 rounded-full bg-gold/40 mb-3" />
 
+              {/*
+                Negative horizontal margins cancel the card's px-5/px-8 padding,
+                making this span as wide as the card's full visual box. Because the
+                card shrink-wraps to its content there is no "extra" content-area
+                width to center within — the only reliable anchor is the full visual
+                width (content + padding). text-align:center then works correctly for
+                any digit count (1, 2, or 3 digits).
+              */}
               <span
-                className="text-gold leading-none"
+                className="text-gold leading-none block text-center -mx-5 sm:-mx-8"
                 style={{
                   fontFamily: "var(--font-rye, serif)",
                   fontSize: "clamp(2.2rem, 6vw, 3.5rem)",
                   textShadow: "0 2px 8px rgba(196,144,42,0.3)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  textAlign: "center",
+                  fontVariantNumeric: "tabular-nums",
                   letterSpacing: 0,
                 }}
               >
