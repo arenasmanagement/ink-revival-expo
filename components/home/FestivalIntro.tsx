@@ -217,12 +217,25 @@ export default function FestivalIntro() {
                   backgroundColor: "rgba(26,16,8,0.04)",
                 }}
               >
-                {/* Large countdown number */}
+                {/* Large countdown number
+                    Optical centering fix — Bebas Neue glyph metrics:
+                    3-digit values (days 100–365): glyph ink is 202px wide
+                    inside a 168px container, putting the ink center 17px
+                    RIGHT of the mathematical center. Shift left by exactly
+                    17px (measured via Range.getBoundingClientRect()) to
+                    restore visual center on the card axis.
+                    1-digit and 2-digit values measure offset=0 → no shift.
+                    Only the Days card can reach 3 digits; Hours/Minutes/Seconds
+                    are always padded to 2 digits. */}
                 <div
                   className="stat-number"
                   style={{
                     color:              card.color,
                     fontVariantNumeric: "tabular-nums",
+                    transform:
+                      card.key === "days" && display.days.length === 3
+                        ? "translateX(-17px)"
+                        : "none",
                   }}
                 >
                   {display[card.key]}
