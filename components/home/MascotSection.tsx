@@ -43,7 +43,7 @@ export default function MascotSection() {
 
               <Image
                 src="/frog-tattoo-art.png"
-                alt="The West TN Ink Revival Expo mascot — a hand-drawn teal frog in orange pants and red suspenders, holding a paintbrush in one hand and a tattoo machine in the other, with a panther tattoo on his chest and a boater hat"
+                alt="The West TN Tattoo &amp; Art Festival mascot — a hand-drawn teal frog in orange pants and red suspenders, holding a paintbrush in one hand and a tattoo machine in the other, with a panther tattoo on his chest and a boater hat"
                 width={420}
                 height={630}
                 className="mascot-float relative"

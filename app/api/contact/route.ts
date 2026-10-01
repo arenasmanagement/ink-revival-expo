@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 // westtninkrevival.com must be verified as a sending domain in the Resend
 // account before this address will work.  Do NOT change this to the AMC or
 // Lambuth domain — this address belongs to this project only.
-const FROM_EMAIL = "West TN Ink Revival Expo <contact@westtninkrevival.com>";
+const FROM_EMAIL = "West TN Tattoo & Art Festival <contact@westtninkrevival.com>";
 const TO_EMAIL = "studio45tattoo2025@gmail.com";
 
 export async function POST(req: Request) {

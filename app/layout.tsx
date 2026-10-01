@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     siteName: "West TN Tattoo and Art Festival",
     images: [
       {
-        url: "/og-card.png",
+        url: "/west-tn-tattoo-festival-2027-og.jpg",
         width: 1200,
         height: 630,
         alt: "West TN Tattoo and Art Festival 2027 — March 12–14, Huntingdon, Tennessee",
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     title: "West TN Tattoo and Art Festival 2027 — Huntingdon, Tennessee",
     description:
       "West Tennessee's first tattoo & art festival. March 12–14, 2027 · Carroll County TN Fairgrounds · Huntingdon, TN",
-    images: ["/og-card.png"],
+    images: ["/west-tn-tattoo-festival-2027-og.jpg"],
     site: "@westtninkrevival",
   },
   robots: {
