@@ -22,13 +22,21 @@ export default function EmailSignup() {
     setErrorMsg("");
 
     try {
-      // TODO: wire to a real email service (Mailchimp, Resend, etc.)
-      // For now, simulate success so the UI works end-to-end
-      await new Promise((r) => setTimeout(r, 800));
-      setStatus("success");
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const json = (await res.json()) as { success?: boolean; error?: string };
+      if (res.ok && json.success) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrorMsg(json.error ?? "Something went wrong. Please try again.");
+      }
     } catch {
       setStatus("error");
-      setErrorMsg("Something went wrong. Please try again.");
+      setErrorMsg("Network error — please check your connection and try again.");
     }
   }
 

@@ -51,7 +51,7 @@ const PRICING: Record<string, { name: string; dollars: number }> = {
 };
 
 // ─── Registration type metadata ──────────────────────────────────────────────
-const TYPE_META: Record<string, { label: string; next: string; isApplication: boolean }> = {
+const TYPE_META: Record<string, { label: string; next: string; nextTestMode?: string; isApplication: boolean }> = {
   artist: {
     label: "Tattoo Artist Application",
     next:  "Our team will review your application and contact you within 3–5 business days. Approval is required before any payment is collected.",
@@ -64,7 +64,8 @@ const TYPE_META: Record<string, { label: string; next: string; isApplication: bo
   },
   vendor: {
     label: "Vendor Booth Registration",
-    next:  "You will be redirected to our secure payment page to complete your registration.",
+    next:         "You will be redirected to our secure payment page to complete your registration.",
+    nextTestMode: "Your registration request has been received. A payment link for your booth fee will be sent separately once we confirm your space.",
     isApplication: false,
   },
   sponsor: {
@@ -74,7 +75,8 @@ const TYPE_META: Record<string, { label: string; next: string; isApplication: bo
   },
   "car-show": {
     label: "Car Show Entry",
-    next:  "You will be redirected to our secure payment page to complete your registration.",
+    next:         "You will be redirected to our secure payment page to complete your registration.",
+    nextTestMode: "Your car show entry has been received. A payment link for the $25 entry fee will be sent to you separately.",
     isApplication: false,
   },
 };
@@ -105,10 +107,14 @@ function buildAdminEmail(data: Record<string, unknown>, orderId: string): string
   `;
 }
 
-function buildConfirmationEmail(data: Record<string, unknown>, orderId: string): string {
+function buildConfirmationEmail(data: Record<string, unknown>, orderId: string, testMode = false): string {
   const type = String(data.type ?? "");
   const firstName = String(data.firstName ?? "there");
-  const meta = TYPE_META[type] ?? { label: "Registration", next: "Our team will be in touch shortly.", isApplication: true };
+  const metaRaw = TYPE_META[type] ?? { label: "Registration", next: "Our team will be in touch shortly.", isApplication: true };
+  const meta = {
+    ...metaRaw,
+    next: (testMode && metaRaw.nextTestMode) ? metaRaw.nextTestMode : metaRaw.next,
+  };
 
   return `
     <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:20px;background:#faf7f2">
@@ -197,9 +203,11 @@ export async function POST(request: NextRequest) {
   let pricingKey: string = type;
 
   if (type === "vendor") {
-    const boothSize = String(data.boothSize ?? "single");
-    pricingKey  = boothSize === "double" ? "vendor_10x20" : "vendor_10x10";
-    categoryId  = boothSize === "double" ? "vendor_10x20" : "vendor_10x10";
+    const boothSize = String(data.boothSize ?? "10x10");
+    // Accept both "double"/"10x20" (double booth) and "single"/"10x10" (single booth)
+    const isDouble = boothSize === "double" || boothSize === "10x20";
+    pricingKey  = isDouble ? "vendor_10x20" : "vendor_10x10";
+    categoryId  = isDouble ? "vendor_10x20" : "vendor_10x10";
   }
   if (type === "sponsor") {
     // Accept both "package" (new native form) and "sponsorPackage" (legacy)
@@ -239,7 +247,7 @@ export async function POST(request: NextRequest) {
         lastName,
         email,
         phone,
-        businessName: String(data.businessName ?? data.company ?? ""),
+        businessName: String(data.businessName ?? data.company ?? data.truckName ?? ""),
         city:         String(data.city  ?? ""),
         state:        String(data.state ?? ""),
         amountCents:  pricing ? pricing.dollars * 100 : (data.totalCents as number | undefined),
@@ -273,8 +281,14 @@ export async function POST(request: NextRequest) {
 
   const meta = TYPE_META[type];
 
+  // ── Payment test mode bypass ────────────────────────────────────────────────
+  // Activated ONLY when PAYMENT_TEST_MODE=true is set as a server-side (non-public)
+  // Vercel env var.  Never exposed to browsers.  Cannot be triggered by end-users.
+  // Use: set in Vercel dashboard for testing, unset when done.
+  const paymentTestMode = process.env.PAYMENT_TEST_MODE === "true";
+
   // ── Direct checkout: create Stripe Checkout Session ────────────────────────
-  if (!meta.isApplication && process.env.STRIPE_SECRET_KEY) {
+  if (!meta.isApplication && !paymentTestMode && process.env.STRIPE_SECRET_KEY) {
     const pricing = PRICING[pricingKey];
     if (!pricing) {
       return NextResponse.json({ error: "Pricing not found for this registration type." }, { status: 400 });
@@ -336,7 +350,7 @@ export async function POST(request: NextRequest) {
       from:    FROM_EMAIL,
       to:      email,
       subject: `${meta.label} Received — West TN Tattoo and Art Festival 2027 (${orderId})`,
-      html:    buildConfirmationEmail(data, orderId),
+      html:    buildConfirmationEmail(data, orderId, paymentTestMode),
     });
   } catch (emailErr) {
     console.error("[/api/register] confirmation email error:", emailErr);
