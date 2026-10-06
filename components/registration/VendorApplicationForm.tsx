@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import PaymentForm from "@/components/payment/PaymentForm";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -24,6 +25,8 @@ const VENDOR_CATEGORIES = [
 export default function VendorApplicationForm() {
   const [state, setState] = useState<FormState>("idle");
   const [orderId, setOrderId] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [amountCents, setAmountCents] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({
     firstName: "",
@@ -61,11 +64,50 @@ export default function VendorApplicationForm() {
       }
 
       setOrderId(data.orderId);
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
+        setAmountCents(data.amountCents ?? 0);
+        return;
+      }
       setState("success");
     } catch {
       setErrorMsg("Network error — please check your connection and try again.");
       setState("error");
     }
+  }
+
+  // Payment step
+  if (clientSecret && state !== "success") {
+    const BODY: React.CSSProperties = { fontFamily: "var(--font-garamond, serif)" };
+    return (
+      <div className="border border-ink/12 bg-cream/70 p-6 sm:p-8 card-vintage">
+        <p
+          className="text-crimson text-[10px] tracking-[0.3em] uppercase mb-4"
+          style={{ fontFamily: "var(--font-special-elite, monospace)" }}
+        >
+          ★ Authorize Booth Fee ★
+        </p>
+        <p style={{ ...BODY, color: "rgba(14,8,4,0.55)", fontSize: "0.85rem", marginBottom: "0.5rem" }}>
+          Reference: <strong>{orderId}</strong>
+        </p>
+        <p style={{ ...BODY, color: "rgba(14,8,4,0.45)", fontSize: "0.8rem", marginBottom: "1.5rem" }}>
+          A hold will be placed on your card. No charge until your application is approved.
+        </p>
+        <PaymentForm
+          clientSecret={clientSecret}
+          orderId={orderId}
+          amountCents={amountCents}
+          paymentType="auth"
+          onSuccess={() => setState("success")}
+          onError={(msg) => setErrorMsg(msg)}
+        />
+        {errorMsg && (
+          <p className="text-crimson text-sm text-center mt-3" style={{ fontFamily: "var(--font-garamond, serif)" }}>
+            {errorMsg}
+          </p>
+        )}
+      </div>
+    );
   }
 
   if (state === "success") {

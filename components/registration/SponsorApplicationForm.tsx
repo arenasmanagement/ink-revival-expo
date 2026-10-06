@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PRICING } from "@/lib/eventData";
+import PaymentForm from "@/components/payment/PaymentForm";
 
 const BODY: React.CSSProperties = { fontFamily: "var(--font-body, system-ui, sans-serif)" };
 const DISPLAY: React.CSSProperties = {
@@ -61,6 +62,8 @@ export default function SponsorApplicationForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted]   = useState(false);
   const [orderId, setOrderId]       = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [amountCents, setAmountCents]   = useState(0);
   const [error, setError]           = useState("");
 
   const set = (field: keyof FormData, value: unknown) =>
@@ -101,12 +104,43 @@ export default function SponsorApplicationForm() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Submission failed");
       setOrderId(json.orderId ?? "");
+      if (json.testMode) { setSubmitted(true); return; }
+      if (json.clientSecret) {
+        setClientSecret(json.clientSecret);
+        setAmountCents(json.amountCents ?? 0);
+        return;
+      }
       setSubmitted(true);
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setSubmitting(false);
     }
+  }
+
+  // ── Payment step ─────────────────────────────────────────────────────
+  if (clientSecret && !submitted) {
+    const pkg = PACKAGES.find((p) => p.id === data.package)!;
+    return (
+      <div style={{ paddingTop: "2rem" }}>
+        <h2 style={{ ...DISPLAY, fontSize: "2rem", color: "#F5EDD8", textAlign: "center", marginBottom: "0.5rem" }}>
+          Authorize Sponsorship Fee
+        </h2>
+        <p style={{ ...BODY, color: "rgba(245,237,216,0.5)", fontSize: "0.85rem", textAlign: "center", marginBottom: "2rem" }}>
+          {pkg.label} — Reference: <strong style={{ color: "#F5EDD8" }}>{orderId}</strong>
+          <br />A hold will be placed on your card. No charge until your sponsorship agreement is finalized.
+        </p>
+        <PaymentForm
+          clientSecret={clientSecret}
+          orderId={orderId}
+          amountCents={amountCents}
+          paymentType="auth"
+          onSuccess={() => setSubmitted(true)}
+          onError={(msg) => setError(msg)}
+        />
+        {error && <p style={{ ...BODY, color: "#E03A3A", fontSize: "0.85rem", textAlign: "center", marginTop: "1rem" }}>{error}</p>}
+      </div>
+    );
   }
 
   // ── Confirmation ────────────────────────────────────────────────────────
