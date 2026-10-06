@@ -120,6 +120,15 @@ export async function updateRegistrationStatus(
   if (error) throw error;
 }
 
+export async function markPaymentAuthorized(
+  orderId: string,
+  paymentIntentId: string
+) {
+  return updateRegistrationStatus(orderId, "pending_review", {
+    stripe_payment_intent_id: paymentIntentId,
+  });
+}
+
 export async function markPaymentConfirmed(
   orderId: string,
   paymentIntentId: string
@@ -128,4 +137,34 @@ export async function markPaymentConfirmed(
     stripe_payment_intent_id: paymentIntentId,
     paid_at: new Date().toISOString(),
   });
+}
+
+export async function markPaymentCaptured(orderId: string) {
+  return updateRegistrationStatus(orderId, "captured", {
+    paid_at: new Date().toISOString(),
+  });
+}
+
+export async function getRegistrationByOrderId(orderId: string) {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase
+    .from("wtsf_registrations")
+    .select("*")
+    .eq("order_id", orderId)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function listRegistrations(status?: string, limit = 100) {
+  const supabase = createServiceClient();
+  let query = supabase
+    .from("wtsf_registrations")
+    .select("order_id,registration_type,status,first_name,last_name,email,amount_cents,stripe_payment_intent_id,created_at,metadata")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (status) query = query.eq("status", status);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
 }

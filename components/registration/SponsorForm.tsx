@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PaymentForm from "@/components/payment/PaymentForm";
 
 const BODY: React.CSSProperties    = { fontFamily: "var(--font-body, system-ui, sans-serif)" };
 const DISPLAY: React.CSSProperties = { fontFamily: "var(--font-display, var(--font-bebas-neue), Impact, sans-serif)", letterSpacing: "0.04em" };
@@ -19,6 +20,8 @@ export default function SponsorForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted]   = useState(false);
   const [orderId, setOrderId]       = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [amountCents, setAmountCents]   = useState(0);
   const [error, setError]           = useState("");
 
   const set = (k: string, v: unknown) => setForm((p) => ({ ...p, [k]: v }));
@@ -39,9 +42,35 @@ export default function SponsorForm() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Submission failed");
       setOrderId(json.orderId ?? "");
-      if (json.checkoutUrl) { window.location.href = json.checkoutUrl; return; }
+      if (json.testMode) { setSubmitted(true); return; }
+      if (json.clientSecret) {
+        setClientSecret(json.clientSecret);
+        setAmountCents(json.amountCents ?? price * 100);
+        return;
+      }
       setSubmitted(true);
     } catch (e) { setError((e as Error).message); } finally { setSubmitting(false); }
+  }
+
+  if (clientSecret && !submitted) {
+    return (
+      <div style={{ paddingTop: "2rem" }}>
+        <h2 style={{ ...DISPLAY, fontSize: "2rem", color: "#F5EDD8", textAlign: "center", marginBottom: "0.5rem" }}>Authorize Sponsorship Hold</h2>
+        <p style={{ ...BODY, color: "rgba(245,237,216,0.5)", fontSize: "0.85rem", textAlign: "center", marginBottom: "2rem" }}>
+          Reference: <strong style={{ color: "#F5EDD8" }}>{orderId}</strong><br />
+          A hold will be placed on your card. No charge until your sponsorship is confirmed.
+        </p>
+        <PaymentForm
+          clientSecret={clientSecret}
+          orderId={orderId}
+          amountCents={amountCents}
+          paymentType="auth"
+          onSuccess={() => setSubmitted(true)}
+          onError={(msg) => setError(msg)}
+        />
+        {error && <p style={{ ...BODY, color: "#E07830", fontSize: "0.85rem", textAlign: "center", marginTop: "1rem" }}>{error}</p>}
+      </div>
+    );
   }
 
   if (submitted) {
@@ -53,6 +82,9 @@ export default function SponsorForm() {
           Thank you, {form.firstName}! We&apos;ll be in touch at <strong style={{ color: "#F5EDD8" }}>{form.email}</strong> with next steps.
         </p>
         {orderId && <p style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.35)" }}>Reference: {orderId}</p>}
+        <p style={{ ...BODY, fontSize: "0.85rem", color: "rgba(245,237,216,0.4)", marginTop: "1rem" }}>
+          Your payment hold has been placed. If confirmed, your sponsorship fee will be captured.
+        </p>
       </div>
     );
   }
