@@ -31,23 +31,23 @@ const nextConfig: NextConfig = {
           //   - Google Maps iframes (maps.googleapis.com, maps.gstatic.com, www.google.com)
           //   - Google Fonts (fonts.googleapis.com, fonts.gstatic.com)
           //   - Resend API calls (api.resend.com)
-          //   - Jotform embeds (form.jotform.com, *.jotform.com)
+          //   - Stripe payment elements (js.stripe.com, *.stripe.com)
           {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              // Scripts: self + inline (Next.js needs unsafe-inline for hydration) + Google Maps
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' maps.googleapis.com",
+              // Scripts: self + inline (Next.js hydration) + Google Maps + Stripe JS
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' maps.googleapis.com js.stripe.com",
               // Styles: self + inline (Tailwind/CSS-in-JS) + Google Fonts
               "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
               // Fonts: self + Google Fonts CDN
               "font-src 'self' fonts.gstatic.com",
-              // Images: self + data URIs + Google Maps tiles
-              "img-src 'self' data: maps.gstatic.com maps.googleapis.com *.googleapis.com",
-              // Frames: Google Maps + Jotform
-              "frame-src maps.google.com www.google.com form.jotform.com *.jotform.com",
-              // API fetches: self + Resend + Jotform (for form submissions)
-              "connect-src 'self' api.resend.com *.jotform.com",
+              // Images: self + data URIs + Google Maps tiles + Stripe card brand logos
+              "img-src 'self' data: maps.gstatic.com maps.googleapis.com *.googleapis.com *.stripe.com",
+              // Frames: Google Maps + Stripe payment element iframes
+              "frame-src maps.google.com www.google.com js.stripe.com *.stripe.com",
+              // API fetches: self + Resend + Stripe API
+              "connect-src 'self' api.resend.com api.stripe.com *.stripe.com",
               // Workers (Next.js service worker)
               "worker-src 'self' blob:",
             ].join("; "),
