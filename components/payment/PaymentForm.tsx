@@ -113,6 +113,14 @@ export default function PaymentForm({
     setReady(true);
   }, [clientSecret, onError]);
 
+  // If Stripe.js is already loaded (e.g. a second PaymentForm on the same page),
+  // Script onLoad won't fire again — call initStripe directly.
+  useEffect(() => {
+    if (window.Stripe) {
+      initStripe();
+    }
+  }, [initStripe]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
