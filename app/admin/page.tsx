@@ -1,508 +1,288 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { CAPACITY, ADMISSION, PRICING } from "@/lib/eventData";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 
-const CAPACITY_ROWS = [
-  { category: "Tattoo Artist Booths",  total: CAPACITY.tattooArtistBooths, price: `$${PRICING.tattooArtist.single.price} / $${PRICING.tattooArtist.double.price} (single/double) + permit`, type: "artist" },
-  { category: "Vendor Booths",         total: CAPACITY.vendorBooths,        price: `$${PRICING.vendor.single.price} / $${PRICING.vendor.double.price} (single/double)`, type: "vendor" },
-  { category: "Food Truck Spaces",     total: CAPACITY.foodTrucks,          price: `$${PRICING.foodTruck.space.price}`,                       type: "food-truck" },
-  { category: "Sponsor Booths",        total: CAPACITY.sponsorBooths,       price: "Custom packages",                                         type: "sponsor" },
-  { category: "Car Show Vehicles",     total: CAPACITY.carShowVehicles,     price: "See car-show page",                                       type: "car-show" },
-  { category: "VIP Sponsors",          total: CAPACITY.vipSponsors,         price: "TBD — confirm before publishing",                         type: "sponsor" },
-];
-
-const ADMISSION_ROWS = [
-  { label: "Friday, March 12",      price: `$${ADMISSION.friday.price}` },
-  { label: "Saturday, March 13",    price: `$${ADMISSION.saturday.price}` },
-  { label: "Sunday, March 14",      price: `$${ADMISSION.sunday.price}` },
-  { label: "3-Day Weekend Pass",    price: `$${ADMISSION.weekend.price}` },
-  { label: "Children (12 & under)", price: "FREE" },
-];
-
-interface Registration {
-  order_id: string;
-  registration_type: string;
-  status: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  amount_cents: number;
-  stripe_payment_intent_id: string | null;
-  created_at: string;
-  metadata: Record<string, unknown> | null;
+interface Stats {
+  total: number;
+  pending: number;
+  pending_review: number;
+  captured: number;
+  confirmed: number;
+  cancelled: number;
+  payment_failed: number;
+  approved_pending_payment: number;
+  info_requested: number;
+  total_revenue_cents: number;
+  pending_revenue_cents: number;
+  by_type: Record<string, number>;
+  recent: Array<{ status: string; registration_type: string; amount_cents: number; created_at: string }>;
 }
 
-type Tab = "registrations" | "capacity" | "links";
+const TYPE_LABELS: Record<string, string> = {
+  artist: "Tattoo Artists",
+  vendor: "Vendors",
+  food_truck: "Food Trucks",
+  sponsor: "Sponsors",
+  car_show: "Car Show",
+  competition: "Competitions",
+};
 
-export default function AdminPage() {
-  const [password, setPassword] = useState("");
-  const [authed, setAuthed]     = useState<boolean | null>(null); // null = checking
-  const [loginError, setLoginError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+const STATUS_COLORS: Record<string, string> = {
+  pending: "#d97706",
+  pending_review: "#2563eb",
+  captured: "#16a34a",
+  confirmed: "#16a34a",
+  cancelled: "#dc2626",
+  payment_failed: "#dc2626",
+  approved_pending_payment: "#7c3aed",
+  info_requested: "#d97706",
+};
 
-  const [tab, setTab] = useState<Tab>("registrations");
-  const [registrations, setRegistrations] = useState<Registration[]>([]);
-  const [loadingRegs, setLoadingRegs] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("pending_review");
-  const [actionLoading, setActionLoading] = useState<string | null>(null); // orderId being acted on
-  const [actionMsg, setActionMsg] = useState<{ orderId: string; msg: string } | null>(null);
+const STATUS_LABELS: Record<string, string> = {
+  pending: "Awaiting Payment",
+  pending_review: "Pending Review",
+  captured: "Approved & Paid",
+  confirmed: "Confirmed",
+  cancelled: "Denied/Cancelled",
+  payment_failed: "Payment Failed",
+  approved_pending_payment: "Approved — Payment Needed",
+  info_requested: "Info Requested",
+};
 
-  // Check session on mount
+function StatCard({ label, value, href, color, sub }: { label: string; value: number | string; href?: string; color?: string; sub?: string }) {
+  const content = (
+    <div style={{
+      background: "#fff",
+      border: "1px solid #e5e0d5",
+      borderRadius: "6px",
+      padding: "20px",
+      transition: "box-shadow 0.15s",
+      cursor: href ? "pointer" : "default",
+    }}>
+      <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#888", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</p>
+      <p style={{ margin: "0", fontSize: "36px", fontFamily: "var(--font-rye, serif)", color: color ?? "#1a120a", lineHeight: 1 }}>{value}</p>
+      {sub && <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>{sub}</p>}
+    </div>
+  );
+
+  if (href) {
+    return <Link href={href} style={{ textDecoration: "none", display: "block" }}>{content}</Link>;
+  }
+  return content;
+}
+
+export default function AdminDashboard() {
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   useEffect(() => {
-    fetch("/api/admin/auth")
-      .then((r) => { setAuthed(r.ok); })
-      .catch(() => setAuthed(false));
+    fetch("/api/admin/stats")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.error) throw new Error(d.error);
+        setStats(d);
+      })
+      .catch((e) => setError(e.message ?? "Failed to load stats."))
+      .finally(() => setLoading(false));
   }, []);
 
-  const loadRegistrations = useCallback(async () => {
-    setLoadingRegs(true);
-    try {
-      const param = statusFilter === "all" ? "?status=all" : `?status=${statusFilter}`;
-      const res = await fetch(`/api/admin/registrations${param}`);
-      if (!res.ok) throw new Error("Failed to load");
-      const json = await res.json();
-      setRegistrations(json.registrations ?? []);
-    } catch {
-      setRegistrations([]);
-    } finally {
-      setLoadingRegs(false);
-    }
-  }, [statusFilter]);
-
-  useEffect(() => {
-    if (authed && tab === "registrations") {
-      loadRegistrations();
-    }
-  }, [authed, tab, loadRegistrations]);
-
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setSubmitting(true);
-    setLoginError("");
-    try {
-      const res = await fetch("/api/admin/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-      if (res.ok) {
-        setAuthed(true);
-        setPassword("");
-      } else {
-        const json = await res.json().catch(() => ({}));
-        setLoginError(json.error ?? "Incorrect password.");
-      }
-    } catch {
-      setLoginError("Network error. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleLogout() {
-    await fetch("/api/admin/auth", { method: "DELETE" });
-    setAuthed(false);
-    setRegistrations([]);
-  }
-
-  async function handleCapture(orderId: string) {
-    setActionLoading(orderId);
-    setActionMsg(null);
-    try {
-      const res = await fetch("/api/admin/capture", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error ?? "Capture failed");
-      setActionMsg({ orderId, msg: json.alreadyCaptured ? "Already captured." : "✅ Captured — payment collected." });
-      await loadRegistrations();
-    } catch (err) {
-      setActionMsg({ orderId, msg: `❌ ${(err as Error).message}` });
-    } finally {
-      setActionLoading(null);
-    }
-  }
-
-  async function handleCancel(orderId: string) {
-    if (!confirm(`DENY and cancel payment for ${orderId}? This cannot be undone.`)) return;
-    setActionLoading(orderId);
-    setActionMsg(null);
-    try {
-      const res = await fetch("/api/admin/cancel", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error ?? "Cancel failed");
-      setActionMsg({ orderId, msg: json.alreadyCancelled ? "Already cancelled." : "🚫 Denied — hold released." });
-      await loadRegistrations();
-    } catch (err) {
-      setActionMsg({ orderId, msg: `❌ ${(err as Error).message}` });
-    } finally {
-      setActionLoading(null);
-    }
-  }
-
-  // Loading auth check
-  if (authed === null) {
-    return (
-      <div className="min-h-screen bg-ink-texture flex items-center justify-center">
-        <p style={{ color: "rgba(245,237,216,0.4)", fontFamily: "var(--font-special-elite, monospace)", fontSize: "0.85rem" }}>
-          Checking session…
+  return (
+    <div style={{ padding: "32px 32px 48px", maxWidth: "1100px" }}>
+      {/* Page header */}
+      <div style={{ marginBottom: "32px" }}>
+        <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
+          Admin Dashboard
+        </p>
+        <h1 style={{ margin: "0", fontSize: "28px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
+          West TN Tattoo and Art Festival 2027
+        </h1>
+        <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>
+          March 12–14, 2027 · Carroll County Fairgrounds, Huntingdon, TN
         </p>
       </div>
-    );
-  }
 
-  // Login screen
-  if (!authed) {
-    return (
-      <div className="min-h-screen bg-ink-texture flex items-center justify-center px-4">
-        <div className="bg-cream/90 border-2 border-gold/40 p-8 w-full max-w-sm text-center card-vintage">
-          <p
-            className="text-crimson text-xs tracking-[0.3em] uppercase mb-4"
-            style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-          >
-            ★ Admin Access ★
-          </p>
-          <h1
-            className="text-ink text-2xl mb-6"
-            style={{ fontFamily: "var(--font-rye, serif)" }}
-          >
-            West TN Tattoo and Art Festival<br />Admin Panel
-          </h1>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              autoFocus
-              className="w-full border border-ink/20 bg-white/80 px-4 py-3 text-ink text-sm text-center tracking-[0.3em] focus:outline-none focus:border-gold/60"
-              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
+      {loading && (
+        <p style={{ color: "#888", fontFamily: "var(--font-garamond, serif)", fontSize: "14px" }}>Loading dashboard…</p>
+      )}
+      {error && (
+        <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "6px", padding: "16px", color: "#dc2626", fontSize: "14px" }}>
+          Error: {error}
+        </div>
+      )}
+
+      {stats && (
+        <>
+          {/* Main stat cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+            <StatCard label="Total Applications" value={stats.total} href="/admin/applications?status=all" />
+            <StatCard label="Pending Review" value={stats.pending_review} href="/admin/applications?status=pending_review" color="#2563eb" />
+            <StatCard label="Awaiting Payment" value={stats.pending + (stats.approved_pending_payment ?? 0)} href="/admin/applications?status=pending" color="#d97706" />
+            <StatCard label="Approved & Paid" value={(stats.captured ?? 0) + (stats.confirmed ?? 0)} href="/admin/applications?status=captured" color="#16a34a" />
+            <StatCard label="Denied" value={stats.cancelled} href="/admin/applications?status=cancelled" color="#dc2626" />
+            <StatCard
+              label="Revenue Collected"
+              value={`$${(stats.total_revenue_cents / 100).toLocaleString("en-US", { minimumFractionDigits: 0 })}`}
+              color="#C4902A"
+              sub={stats.pending_revenue_cents > 0 ? `+$${(stats.pending_revenue_cents / 100).toLocaleString()} pending` : undefined}
             />
-            {loginError && (
-              <p className="text-crimson text-xs" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                {loginError}
-              </p>
-            )}
-            <button
-              type="submit"
-              disabled={submitting || !password}
-              className="w-full py-3 bg-crimson text-cream uppercase tracking-widest text-sm hover:bg-crimson-dark transition-all disabled:opacity-50"
-              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-            >
-              {submitting ? "Checking…" : "Access Admin Panel"}
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
-  // Authenticated admin panel
-  return (
-    <div className="bg-parchment-light-texture min-h-screen">
-      {/* Header */}
-      <div className="bg-ink-texture py-8 px-4 relative">
-        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />
-        <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg,transparent,#C4902A,transparent)" }} />
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div>
-            <p className="text-gold/60 text-[10px] uppercase tracking-[0.3em] mb-1" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-              Admin Panel
-            </p>
-            <h1 className="text-cream text-2xl" style={{ fontFamily: "var(--font-rye, serif)" }}>
-              West TN Tattoo and Art Festival 2027
-            </h1>
           </div>
-          <button
-            onClick={handleLogout}
-            className="text-cream/40 text-xs uppercase tracking-wider hover:text-cream/70 transition-colors"
-            style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-          >
-            Sign Out
-          </button>
-        </div>
 
-        {/* Tabs */}
-        <div className="max-w-5xl mx-auto mt-6 flex gap-2">
-          {(["registrations", "capacity", "links"] as Tab[]).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-4 py-2 text-xs uppercase tracking-wider transition-colors ${
-                tab === t
-                  ? "bg-gold text-ink"
-                  : "text-cream/50 hover:text-cream/80 border border-cream/20 hover:border-cream/40"
-              }`}
-              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-            >
-              {t === "registrations" ? "Registrations" : t === "capacity" ? "Capacity & Pricing" : "Quick Links"}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 py-8">
-
-        {/* ── REGISTRATIONS TAB ── */}
-        {tab === "registrations" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between flex-wrap gap-3">
-              <div className="flex gap-2">
-                {["pending_review", "captured", "cancelled", "all"].map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => { setStatusFilter(s); setActionMsg(null); }}
-                    className={`px-3 py-1.5 text-xs uppercase tracking-wider transition-colors ${
-                      statusFilter === s
-                        ? "bg-ink text-cream"
-                        : "border border-ink/20 text-ink/60 hover:border-ink/40"
-                    }`}
-                    style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                  >
-                    {s === "pending_review" ? "Pending Review" :
-                     s === "captured" ? "Approved" :
-                     s === "cancelled" ? "Denied" : "All"}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={loadRegistrations}
-                disabled={loadingRegs}
-                className="text-xs text-ink/50 hover:text-ink/80 uppercase tracking-wider border border-ink/15 px-3 py-1.5 transition-colors disabled:opacity-40"
-                style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-              >
-                {loadingRegs ? "Loading…" : "↺ Refresh"}
-              </button>
+          {/* Two column section */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginBottom: "24px" }}>
+            {/* Applications by type */}
+            <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "24px" }}>
+              <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
+                Applications by Type
+              </h2>
+              {Object.entries(stats.by_type).length === 0 ? (
+                <p style={{ color: "#aaa", fontSize: "13px" }}>No applications yet.</p>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {Object.entries(stats.by_type).map(([type, count]) => (
+                    <Link key={type} href={`/admin/applications?type=${type}&status=all`} style={{ textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
+                      <span style={{ fontSize: "13px", color: "#555", fontFamily: "var(--font-garamond, serif)" }}>
+                        {TYPE_LABELS[type] ?? type}
+                      </span>
+                      <span style={{ fontSize: "18px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>{count}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+              <Link href="/admin/applications?status=all" style={{ display: "inline-block", marginTop: "16px", fontSize: "12px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textDecoration: "none" }}>
+                VIEW ALL APPLICATIONS →
+              </Link>
             </div>
 
-            {loadingRegs ? (
-              <p className="text-ink/40 text-sm text-center py-8" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                Loading registrations…
-              </p>
-            ) : registrations.length === 0 ? (
-              <div className="border border-ink/10 bg-cream/50 p-8 text-center">
-                <p className="text-ink/50 text-sm" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                  No registrations with status &quot;{statusFilter}&quot;.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {registrations.map((reg) => {
-                  const dollars = reg.amount_cents ? `$${(reg.amount_cents / 100).toFixed(2)}` : "—";
-                  const date = new Date(reg.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-                  const isPending = reg.status === "pending_review";
-                  const myActionMsg = actionMsg?.orderId === reg.order_id ? actionMsg.msg : null;
-
-                  return (
-                    <div key={reg.order_id} className={`border p-5 ${isPending ? "border-gold/50 bg-gold/5" : "border-ink/12 bg-cream/50"}`}>
-                      <div className="flex flex-wrap items-start justify-between gap-4">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-ink font-medium" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-                              {reg.first_name} {reg.last_name}
-                            </span>
-                            <span className={`text-[10px] px-1.5 py-0.5 uppercase tracking-wider ${
-                              reg.status === "pending_review" ? "bg-gold/20 text-amber-700" :
-                              reg.status === "captured"       ? "bg-green-100 text-green-700" :
-                              reg.status === "cancelled"      ? "bg-red-100 text-red-700" :
-                              "bg-ink/10 text-ink/60"
-                            }`} style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-                              {reg.status === "pending_review" ? "Pending" :
-                               reg.status === "captured"       ? "Approved" :
-                               reg.status === "cancelled"      ? "Denied" : reg.status}
-                            </span>
-                          </div>
-                          <p className="text-ink/60 text-sm" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                            {reg.email} · {reg.registration_type} · {dollars} · {date}
+            {/* Recent activity */}
+            <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "24px" }}>
+              <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
+                Recent Submissions
+              </h2>
+              {stats.recent.length === 0 ? (
+                <p style={{ color: "#aaa", fontSize: "13px" }}>No submissions yet.</p>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {stats.recent.map((r, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#333" }}>
+                          {TYPE_LABELS[r.registration_type] ?? r.registration_type}
+                        </p>
+                        <p style={{ margin: "2px 0 0", fontSize: "11px", color: "#aaa", fontFamily: "var(--font-garamond, serif)" }}>
+                          {new Date(r.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </p>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <span style={{
+                          display: "inline-block",
+                          padding: "2px 8px",
+                          borderRadius: "3px",
+                          fontSize: "10px",
+                          fontFamily: "var(--font-special-elite, monospace)",
+                          letterSpacing: "0.05em",
+                          background: `${STATUS_COLORS[r.status] ?? "#888"}20`,
+                          color: STATUS_COLORS[r.status] ?? "#888",
+                        }}>
+                          {STATUS_LABELS[r.status] ?? r.status}
+                        </span>
+                        {r.amount_cents > 0 && (
+                          <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#555", fontFamily: "var(--font-garamond, serif)" }}>
+                            ${(r.amount_cents / 100).toFixed(0)}
                           </p>
-                          <p className="text-ink/35 text-xs mt-1" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                            Ref: {reg.order_id}
-                            {reg.stripe_payment_intent_id && ` · PI: ${reg.stripe_payment_intent_id}`}
-                          </p>
-                          {myActionMsg && (
-                            <p className="text-sm mt-2" style={{ fontFamily: "var(--font-garamond, serif)", color: myActionMsg.startsWith("❌") ? "#dc2626" : "#16a34a" }}>
-                              {myActionMsg}
-                            </p>
-                          )}
-                        </div>
-
-                        {isPending && (
-                          <div className="flex gap-2 flex-shrink-0">
-                            <button
-                              onClick={() => handleCapture(reg.order_id)}
-                              disabled={actionLoading === reg.order_id}
-                              className="px-4 py-2 bg-green-600 text-white text-xs uppercase tracking-wider hover:bg-green-700 transition-colors disabled:opacity-50"
-                              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                            >
-                              {actionLoading === reg.order_id ? "…" : "✓ Approve"}
-                            </button>
-                            <button
-                              onClick={() => handleCancel(reg.order_id)}
-                              disabled={actionLoading === reg.order_id}
-                              className="px-4 py-2 bg-crimson text-cream text-xs uppercase tracking-wider hover:bg-crimson-dark transition-colors disabled:opacity-50"
-                              style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                            >
-                              {actionLoading === reg.order_id ? "…" : "✗ Deny"}
-                            </button>
-                          </div>
                         )}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-
-            <p className="text-ink/35 text-xs italic" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-              Approving captures the authorized hold. Denying releases it. TYPE 2 entries (car show, competition) are charged immediately and will not appear here as pending.
-            </p>
-          </div>
-        )}
-
-        {/* ── CAPACITY TAB ── */}
-        {tab === "capacity" && (
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-ink text-xl mb-4" style={{ fontFamily: "var(--font-rye, serif)" }}>
-                Capacity Reference
-              </h2>
-              <div className="border border-ink/15 overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-ink/8">
-                      <th className="text-left px-4 py-3 text-ink/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>Category</th>
-                      <th className="text-center px-4 py-3 text-ink/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>Total Spaces</th>
-                      <th className="text-right px-4 py-3 text-ink/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>Rate</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {CAPACITY_ROWS.map((row, i) => (
-                      <tr key={row.category} className={`border-t border-ink/8 ${i % 2 === 0 ? "bg-cream/40" : "bg-cream/70"}`}>
-                        <td className="px-4 py-3 text-ink/80" style={{ fontFamily: "var(--font-garamond, serif)" }}>{row.category}</td>
-                        <td className="px-4 py-3 text-center">
-                          <span className="text-gold font-bold text-lg" style={{ fontFamily: "var(--font-rye, serif)" }}>
-                            {row.total}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right text-ink/60 text-xs" style={{ fontFamily: "var(--font-garamond, serif)" }}>{row.price}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-ink text-xl mb-4" style={{ fontFamily: "var(--font-rye, serif)" }}>
-                General Admission Pricing
-              </h2>
-              <div className="border border-ink/15 overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-ink/8">
-                      <th className="text-left px-4 py-3 text-ink/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>Ticket</th>
-                      <th className="text-right px-4 py-3 text-ink/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {ADMISSION_ROWS.map((row, i) => (
-                      <tr key={row.label} className={`border-t border-ink/8 ${i % 2 === 0 ? "bg-cream/40" : "bg-cream/70"}`}>
-                        <td className="px-4 py-3 text-ink/80" style={{ fontFamily: "var(--font-garamond, serif)" }}>{row.label}</td>
-                        <td className="px-4 py-3 text-right">
-                          <span className="text-crimson font-bold" style={{ fontFamily: "var(--font-rye, serif)" }}>
-                            {row.price}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-        )}
 
-        {/* ── QUICK LINKS TAB ── */}
-        {tab === "links" && (
-          <div className="space-y-6">
-            <h2 className="text-ink text-xl mb-4" style={{ fontFamily: "var(--font-rye, serif)" }}>
-              Quick Links
+          {/* System status */}
+          <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "24px" }}>
+            <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
+              System Status
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "12px" }}>
               {[
-                { label: "Artist Applications",  href: "/artists" },
-                { label: "Vendor Applications",  href: "/vendors#apply-vendor" },
-                { label: "Food Truck Apps",       href: "/vendors#apply-food-truck" },
-                { label: "Car Show",              href: "/car-show#register" },
-                { label: "Competitions",          href: "/competitions" },
-                { label: "Sponsor Info",          href: "/sponsors" },
-                { label: "Tickets Page",          href: "/tickets" },
-                { label: "Event Info",            href: "/event-info" },
-                { label: "Contact",               href: "/contact" },
-              ].map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="block border border-ink/15 bg-cream/60 px-4 py-3 text-ink/70 text-xs uppercase tracking-wider hover:bg-cream hover:text-ink hover:border-gold/40 transition-all text-center"
-                  style={{ fontFamily: "var(--font-special-elite, monospace)" }}
-                >
-                  {link.label}
-                </a>
+                { name: "Registration Forms", status: "live", note: "Artists, Vendors, Food Trucks, Sponsors, Car Show, Competitions" },
+                { name: "Admin Review Portal", status: "live", note: "This panel — approve, deny, request info, add notes" },
+                { name: "Applicant Emails (Resend)", status: "live", note: "Approval, denial, and info-request emails working" },
+                { name: "Stripe Payments", status: "test", note: "Running in TEST MODE — no real money collected" },
+                { name: "Stripe Webhook", status: "pending", note: "Register endpoint in Stripe dashboard once live keys are ready" },
+                { name: "Live Stripe Credentials", status: "pending", note: "Complete Stripe verification, then update Vercel env vars" },
+              ].map((item) => (
+                <div key={item.name} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                  <div style={{
+                    width: "8px", height: "8px", borderRadius: "50%", flexShrink: 0, marginTop: "5px",
+                    background: item.status === "live" ? "#16a34a" : item.status === "test" ? "#d97706" : "#dc2626",
+                  }} />
+                  <div>
+                    <p style={{ margin: "0 0 2px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#333" }}>
+                      {item.name}
+                      <span style={{
+                        marginLeft: "8px", fontSize: "9px", padding: "1px 6px", borderRadius: "2px", fontFamily: "var(--font-special-elite, monospace)",
+                        background: item.status === "live" ? "#dcfce7" : item.status === "test" ? "#fef9c3" : "#fee2e2",
+                        color: item.status === "live" ? "#166534" : item.status === "test" ? "#854d0e" : "#991b1b",
+                      }}>
+                        {item.status === "live" ? "LIVE" : item.status === "test" ? "TEST MODE" : "PENDING"}
+                      </span>
+                    </p>
+                    <p style={{ margin: 0, fontSize: "11px", color: "#aaa", fontFamily: "var(--font-garamond, serif)" }}>{item.note}</p>
+                  </div>
+                </div>
               ))}
             </div>
-
-            <div className="border border-ink/12 bg-cream/50 p-6">
-              <h2 className="text-ink text-xl mb-4" style={{ fontFamily: "var(--font-rye, serif)" }}>
-                System Status
-              </h2>
-              <div className="space-y-3">
-                {[
-                  { name: "Registration Forms",        status: "live",    note: "Artists, Vendors, Food Trucks, Car Show — forms live" },
-                  { name: "Email (Resend)",             status: "live",    note: "Notifications to studio45tattoo2025@gmail.com + applicant" },
-                  { name: "Stripe (Test Mode)",         status: "live",    note: "Auth-holds (TYPE 1) + immediate charge (TYPE 2) wired" },
-                  { name: "Admin Approve/Deny",         status: "live",    note: "This panel — capture or cancel holds from Registrations tab" },
-                  { name: "Stripe Webhook",             status: "pending", note: "Register endpoint in Stripe dashboard + add STRIPE_WEBHOOK_SECRET" },
-                  { name: "Live Stripe Credentials",    status: "pending", note: "Set STRIPE_SECRET_KEY + STRIPE_PUBLISHABLE_KEY to live keys after verification" },
-                  { name: "VIP Weekend Ticket",         status: "hold",    note: "Pricing unconfirmed — do not publish until confirmed by organizers" },
-                ].map((item) => (
-                  <div key={item.name} className="flex items-start gap-3">
-                    <span
-                      className={`flex-shrink-0 w-2 h-2 rounded-full mt-1.5 ${
-                        item.status === "live"    ? "bg-green-500" :
-                        item.status === "pending" ? "bg-yellow-500" :
-                        "bg-red-500"
-                      }`}
-                    />
-                    <div>
-                      <p className="text-ink/80 text-sm font-medium" style={{ fontFamily: "var(--font-special-elite, monospace)" }}>
-                        {item.name}
-                        <span className={`ml-2 text-[10px] px-1.5 py-0.5 uppercase tracking-wider ${
-                          item.status === "live"    ? "bg-green-100 text-green-700" :
-                          item.status === "pending" ? "bg-yellow-50 text-yellow-700" :
-                          "bg-red-50 text-red-700"
-                        }`}>
-                          {item.status === "live" ? "Live" : item.status === "pending" ? "Pending Setup" : "On Hold"}
-                        </span>
-                      </p>
-                      <p className="text-ink/45 text-xs mt-0.5" style={{ fontFamily: "var(--font-garamond, serif)" }}>
-                        {item.note}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
-        )}
 
-      </div>
+          {/* Quick actions */}
+          <div style={{ marginTop: "24px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <Link href="/admin/applications?status=pending_review" style={{
+              padding: "10px 20px",
+              background: "#2563eb",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "12px",
+              fontFamily: "var(--font-special-elite, monospace)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              borderRadius: "4px",
+            }}>
+              Review Pending ({stats.pending_review})
+            </Link>
+            <Link href="/admin/capacity" style={{
+              padding: "10px 20px",
+              background: "#fff",
+              color: "#1a120a",
+              border: "1px solid #e5e0d5",
+              textDecoration: "none",
+              fontSize: "12px",
+              fontFamily: "var(--font-special-elite, monospace)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              borderRadius: "4px",
+            }}>
+              View Capacity
+            </Link>
+            <Link href="/admin/activity" style={{
+              padding: "10px 20px",
+              background: "#fff",
+              color: "#1a120a",
+              border: "1px solid #e5e0d5",
+              textDecoration: "none",
+              fontSize: "12px",
+              fontFamily: "var(--font-special-elite, monospace)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              borderRadius: "4px",
+            }}>
+              Activity Log
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 }
