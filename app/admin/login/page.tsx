@@ -1,19 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import Link from "next/link";
+
+const INPUT_STYLE: React.CSSProperties = {
+  width: "100%",
+  background: "rgba(245,237,216,0.06)",
+  border: "1px solid rgba(196,144,42,0.3)",
+  color: "#F5EDD8",
+  padding: "12px 14px",
+  fontSize: "14px",
+  fontFamily: "var(--font-special-elite, monospace)",
+  letterSpacing: "0.05em",
+  outline: "none",
+  boxSizing: "border-box",
+  borderRadius: "2px",
+};
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") ?? "/admin";
 
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Check if already logged in
+  // Redirect if already logged in
   useEffect(() => {
     fetch("/api/admin/auth")
       .then((r) => { if (r.ok) router.replace(redirectTo); })
@@ -22,20 +37,20 @@ function LoginForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!password) return;
+    if (!email || !password) return;
     setLoading(true);
     setError("");
     try {
       const res = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
       });
       if (res.ok) {
         router.replace(redirectTo);
       } else {
         const json = await res.json().catch(() => ({}));
-        setError(json.error ?? "Incorrect password. Please try again.");
+        setError(json.error ?? "Invalid email or password. Please try again.");
         setPassword("");
       }
     } catch {
@@ -63,30 +78,47 @@ function LoginForm() {
 
         {/* Login card */}
         <div style={{ background: "#1a120a", border: "1px solid rgba(196,144,42,0.25)", borderRadius: "4px", padding: "32px" }}>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {/* Email */}
             <div>
-              <label style={{ display: "block", color: "rgba(245,237,216,0.5)", fontSize: "11px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "8px" }}>
+              <label
+                htmlFor="admin-email"
+                style={{ display: "block", color: "rgba(245,237,216,0.5)", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "8px" }}
+              >
+                Email Address
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                autoFocus
+                autoComplete="email"
+                required
+                style={INPUT_STYLE}
+                onFocus={(e) => { e.target.style.borderColor = "rgba(196,144,42,0.6)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "rgba(196,144,42,0.3)"; }}
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label
+                htmlFor="admin-password"
+                style={{ display: "block", color: "rgba(245,237,216,0.5)", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "8px" }}
+              >
                 Password
               </label>
               <input
+                id="admin-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter admin password"
-                autoFocus
+                placeholder="••••••••••••"
                 autoComplete="current-password"
-                style={{
-                  width: "100%",
-                  background: "rgba(245,237,216,0.06)",
-                  border: "1px solid rgba(196,144,42,0.3)",
-                  color: "#F5EDD8",
-                  padding: "12px 14px",
-                  fontSize: "14px",
-                  fontFamily: "var(--font-special-elite, monospace)",
-                  letterSpacing: "0.15em",
-                  outline: "none",
-                  boxSizing: "border-box",
-                }}
+                required
+                style={INPUT_STYLE}
                 onFocus={(e) => { e.target.style.borderColor = "rgba(196,144,42,0.6)"; }}
                 onBlur={(e) => { e.target.style.borderColor = "rgba(196,144,42,0.3)"; }}
               />
@@ -100,29 +132,45 @@ function LoginForm() {
 
             <button
               type="submit"
-              disabled={loading || !password}
+              disabled={loading || !email || !password}
               style={{
                 width: "100%",
                 padding: "13px",
-                background: loading || !password ? "rgba(196,144,42,0.4)" : "#C4902A",
+                background: loading || !email || !password ? "rgba(196,144,42,0.4)" : "#C4902A",
                 color: "#0f0a05",
                 fontFamily: "var(--font-special-elite, monospace)",
                 fontSize: "12px",
                 letterSpacing: "0.25em",
                 textTransform: "uppercase",
                 border: "none",
-                cursor: loading || !password ? "not-allowed" : "pointer",
+                cursor: loading || !email || !password ? "not-allowed" : "pointer",
                 fontWeight: "bold",
                 transition: "all 0.2s",
+                borderRadius: "2px",
+                marginTop: "4px",
               }}
             >
               {loading ? "Signing in…" : "Sign In"}
             </button>
           </form>
 
-          <p style={{ color: "rgba(245,237,216,0.2)", fontSize: "11px", fontFamily: "var(--font-garamond, serif)", textAlign: "center", marginTop: "24px", marginBottom: 0 }}>
-            Forgot your password? Contact your developer to reset the admin password in Vercel.
-          </p>
+          {/* Forgot password */}
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <Link
+              href="/admin/login/reset"
+              style={{
+                color: "rgba(245,237,216,0.3)",
+                fontSize: "11px",
+                fontFamily: "var(--font-special-elite, monospace)",
+                letterSpacing: "0.1em",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(196,144,42,0.7)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(245,237,216,0.3)"; }}
+            >
+              Forgot Password?
+            </Link>
+          </div>
         </div>
 
         <p style={{ color: "rgba(245,237,216,0.15)", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", textAlign: "center", marginTop: "24px", letterSpacing: "0.1em" }}>

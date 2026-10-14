@@ -228,6 +228,9 @@ export default function Footer() {
               fontFamily: "var(--font-body, system-ui, sans-serif)",
               fontSize: "0.8rem",
               color: "rgba(245,237,216,0.22)",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
             }}
           >
             Website by{" "}
@@ -243,6 +246,36 @@ export default function Footer() {
             >
               Arenas Management Co.
             </a>
+            {/* Discreet organizer portal access — not a security mechanism */}
+            <Link
+              href="/admin/login"
+              aria-label="Organizer portal"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                color: "rgba(245,237,216,0.18)",
+                lineHeight: 1,
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(245,237,216,0.45)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(245,237,216,0.18)"; }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                width="13"
+                height="13"
+                aria-hidden="true"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </Link>
           </p>
         </div>
       </div>
