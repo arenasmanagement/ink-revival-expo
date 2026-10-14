@@ -25,7 +25,7 @@ import { Resend } from "resend";
 export const dynamic = "force-dynamic";
 
 // SECURITY CONSTANT — DO NOT CHANGE
-const FROM_EMAIL = "West TN Ink Revival Expo <contact@westtninkrevival.com>";
+const FROM_EMAIL = "West TN Tattoo & Art Festival <contact@westtninkrevival.com>";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

@@ -16,7 +16,7 @@
  *   5. If PAYMENT_TEST_MODE=true: skip Stripe, send emails immediately
  *
  * Security:
- *   FROM_EMAIL = "West TN Ink Revival Expo <contact@westtninkrevival.com>" — NEVER CHANGE
+ *   FROM_EMAIL = "West TN Tattoo & Art Festival <contact@westtninkrevival.com>"
  *   ADMIN_EMAIL = "studio45tattoo2025@gmail.com" — keep as-is
  *   No card data passes through this route.
  *   Never expose Stripe or Supabase keys in client responses.
@@ -30,7 +30,7 @@ import { stripe } from "@/lib/stripe";
 export const dynamic = "force-dynamic";
 
 // ─── SECURITY CONSTANTS — DO NOT CHANGE ─────────────────────────────────────
-const FROM_EMAIL  = "West TN Ink Revival Expo <contact@westtninkrevival.com>";
+const FROM_EMAIL  = "West TN Tattoo & Art Festival <contact@westtninkrevival.com>";
 const ADMIN_EMAIL = "studio45tattoo2025@gmail.com";
 
 // ─── Payment type classification ─────────────────────────────────────────────
