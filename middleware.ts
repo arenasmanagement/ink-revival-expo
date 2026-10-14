@@ -28,10 +28,11 @@ function isTokenValid(token: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Pass through login page, password-reset pages, and auth API routes
+  // Pass through login page, password-reset/setup pages, and auth API routes
   if (
     pathname === "/admin/login" ||
     pathname.startsWith("/admin/login/") ||
+    pathname === "/admin/setup-password" ||
     pathname.startsWith("/api/admin/auth")
   ) {
     return NextResponse.next();

@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       const supabase = createServiceClient();
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://westtninkrevival.com";
       await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${siteUrl}/admin/login/new-password`,
+        redirectTo: `${siteUrl}/admin/setup-password`,
       });
     } catch { /* intentionally silent */ }
   }

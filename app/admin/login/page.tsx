@@ -22,6 +22,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") ?? "/admin";
+  const setupDone = searchParams.get("setup") === "1";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -78,6 +79,13 @@ function LoginForm() {
 
         {/* Login card */}
         <div style={{ background: "#1a120a", border: "1px solid rgba(196,144,42,0.25)", borderRadius: "4px", padding: "32px" }}>
+          {setupDone && (
+            <div style={{ background: "rgba(22,163,74,0.12)", border: "1px solid rgba(22,163,74,0.3)", borderRadius: "3px", padding: "10px 14px", marginBottom: "20px" }}>
+              <p style={{ color: "#16a34a", fontFamily: "var(--font-special-elite, monospace)", fontSize: "12px", letterSpacing: "0.05em", margin: 0 }}>
+                ✓ Password created — please sign in below.
+              </p>
+            </div>
+          )}
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {/* Email */}
             <div>
