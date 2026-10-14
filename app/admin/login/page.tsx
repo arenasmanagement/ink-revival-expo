@@ -165,7 +165,7 @@ function LoginForm() {
           {/* Forgot password */}
           <div style={{ textAlign: "center", marginTop: "20px" }}>
             <Link
-              href="/admin/login/reset"
+              href="/admin/forgot-password"
               style={{
                 color: "rgba(245,237,216,0.3)",
                 fontSize: "11px",

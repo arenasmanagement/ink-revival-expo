@@ -238,7 +238,7 @@ export default function SetupPasswordPage() {
                 This link is invalid or has expired. Please request a new one.
               </p>
               <Link
-                href="/admin/login/reset"
+                href="/admin/forgot-password"
                 style={{
                   color: "rgba(196,144,42,0.7)",
                   fontFamily: "var(--font-special-elite, monospace)",

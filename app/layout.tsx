@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Barlow, Rye, Special_Elite, EB_Garamond } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { headers } from "next/headers";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -105,23 +106,29 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Read the pathname forwarded by middleware so we can suppress the public
+  // Navbar / Footer for all admin routes (they have their own layout).
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") ?? "";
+  const isAdmin = pathname.startsWith("/admin");
+
   return (
     <html
       lang="en"
       className={`${bebasNeue.variable} ${barlow.variable} ${rye.variable} ${specialElite.variable} ${ebGaramond.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-ink" style={{ backgroundColor: "#1A1008" }}>
-        <AnnouncementBar />
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {!isAdmin && <AnnouncementBar />}
+        {!isAdmin && <Navbar />}
+        {isAdmin ? children : <main className="flex-1">{children}</main>}
+        {!isAdmin && <Footer />}
       </body>
-      <GoogleAnalytics gaId="G-1J8YDHQEN3" />
+      {!isAdmin && <GoogleAnalytics gaId="G-1J8YDHQEN3" />}
     </html>
   );
 }

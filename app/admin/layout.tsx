@@ -17,8 +17,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Don't wrap the login page with sidebar
-  if (pathname === "/admin/login") {
+  // Don't wrap auth pages with the sidebar — they render their own full-screen layout.
+  // This covers: login, login/reset, login/new-password, setup-password, forgot-password.
+  if (
+    pathname === "/admin/login" ||
+    pathname.startsWith("/admin/login/") ||
+    pathname === "/admin/setup-password" ||
+    pathname === "/admin/forgot-password"
+  ) {
     return <>{children}</>;
   }
 
