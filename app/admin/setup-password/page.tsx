@@ -3,20 +3,32 @@
 /**
  * /admin/setup-password
  *
- * Handles all three URL formats Supabase may send after a recovery or invite email:
+ * Handles Supabase password recovery and invite flows.
  *
- *   1. ?token_hash=HASH&type=recovery  (modern Supabase default — was NOT handled before)
- *   2. ?code=CODE                      (PKCE code exchange)
- *   3. #access_token=AT&type=recovery  (implicit / hash fragment)
+ * ─── ARCHITECTURE: verify-on-submit ────────────────────────────────────────
  *
- * The previous version called getSession() immediately after createClient(), which
- * races with Supabase's async detectSessionInUrl processing and nearly always
- * returns null — causing the "invalid or expired" message on fresh valid links.
+ *  Previous architecture (broken):
+ *    Email → {{ .ConfirmationURL }} → Supabase /auth/v1/verify endpoint
+ *    → Email security scanner hits Supabase endpoint → token consumed
+ *    → Even if it reaches our page, useEffect calls verifyOtp() immediately
+ *    → Token consumed again → Diego clicks → "Link Invalid or Expired"
  *
- * This version sets detectSessionInUrl: false and handles each URL format
- * explicitly so there is no race condition.
+ *  New architecture (correct):
+ *    Email → {{ .TokenHash }} → direct URL to THIS page
+ *    → Email scanners get server-rendered HTML (no JS, no token consumed)
+ *    → Page shows password form immediately — NO auto-verification on load
+ *    → User fills password, clicks Set Password
+ *    → Form submit handler calls verifyOtp() + updateUser() atomically
+ *    → Token consumed exactly once, by the real user
+ *
+ *  URL format this page expects:
+ *    /admin/setup-password?token_hash=HASH&type=recovery
+ *    /admin/setup-password?token_hash=HASH&type=invite
  *
  * SECURITY: Public page — in middleware passthrough list.
+ * No authentication bypass: verifyOtp() with an invalid/expired hash returns
+ * an error and the page shows "Link Invalid". Password update requires a
+ * valid, live Supabase recovery session obtained via verifyOtp().
  */
 
 import { useState, useEffect, useRef } from "react";
@@ -25,11 +37,10 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import Link from "next/link";
 
 type Phase =
-  | "verifying"   // Parsing URL token — initial state
-  | "form"        // Token verified — ready for password input
-  | "submitting"  // Saving password + auto-login
-  | "success"     // Done — redirecting
-  | "invalid";    // Token missing / expired / already used
+  | "ready"      // Token found in URL — form is shown, waiting for user input
+  | "submitting" // User submitted — verifying token + updating password
+  | "success"    // Password updated — redirecting to /admin
+  | "invalid";   // No token in URL, or verifyOtp failed on submit
 
 const INPUT_STYLE: React.CSSProperties = {
   width: "100%",
@@ -63,20 +74,24 @@ export default function SetupPasswordPage() {
   const router = useRouter();
   const supabaseRef = useRef<SupabaseClient | null>(null);
 
-  const [phase, setPhase] = useState<Phase>("verifying");
+  const [phase, setPhase] = useState<Phase>("ready");
+  const [tokenHash, setTokenHash] = useState("");
+  const [tokenType, setTokenType] = useState<"recovery" | "invite" | "signup">("recovery");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [invalidReason, setInvalidReason] = useState("");
-  const [userEmail, setUserEmail] = useState("");
 
   const strength = getPasswordStrength(password);
 
   /**
-   * Create a Supabase anon client. detectSessionInUrl is intentionally false —
-   * we parse and exchange the URL token ourselves so there is no async race.
+   * Supabase anon client.
+   * persistSession: false — we use our own wt_admin_session cookie.
+   * detectSessionInUrl: false — we parse URL params ourselves.
+   * autoRefreshToken: false — session only needs to last long enough to
+   *   call verifyOtp() + updateUser() in one submit handler.
    */
   function getClient(): SupabaseClient {
     if (!supabaseRef.current) {
@@ -86,7 +101,7 @@ export default function SetupPasswordPage() {
         {
           auth: {
             persistSession: false,
-            detectSessionInUrl: false, // We handle URL parsing manually
+            detectSessionInUrl: false,
             autoRefreshToken: false,
           },
         }
@@ -95,140 +110,45 @@ export default function SetupPasswordPage() {
     return supabaseRef.current;
   }
 
+  /**
+   * On mount: read token_hash and type from URL.
+   * CRITICAL: We do NOT call any Supabase auth API here.
+   * The token must survive email security scanners fetching this page,
+   * so it is only consumed inside handleSubmit when the user actually acts.
+   */
   useEffect(() => {
-    const supabase = getClient();
+    const sp = new URLSearchParams(window.location.search);
+    const hash = sp.get("token_hash");
+    const type = sp.get("type") as "recovery" | "invite" | "signup" | null;
 
-    const searchParams = new URLSearchParams(window.location.search);
-    const hashParams  = new URLSearchParams(
-      window.location.hash.length > 1
-        ? window.location.hash.substring(1)
-        : ""
-    );
-
-    // Extract every possible token location
-    const tokenHash    = searchParams.get("token_hash");
-    const urlType      = searchParams.get("type") ?? hashParams.get("type");
-    const code         = searchParams.get("code");
-    const accessToken  = hashParams.get("access_token");
-    const refreshToken = hashParams.get("refresh_token") ?? "";
-
-    let cancelled = false;
-
-    // 8-second safety timeout — if none of the flows succeed, show error
-    const timeout = setTimeout(() => {
-      if (!cancelled) {
-        cancelled = true;
-        setInvalidReason("The verification request timed out. Please request a new link.");
-        setPhase("invalid");
-      }
-    }, 8000);
-
-    async function initSession() {
-      // ── Flow 1: token_hash (modern Supabase recovery / invite) ──────────────
-      // URL: /admin/setup-password?token_hash=XXXXX&type=recovery
-      // This is the DEFAULT format for modern Supabase Auth projects.
-      // The previous code never handled this, which caused all fresh links to fail.
-      if (tokenHash && urlType) {
-        const { data, error } = await supabase.auth.verifyOtp({
-          token_hash: tokenHash,
-          type: urlType as "recovery" | "invite" | "signup",
-        });
-
-        if (cancelled) return;
-        clearTimeout(timeout);
-        cancelled = true;
-
-        if (error || !data.session) {
-          setInvalidReason(
-            error?.message?.toLowerCase().includes("expired")
-              ? "This link has expired. Please request a new one — links are valid for 1 hour."
-              : "This link is invalid or has already been used. Please request a new one."
-          );
-          setPhase("invalid");
-          return;
-        }
-
-        setUserEmail(data.session.user.email ?? "");
-        setPhase("form");
-        return;
-      }
-
-      // ── Flow 2: PKCE code exchange ───────────────────────────────────────────
-      // URL: /admin/setup-password?code=XXXXX
-      if (code) {
-        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-
-        if (cancelled) return;
-        clearTimeout(timeout);
-        cancelled = true;
-
-        if (error || !data.session) {
-          setInvalidReason(
-            "This link is invalid or has already been used. Please request a new one."
-          );
-          setPhase("invalid");
-          return;
-        }
-
-        setUserEmail(data.session.user.email ?? "");
-        setPhase("form");
-        return;
-      }
-
-      // ── Flow 3: Hash / implicit ──────────────────────────────────────────────
-      // URL: /admin/setup-password#access_token=AT&refresh_token=RT&type=recovery
-      if (
-        accessToken &&
-        (urlType === "recovery" || urlType === "invite" || urlType === "signup")
-      ) {
-        const { data, error } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        });
-
-        if (cancelled) return;
-        clearTimeout(timeout);
-        cancelled = true;
-
-        if (error || !data.session) {
-          setInvalidReason(
-            error?.message?.toLowerCase().includes("expired")
-              ? "This link has expired. Please request a new one — links are valid for 1 hour."
-              : "This link is invalid or has already been used. Please request a new one."
-          );
-          setPhase("invalid");
-          return;
-        }
-
-        setUserEmail(data.session.user.email ?? "");
-        setPhase("form");
-        return;
-      }
-
-      // ── No recognisable token in URL ─────────────────────────────────────────
-      if (!cancelled) {
-        clearTimeout(timeout);
-        cancelled = true;
-        setInvalidReason(
-          "No valid recovery token was found in this link. Please request a new password reset."
-        );
-        setPhase("invalid");
-      }
+    if (!hash || !type || !["recovery", "invite", "signup"].includes(type)) {
+      setInvalidReason(
+        "No valid recovery token was found in this link. Please request a new password reset."
+      );
+      setPhase("invalid");
+      return;
     }
 
-    initSession();
-
-    return () => {
-      cancelled = true;
-      clearTimeout(timeout);
-    };
+    setTokenHash(hash);
+    setTokenType(type);
+    setPhase("ready");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Form submit: the one and only place where the token is verified.
+   *
+   * Step 1 — Validate password locally (no API call yet).
+   * Step 2 — verifyOtp({ token_hash, type }) — consumes the token, creates session.
+   * Step 3 — updateUser({ password }) — uses the in-memory session from step 2.
+   * Step 4 — Auto sign-in via /api/admin/auth to set the wt_admin_session cookie.
+   * Step 5 — Redirect to /admin dashboard.
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErrorMsg("");
 
+    // ── Local validation ────────────────────────────────────────────────────
     if (password.length < 12) {
       setErrorMsg("Password must be at least 12 characters.");
       return;
@@ -250,10 +170,36 @@ export default function SetupPasswordPage() {
 
     try {
       const supabase = getClient();
-      const { error: updateError } = await supabase.auth.updateUser({ password });
-      if (updateError) throw updateError;
 
-      // Auto sign-in: exchange the new credentials for our wt_admin_session cookie
+      // ── Step 2: Verify the one-time token ──────────────────────────────────
+      // This is the ONLY place the token is verified. It happens on explicit
+      // user action (form submit), never on page load.
+      const { data: verifyData, error: verifyError } = await supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: tokenType,
+      });
+
+      if (verifyError || !verifyData.session) {
+        const msg = verifyError?.message?.toLowerCase() ?? "";
+        setInvalidReason(
+          msg.includes("expired")
+            ? "This link has expired. Recovery links are valid for 1 hour. Please request a new one."
+            : "This link is invalid or has already been used. Please request a new one."
+        );
+        setPhase("invalid");
+        return;
+      }
+
+      const userEmail = verifyData.session.user.email ?? "";
+
+      // ── Step 3: Update password using the verified in-memory session ────────
+      const { error: updateError } = await supabase.auth.updateUser({ password });
+      if (updateError) {
+        // If update fails, go back to form so user can try again or request new link
+        throw updateError;
+      }
+
+      // ── Step 4: Auto sign-in via cookie auth ───────────────────────────────
       if (userEmail) {
         const loginRes = await fetch("/api/admin/auth", {
           method: "POST",
@@ -268,11 +214,12 @@ export default function SetupPasswordPage() {
         }
       }
 
-      // Fallback: password saved, auto-login failed — go to login page
+      // Fallback: password saved, auto-login failed — send to login page
       setPhase("success");
       setTimeout(() => router.replace("/admin/login?setup=1"), 1800);
+
     } catch (err) {
-      setPhase("form");
+      setPhase("ready"); // Return to form so user can retry
       setErrorMsg(
         (err as Error).message ?? "Failed to set password. Please try again."
       );
@@ -283,7 +230,8 @@ export default function SetupPasswordPage() {
   const meetsUppercase = /[A-Z]/.test(password);
   const meetsNumber    = /[0-9]/.test(password);
   const passwordsMatch = password.length > 0 && password === confirm;
-  const canSubmit      = meetsLength && meetsUppercase && meetsNumber && passwordsMatch && phase !== "submitting";
+  const canSubmit      =
+    meetsLength && meetsUppercase && meetsNumber && passwordsMatch && phase !== "submitting";
 
   return (
     <div
@@ -327,34 +275,6 @@ export default function SetupPasswordPage() {
             padding: "32px",
           }}
         >
-          {/* Verifying */}
-          {phase === "verifying" && (
-            <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  display: "inline-block",
-                  width: "20px",
-                  height: "20px",
-                  border: "2px solid rgba(196,144,42,0.3)",
-                  borderTopColor: "#C4902A",
-                  borderRadius: "50%",
-                  animation: "spin 0.8s linear infinite",
-                  marginBottom: "12px",
-                }}
-              />
-              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-              <p
-                style={{
-                  color: "rgba(245,237,216,0.4)",
-                  fontFamily: "var(--font-garamond, serif)",
-                  fontSize: "13px",
-                }}
-              >
-                Verifying your link…
-              </p>
-            </div>
-          )}
-
           {/* Invalid / expired */}
           {phase === "invalid" && (
             <div style={{ textAlign: "center" }}>
@@ -429,27 +349,12 @@ export default function SetupPasswordPage() {
             </div>
           )}
 
-          {/* Password form */}
-          {(phase === "form" || phase === "submitting") && (
+          {/* Password form — shown as soon as the page loads (no verifying spinner) */}
+          {(phase === "ready" || phase === "submitting") && (
             <form
               onSubmit={handleSubmit}
               style={{ display: "flex", flexDirection: "column", gap: "18px" }}
             >
-              {userEmail && (
-                <p
-                  style={{
-                    color: "rgba(245,237,216,0.35)",
-                    fontFamily: "var(--font-garamond, serif)",
-                    fontSize: "12px",
-                    margin: 0,
-                    textAlign: "center",
-                  }}
-                >
-                  Setting password for{" "}
-                  <span style={{ color: "rgba(245,237,216,0.6)" }}>{userEmail}</span>
-                </p>
-              )}
-
               {/* New password */}
               <div>
                 <label
@@ -475,6 +380,7 @@ export default function SetupPasswordPage() {
                     placeholder="Min. 12 chars, 1 uppercase, 1 number"
                     autoFocus
                     required
+                    disabled={phase === "submitting"}
                     style={{ ...INPUT_STYLE, paddingRight: "44px" }}
                     onFocus={(e) => { e.target.style.borderColor = "rgba(196,144,42,0.6)"; }}
                     onBlur={(e)  => { e.target.style.borderColor = "rgba(196,144,42,0.3)"; }}
@@ -482,6 +388,7 @@ export default function SetupPasswordPage() {
                   <button
                     type="button"
                     onClick={() => setShowPw((v) => !v)}
+                    disabled={phase === "submitting"}
                     style={{
                       position: "absolute",
                       right: "12px",
@@ -562,6 +469,7 @@ export default function SetupPasswordPage() {
                     onChange={(e) => setConfirm(e.target.value)}
                     placeholder="Re-enter your password"
                     required
+                    disabled={phase === "submitting"}
                     style={{ ...INPUT_STYLE, paddingRight: "44px" }}
                     onFocus={(e) => { e.target.style.borderColor = "rgba(196,144,42,0.6)"; }}
                     onBlur={(e)  => { e.target.style.borderColor = "rgba(196,144,42,0.3)"; }}
@@ -569,6 +477,7 @@ export default function SetupPasswordPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirm((v) => !v)}
+                    disabled={phase === "submitting"}
                     style={{
                       position: "absolute",
                       right: "12px",
@@ -626,9 +535,7 @@ export default function SetupPasswordPage() {
                       margin: 0,
                       fontSize: "11px",
                       fontFamily: "var(--font-garamond, serif)",
-                      color: met
-                        ? "#16a34a"
-                        : "rgba(245,237,216,0.25)",
+                      color: met ? "#16a34a" : "rgba(245,237,216,0.25)",
                       transition: "color 0.15s",
                     }}
                   >
