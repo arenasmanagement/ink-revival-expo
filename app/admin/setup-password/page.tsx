@@ -18,7 +18,8 @@
  *    → Email scanners get server-rendered HTML (no JS, no token consumed)
  *    → Page shows password form immediately — NO auto-verification on load
  *    → User fills password, clicks Set Password
- *    → Form submit handler calls verifyOtp() + updateUser() atomically
+ *    → Form submit handler POSTs to /api/admin/auth/setup (server-side)
+ *    → Server verifyOtp + admin.updateUserById + signInWithPassword
  *    → Token consumed exactly once, by the real user
  *
  *  URL format this page expects:
@@ -31,9 +32,8 @@
  * valid, live Supabase recovery session obtained via verifyOtp().
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import Link from "next/link";
 
 type Phase =
@@ -72,7 +72,6 @@ function getPasswordStrength(pw: string): { level: number; label: string; color:
 
 export default function SetupPasswordPage() {
   const router = useRouter();
-  const supabaseRef = useRef<SupabaseClient | null>(null);
 
   const [phase, setPhase] = useState<Phase>("ready");
   const [tokenHash, setTokenHash] = useState("");
@@ -85,30 +84,6 @@ export default function SetupPasswordPage() {
   const [invalidReason, setInvalidReason] = useState("");
 
   const strength = getPasswordStrength(password);
-
-  /**
-   * Supabase anon client.
-   * persistSession: false — we use our own wt_admin_session cookie.
-   * detectSessionInUrl: false — we parse URL params ourselves.
-   * autoRefreshToken: false — session only needs to last long enough to
-   *   call verifyOtp() + updateUser() in one submit handler.
-   */
-  function getClient(): SupabaseClient {
-    if (!supabaseRef.current) {
-      supabaseRef.current = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-          auth: {
-            persistSession: false,
-            detectSessionInUrl: false,
-            autoRefreshToken: false,
-          },
-        }
-      );
-    }
-    return supabaseRef.current;
-  }
 
   /**
    * On mount: read token_hash and type from URL.
@@ -136,13 +111,15 @@ export default function SetupPasswordPage() {
   }, []);
 
   /**
-   * Form submit: the one and only place where the token is verified.
+   * Form submit: delegates entirely to the server-side /api/admin/auth/setup
+   * route which handles verifyOtp + admin.updateUserById + signInWithPassword
+   * atomically. This avoids the client-side session=null edge case where
+   * verifyOtp returns { user, session: null } without an error.
    *
    * Step 1 — Validate password locally (no API call yet).
-   * Step 2 — verifyOtp({ token_hash, type }) — consumes the token, creates session.
-   * Step 3 — updateUser({ password }) — uses the in-memory session from step 2.
-   * Step 4 — Auto sign-in via /api/admin/auth to set the wt_admin_session cookie.
-   * Step 5 — Redirect to /admin dashboard.
+   * Step 2 — POST to /api/admin/auth/setup — server verifies OTP, updates
+   *           password via admin API, signs in, sets wt_admin_session cookie.
+   * Step 3 — Redirect to /admin (or /admin/login if auto-login failed).
    */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -169,59 +146,49 @@ export default function SetupPasswordPage() {
     setPhase("submitting");
 
     try {
-      const supabase = getClient();
-
-      // ── Step 2: Verify the one-time token ──────────────────────────────────
-      // This is the ONLY place the token is verified. It happens on explicit
-      // user action (form submit), never on page load.
-      const { data: verifyData, error: verifyError } = await supabase.auth.verifyOtp({
-        token_hash: tokenHash,
-        type: tokenType,
+      // ── Step 2: Server-side verify + update + sign-in ──────────────────────
+      const res = await fetch("/api/admin/auth/setup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token_hash: tokenHash, type: tokenType, password }),
       });
 
-      if (verifyError || !verifyData.session) {
-        const msg = verifyError?.message?.toLowerCase() ?? "";
-        setInvalidReason(
-          msg.includes("expired")
-            ? "This link has expired. Recovery links are valid for 1 hour. Please request a new one."
-            : "This link is invalid or has already been used. Please request a new one."
-        );
-        setPhase("invalid");
+      const data = await res.json() as { ok?: boolean; error?: string; requiresLogin?: boolean };
+
+      if (!res.ok) {
+        const errCode = data.error ?? "";
+        if (errCode === "expired") {
+          setInvalidReason(
+            "This link has expired. Recovery links are valid for 1 hour. Please request a new one."
+          );
+          setPhase("invalid");
+        } else if (errCode === "invalid") {
+          setInvalidReason(
+            "This link is invalid or has already been used. Please request a new one."
+          );
+          setPhase("invalid");
+        } else {
+          // Generic / server error — stay on form so user can retry
+          setPhase("ready");
+          setErrorMsg(errCode || "Failed to set password. Please try again.");
+        }
         return;
       }
 
-      const userEmail = verifyData.session.user.email ?? "";
-
-      // ── Step 3: Update password using the verified in-memory session ────────
-      const { error: updateError } = await supabase.auth.updateUser({ password });
-      if (updateError) {
-        // If update fails, go back to form so user can try again or request new link
-        throw updateError;
-      }
-
-      // ── Step 4: Auto sign-in via cookie auth ───────────────────────────────
-      if (userEmail) {
-        const loginRes = await fetch("/api/admin/auth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: userEmail, password }),
-        });
-
-        if (loginRes.ok) {
-          setPhase("success");
-          setTimeout(() => router.replace("/admin"), 1800);
-          return;
-        }
-      }
-
-      // Fallback: password saved, auto-login failed — send to login page
+      // ── Step 3: Password saved — redirect ─────────────────────────────────
       setPhase("success");
-      setTimeout(() => router.replace("/admin/login?setup=1"), 1800);
+      // Use window.location.href for a full page reload so the cookie set by
+      // the server response is picked up cleanly by Next.js middleware.
+      if (data.requiresLogin) {
+        setTimeout(() => { window.location.href = "/admin/login?setup=1"; }, 1800);
+      } else {
+        setTimeout(() => { window.location.href = "/admin"; }, 1800);
+      }
 
     } catch (err) {
-      setPhase("ready"); // Return to form so user can retry
+      setPhase("ready");
       setErrorMsg(
-        (err as Error).message ?? "Failed to set password. Please try again."
+        (err as Error).message ?? "Network error. Please try again."
       );
     }
   }
