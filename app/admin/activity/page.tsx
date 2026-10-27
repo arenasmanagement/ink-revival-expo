@@ -67,7 +67,7 @@ export default function ActivityPage() {
   }
 
   return (
-    <div style={{ padding: "32px 32px 48px", maxWidth: "860px" }}>
+    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "860px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px" }}>
         <div>
           <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
@@ -92,7 +92,7 @@ export default function ActivityPage() {
       {error && <p style={{ color: "#dc2626", fontFamily: "var(--font-garamond, serif)", fontSize: "14px" }}>Error: {error}</p>}
 
       {!loading && !error && activity.length === 0 && (
-        <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "48px", textAlign: "center" }}>
+        <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "48px", textAlign: "center" }}>
           <p style={{ color: "#aaa", fontFamily: "var(--font-garamond, serif)", fontSize: "16px", margin: 0 }}>No activity recorded yet.</p>
         </div>
       )}
@@ -102,7 +102,7 @@ export default function ActivityPage() {
           <p style={{ margin: "0 0 12px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.2em", textTransform: "uppercase" }}>
             {date}
           </p>
-          <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", overflow: "hidden" }}>
+          <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", overflow: "hidden" }}>
             {entries.map((a, i) => {
               const actionColor = ACTION_COLORS[a.action] ?? "#6b7280";
               return (
@@ -146,7 +146,7 @@ export default function ActivityPage() {
         <div style={{ textAlign: "center", marginTop: "16px" }}>
           <button
             onClick={handleLoadMore}
-            style={{ padding: "10px 24px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", background: "none", border: "1px solid #d1c9b8", color: "#555", cursor: "pointer", borderRadius: "3px" }}
+            style={{ padding: "10px 24px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", background: "#faf6ee", border: "1px solid #e0d8c8", color: "#555", cursor: "pointer", borderRadius: "3px" }}
           >
             Load More ({limit} shown)
           </button>

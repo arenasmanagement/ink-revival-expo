@@ -195,7 +195,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
   };
 
   return (
-    <div style={{ padding: "32px 32px 60px", maxWidth: "900px" }}>
+    <div className="px-4 py-6 md:px-8 md:py-8 pb-16" style={{ maxWidth: "900px" }}>
       {/* Back link */}
       <Link href="/admin/applications" style={{ fontSize: "12px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textDecoration: "none", display: "inline-block", marginBottom: "20px" }}>
         ← BACK TO APPLICATIONS
@@ -237,8 +237,8 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
 
       {/* Action buttons */}
       {(canApprove || canDeny || canRequestInfo) && (
-        <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "20px 24px", marginBottom: "24px" }}>
-          <p style={{ margin: "0 0 12px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+        <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", marginBottom: "24px" }}>
+          <p style={{ margin: "0 0 12px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", color: "#8a7a68", letterSpacing: "0.1em", textTransform: "uppercase" }}>
             Review Actions
           </p>
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
@@ -264,7 +264,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
               <button
                 onClick={() => setShowDenyModal(true)}
                 disabled={actionLoading}
-                style={{ padding: "10px 20px", background: "#fff", color: "#dc2626", border: "1px solid #dc2626", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", borderRadius: "4px" }}
+                style={{ padding: "10px 20px", background: "#faf6ee", color: "#dc2626", border: "1px solid #dc2626", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", borderRadius: "4px" }}
               >
                 ✗ Deny Application
               </button>
@@ -281,7 +281,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
       {/* Deny modal */}
       {showDenyModal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-          <div style={{ background: "#fff", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%" }}>
+          <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%" }}>
             <h2 style={{ margin: "0 0 16px", fontFamily: "var(--font-rye, serif)", fontSize: "20px", color: "#1a120a" }}>Deny Application</h2>
             <p style={{ fontSize: "13px", color: "#555", fontFamily: "var(--font-garamond, serif)", marginBottom: "16px" }}>
               This will deny the application and notify <strong>{reg.first_name} {reg.last_name}</strong> by email. Any payment hold will be released.
@@ -315,7 +315,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
       {/* Request info modal */}
       {showInfoModal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-          <div style={{ background: "#fff", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%" }}>
+          <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%" }}>
             <h2 style={{ margin: "0 0 16px", fontFamily: "var(--font-rye, serif)", fontSize: "20px", color: "#1a120a" }}>Request More Information</h2>
             <p style={{ fontSize: "13px", color: "#555", fontFamily: "var(--font-garamond, serif)", marginBottom: "16px" }}>
               This will email <strong>{reg.first_name} {reg.last_name}</strong> asking for more information.
@@ -346,12 +346,12 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
         </div>
       )}
 
-      {/* Two column layout */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+      {/* Two column layout — stacks on mobile */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Applicant info */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {/* Contact */}
-          <section style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "20px 24px" }}>
+          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Contact Information</h2>
             <MetaField label="Email" value={reg.email} />
             <MetaField label="Phone" value={reg.phone} />
@@ -363,7 +363,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
 
           {/* Submitted form data */}
           {reg.metadata && Object.keys(reg.metadata).length > 0 && (
-            <section style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "20px 24px" }}>
+            <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
               <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Submitted Information</h2>
               {Object.entries(reg.metadata).map(([k, v]) => {
                 if (k === "pricingKey" || k === "categoryId") return null;
@@ -378,7 +378,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
         {/* Right: Payment + admin */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {/* Payment */}
-          <section style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "20px 24px" }}>
+          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Payment Information</h2>
             <MetaField label="Amount" value={reg.amount_cents ? `$${(reg.amount_cents / 100).toFixed(2)}` : "—"} />
             <MetaField label="Payment Status" value={statusStyle.label} />
@@ -406,7 +406,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
           </section>
 
           {/* Private notes */}
-          <section style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "20px 24px" }}>
+          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
             <h2 style={{ margin: "0 0 4px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Private Notes</h2>
             <p style={{ margin: "0 0 14px", fontSize: "11px", color: "#ccc", fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}>Never visible to applicants.</p>
 
@@ -443,7 +443,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
           </section>
 
           {/* Activity log */}
-          <section style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "20px 24px" }}>
+          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Activity History</h2>
             {activity.length === 0 ? (
               <p style={{ color: "#ccc", fontSize: "13px", fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}>No recorded activity yet.</p>

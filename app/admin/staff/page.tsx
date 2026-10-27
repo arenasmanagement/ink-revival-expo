@@ -1,6 +1,6 @@
 export default function StaffPage() {
   return (
-    <div style={{ padding: "32px 32px 48px", maxWidth: "700px" }}>
+    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "700px" }}>
       <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
         Admin Portal
       </p>
@@ -11,7 +11,7 @@ export default function StaffPage() {
         Staff account management will be available here. Currently operating as single-organizer portal.
       </p>
 
-      <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "28px" }}>
+      <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "28px" }}>
         <h2 style={{ margin: "0 0 16px", fontSize: "14px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.08em" }}>
           Current Access
         </h2>

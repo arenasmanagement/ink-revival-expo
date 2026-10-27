@@ -120,7 +120,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Mobile top bar */}
+      {/* Mobile top bar — display controlled by Tailwind (flex md:hidden); no inline display override */}
       <div style={{
         position: "fixed",
         top: 0,
@@ -128,7 +128,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         right: 0,
         zIndex: 30,
         background: "#1a120a",
-        display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         padding: "12px 16px",
@@ -193,8 +192,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </aside>
       )}
 
-      {/* Main content */}
-      <main style={{ flex: 1, marginLeft: "0", paddingTop: "0" }} className="md:ml-[240px] pt-[52px] md:pt-0">
+      {/* Main content — margin controlled by Tailwind (md:ml-[240px]); no inline override */}
+      <main style={{ flex: 1, minWidth: 0 }} className="md:ml-[240px] pt-[52px] md:pt-0 min-h-screen">
         {children}
       </main>
     </div>

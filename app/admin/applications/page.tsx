@@ -111,7 +111,7 @@ function ApplicationsContent() {
   }
 
   return (
-    <div style={{ padding: "32px 32px 48px", maxWidth: "1100px" }}>
+    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "1100px" }}>
       <div style={{ marginBottom: "24px" }}>
         <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
           Admin Portal
@@ -137,7 +137,7 @@ function ApplicationsContent() {
                 letterSpacing: "0.05em",
                 border: "1px solid",
                 borderColor: status === s.value ? "#1a120a" : "#d1c9b8",
-                background: status === s.value ? "#1a120a" : "#fff",
+                background: status === s.value ? "#1a120a" : "#faf6ee",
                 color: status === s.value ? "#F5EDD8" : "#555",
                 cursor: "pointer",
                 borderRadius: "3px",
@@ -181,72 +181,105 @@ function ApplicationsContent() {
         </button>
       </div>
 
-      {/* Table */}
+      {/* Applications list */}
       {loading ? (
         <p style={{ color: "#888", fontFamily: "var(--font-garamond, serif)", fontSize: "14px", padding: "40px 0" }}>Loading applications…</p>
       ) : registrations.length === 0 ? (
-        <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "48px", textAlign: "center" }}>
+        <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "48px", textAlign: "center" }}>
           <p style={{ color: "#aaa", fontFamily: "var(--font-garamond, serif)", fontSize: "16px", margin: 0 }}>No applications found with these filters.</p>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "#e5e0d5", borderRadius: "6px", overflow: "hidden", border: "1px solid #e5e0d5" }}>
-          {/* Header */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 130px 100px 90px 100px 80px", gap: "16px", padding: "10px 20px", background: "#f5f0e8", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase", color: "#888" }}>
-            <span>Applicant</span>
-            <span>Type</span>
-            <span>Status</span>
-            <span>Amount</span>
-            <span>Date</span>
-            <span>Action</span>
+        <>
+          {/* Desktop table — hidden on small screens */}
+          <div className="hidden md:block" style={{ display: "flex", flexDirection: "column", gap: "1px", background: "#e0d8c8", borderRadius: "6px", overflow: "hidden", border: "1px solid #e0d8c8" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 130px 140px 80px 100px 80px", gap: "16px", padding: "10px 20px", background: "#f5f0e8", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8a7a68" }}>
+              <span>Applicant</span>
+              <span>Type</span>
+              <span>Status</span>
+              <span>Amount</span>
+              <span>Date</span>
+              <span>Action</span>
+            </div>
+            {registrations.map((reg) => {
+              const statusStyle = STATUS_COLORS[reg.status] ?? { bg: "#f3f4f6", text: "#6b7280", label: reg.status };
+              return (
+                <div key={reg.order_id} style={{ display: "grid", gridTemplateColumns: "1fr 130px 140px 80px 100px 80px", gap: "16px", padding: "14px 20px", background: "#faf6ee", alignItems: "center" }}>
+                  <div>
+                    <p style={{ margin: "0 0 2px", fontSize: "14px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a" }}>
+                      {reg.first_name} {reg.last_name}
+                    </p>
+                    {reg.business_name && (
+                      <p style={{ margin: "0 0 2px", fontSize: "12px", color: "#8a7a68", fontFamily: "var(--font-garamond, serif)" }}>{reg.business_name}</p>
+                    )}
+                    <p style={{ margin: 0, fontSize: "11px", color: "#aaa", fontFamily: "var(--font-garamond, serif)" }}>{reg.email}</p>
+                  </div>
+                  <span style={{ fontSize: "12px", color: "#555", fontFamily: "var(--font-special-elite, monospace)" }}>
+                    {TYPE_LABELS[reg.registration_type] ?? reg.registration_type}
+                  </span>
+                  <span style={{ display: "inline-block", padding: "3px 8px", borderRadius: "3px", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.05em", background: statusStyle.bg, color: statusStyle.text }}>
+                    {statusStyle.label}
+                  </span>
+                  <span style={{ fontSize: "13px", fontFamily: "var(--font-garamond, serif)", color: "#333" }}>
+                    {reg.amount_cents ? `$${(reg.amount_cents / 100).toFixed(0)}` : "—"}
+                  </span>
+                  <span style={{ fontSize: "11px", color: "#aaa", fontFamily: "var(--font-garamond, serif)" }}>
+                    {new Date(reg.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" })}
+                  </span>
+                  <Link href={`/admin/applications/${reg.order_id}`} style={{ display: "inline-block", padding: "5px 12px", background: "#1a120a", color: "#F5EDD8", textDecoration: "none", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", borderRadius: "3px" }}>
+                    View →
+                  </Link>
+                </div>
+              );
+            })}
           </div>
 
-          {registrations.map((reg) => {
-            const statusStyle = STATUS_COLORS[reg.status] ?? { bg: "#f3f4f6", text: "#6b7280", label: reg.status };
-            return (
-              <div key={reg.order_id} style={{ display: "grid", gridTemplateColumns: "1fr 130px 100px 90px 100px 80px", gap: "16px", padding: "14px 20px", background: "#fff", alignItems: "center" }}>
-                <div>
-                  <p style={{ margin: "0 0 2px", fontSize: "14px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a" }}>
-                    {reg.first_name} {reg.last_name}
-                  </p>
-                  {reg.business_name && (
-                    <p style={{ margin: "0 0 2px", fontSize: "12px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>{reg.business_name}</p>
-                  )}
-                  <p style={{ margin: 0, fontSize: "11px", color: "#aaa", fontFamily: "var(--font-garamond, serif)" }}>{reg.email}</p>
-                </div>
-                <span style={{ fontSize: "12px", color: "#555", fontFamily: "var(--font-special-elite, monospace)" }}>
-                  {TYPE_LABELS[reg.registration_type] ?? reg.registration_type}
-                </span>
-                <span style={{
-                  display: "inline-block", padding: "3px 8px", borderRadius: "3px", fontSize: "10px",
-                  fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.05em",
-                  background: statusStyle.bg, color: statusStyle.text,
-                }}>
-                  {statusStyle.label}
-                </span>
-                <span style={{ fontSize: "13px", fontFamily: "var(--font-garamond, serif)", color: "#333" }}>
-                  {reg.amount_cents ? `$${(reg.amount_cents / 100).toFixed(0)}` : "—"}
-                </span>
-                <span style={{ fontSize: "11px", color: "#aaa", fontFamily: "var(--font-garamond, serif)" }}>
-                  {new Date(reg.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" })}
-                </span>
-                <Link href={`/admin/applications/${reg.order_id}`} style={{
-                  display: "inline-block", padding: "5px 12px", background: "#1a120a", color: "#F5EDD8",
-                  textDecoration: "none", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)",
-                  letterSpacing: "0.1em", borderRadius: "3px",
-                }}>
-                  View →
+          {/* Mobile cards — shown only on small screens */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {registrations.map((reg) => {
+              const statusStyle = STATUS_COLORS[reg.status] ?? { bg: "#f3f4f6", text: "#6b7280", label: reg.status };
+              return (
+                <Link key={reg.order_id} href={`/admin/applications/${reg.order_id}`} style={{ textDecoration: "none", display: "block", background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "16px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
+                    <div>
+                      <p style={{ margin: "0 0 2px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a" }}>
+                        {reg.first_name} {reg.last_name}
+                      </p>
+                      {reg.business_name && (
+                        <p style={{ margin: "0 0 2px", fontSize: "12px", color: "#8a7a68", fontFamily: "var(--font-garamond, serif)" }}>{reg.business_name}</p>
+                      )}
+                      <p style={{ margin: 0, fontSize: "11px", color: "#aaa", fontFamily: "var(--font-garamond, serif)" }}>{reg.email}</p>
+                    </div>
+                    <span style={{ display: "inline-block", padding: "3px 8px", borderRadius: "3px", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.05em", background: statusStyle.bg, color: statusStyle.text, flexShrink: 0, marginLeft: "8px" }}>
+                      {statusStyle.label}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ display: "flex", gap: "12px" }}>
+                      <span style={{ fontSize: "11px", color: "#8a7a68", fontFamily: "var(--font-special-elite, monospace)" }}>
+                        {TYPE_LABELS[reg.registration_type] ?? reg.registration_type}
+                      </span>
+                      {reg.amount_cents ? (
+                        <span style={{ fontSize: "12px", color: "#1a120a", fontFamily: "var(--font-garamond, serif)", fontWeight: 600 }}>
+                          ${(reg.amount_cents / 100).toFixed(0)}
+                        </span>
+                      ) : null}
+                    </div>
+                    <span style={{ fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.08em" }}>
+                      View →
+                    </span>
+                  </div>
                 </Link>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
       {/* Pagination */}
       {total > 50 && (
         <div style={{ display: "flex", gap: "8px", marginTop: "16px", justifyContent: "center" }}>
           {page > 1 && (
-            <button onClick={() => updateParam("page", String(page - 1))} style={{ padding: "8px 16px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", background: "#fff", border: "1px solid #d1c9b8", cursor: "pointer", borderRadius: "3px" }}>
+            <button onClick={() => updateParam("page", String(page - 1))} style={{ padding: "8px 16px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", background: "#faf6ee", border: "1px solid #e0d8c8", cursor: "pointer", borderRadius: "3px" }}>
               ← Previous
             </button>
           )}
@@ -254,7 +287,7 @@ function ApplicationsContent() {
             Page {page} of {Math.ceil(total / 50)}
           </span>
           {page * 50 < total && (
-            <button onClick={() => updateParam("page", String(page + 1))} style={{ padding: "8px 16px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", background: "#fff", border: "1px solid #d1c9b8", cursor: "pointer", borderRadius: "3px" }}>
+            <button onClick={() => updateParam("page", String(page + 1))} style={{ padding: "8px 16px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", background: "#faf6ee", border: "1px solid #e0d8c8", cursor: "pointer", borderRadius: "3px" }}>
               Next →
             </button>
           )}

@@ -53,16 +53,16 @@ const STATUS_LABELS: Record<string, string> = {
 function StatCard({ label, value, href, color, sub }: { label: string; value: number | string; href?: string; color?: string; sub?: string }) {
   const content = (
     <div style={{
-      background: "#fff",
-      border: "1px solid #e5e0d5",
+      background: "#faf6ee",
+      border: "1px solid #e0d8c8",
       borderRadius: "6px",
       padding: "20px",
       transition: "box-shadow 0.15s",
       cursor: href ? "pointer" : "default",
     }}>
-      <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#888", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</p>
+      <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#8a7a68", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</p>
       <p style={{ margin: "0", fontSize: "36px", fontFamily: "var(--font-rye, serif)", color: color ?? "#1a120a", lineHeight: 1 }}>{value}</p>
-      {sub && <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>{sub}</p>}
+      {sub && <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#8a7a68", fontFamily: "var(--font-garamond, serif)" }}>{sub}</p>}
     </div>
   );
 
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div style={{ padding: "32px 32px 48px", maxWidth: "1100px" }}>
+    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "1100px" }}>
       {/* Page header */}
       <div style={{ marginBottom: "32px" }}>
         <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
@@ -130,9 +130,9 @@ export default function AdminDashboard() {
           </div>
 
           {/* Two column section */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginBottom: "24px" }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* Applications by type */}
-            <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "24px" }}>
+            <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px" }}>
               <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
                 Applications by Type
               </h2>
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Recent activity */}
-            <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "24px" }}>
+            <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px" }}>
               <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
                 Recent Submissions
               </h2>
@@ -201,7 +201,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* System status */}
-          <div style={{ background: "#fff", border: "1px solid #e5e0d5", borderRadius: "6px", padding: "24px" }}>
+          <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
               System Status
             </h2>
@@ -254,9 +254,9 @@ export default function AdminDashboard() {
             </Link>
             <Link href="/admin/capacity" style={{
               padding: "10px 20px",
-              background: "#fff",
+              background: "#faf6ee",
               color: "#1a120a",
-              border: "1px solid #e5e0d5",
+              border: "1px solid #e0d8c8",
               textDecoration: "none",
               fontSize: "12px",
               fontFamily: "var(--font-special-elite, monospace)",
@@ -268,9 +268,9 @@ export default function AdminDashboard() {
             </Link>
             <Link href="/admin/activity" style={{
               padding: "10px 20px",
-              background: "#fff",
+              background: "#faf6ee",
               color: "#1a120a",
-              border: "1px solid #e5e0d5",
+              border: "1px solid #e0d8c8",
               textDecoration: "none",
               fontSize: "12px",
               fontFamily: "var(--font-special-elite, monospace)",
