@@ -44,13 +44,14 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; label: string }>
 };
 
 const STATUSES = [
-  { value: "pending_review", label: "Pending Review" },
-  { value: "pending", label: "Awaiting Payment" },
-  { value: "approved_pending_payment", label: "Approved — Pay Needed" },
-  { value: "captured", label: "Approved & Paid" },
-  { value: "cancelled", label: "Denied" },
-  { value: "info_requested", label: "Info Requested" },
-  { value: "all", label: "All" },
+  { value: "all",                     label: "All Applications" },
+  { value: "pending_review",          label: "Pending Review" },
+  { value: "pending",                 label: "Awaiting Payment" },
+  { value: "payment_failed",          label: "Payment Failed" },
+  { value: "approved_pending_payment",label: "Approved — Pay Needed" },
+  { value: "captured",                label: "Approved & Paid" },
+  { value: "cancelled",               label: "Denied" },
+  { value: "info_requested",          label: "Info Requested" },
 ];
 
 const TYPES = [
@@ -71,7 +72,7 @@ function ApplicationsContent() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const status = searchParams.get("status") ?? "pending_review";
+  const status = searchParams.get("status") ?? "all";
   const type = searchParams.get("type") ?? "";
   const [searchInput, setSearchInput] = useState(searchParams.get("search") ?? "");
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
