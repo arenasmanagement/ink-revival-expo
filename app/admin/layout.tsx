@@ -9,7 +9,8 @@ const NAV = [
   { href: "/admin/applications", label: "Applications",  icon: "📋" },
   { href: "/admin/capacity",     label: "Capacity",      icon: "📊" },
   { href: "/admin/activity",     label: "Activity Log",  icon: "📜" },
-  { href: "/admin/staff",        label: "Staff",         icon: "👤" },
+  // Staff management at /admin/staff — accessible directly but not in nav
+  // (two-account setup: owner + one organizer only)
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

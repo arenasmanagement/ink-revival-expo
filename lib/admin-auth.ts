@@ -80,3 +80,31 @@ export function clearAdminCookie(res: NextResponse): void {
     path:     "/",
   });
 }
+
+/**
+ * Extract the admin role from the session cookie JWT.
+ * Supabase stores role in app_metadata: { role: "owner" | "organizer" }
+ * Returns null if the token is absent or unparseable.
+ */
+export function getAdminRole(req: NextRequest): "owner" | "organizer" | null {
+  const token = req.cookies.get(COOKIE_NAME)?.value;
+  if (!token) return null;
+  const payload = decodeJwtPayload(token) as Record<string, unknown> | null;
+  if (!payload) return null;
+  const appMeta = payload.app_metadata as Record<string, unknown> | undefined;
+  const role = appMeta?.role;
+  if (role === "owner" || role === "organizer") return role;
+  return null;
+}
+
+/** Returns 403 if caller is not the owner role. */
+export function requireOwner(req: NextRequest): NextResponse | null {
+  if (!isAdminAuthenticated(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const role = getAdminRole(req);
+  if (role !== "owner") {
+    return NextResponse.json({ error: "Forbidden — owner role required." }, { status: 403 });
+  }
+  return null;
+}
