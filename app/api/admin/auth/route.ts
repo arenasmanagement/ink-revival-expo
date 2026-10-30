@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase";
 import { isAdminAuthenticated, setAdminCookie, clearAdminCookie } from "@/lib/admin-auth";
+import { getClientIp, bucketKey, maxWait, rateLimitRecord, rateLimitClear, tooManyMessage } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Password is required." }, { status: 400 });
   }
 
+  // Rate limit failed sign-ins per visitor+email and per visitor. Checked
+  // before contacting Supabase so a blocked visitor learns nothing new.
+  const ip = getClientIp(req);
+  const emailKey = bucketKey("login", ip, email);
+  const ipKey = bucketKey("login_ip", ip);
+  const wait = await maxWait([emailKey, ipKey]);
+  if (wait > 0) {
+    return NextResponse.json(
+      { error: tooManyMessage(wait, "sign-in attempts") },
+      { status: 429, headers: { "Retry-After": String(wait) } },
+    );
+  }
+
   // A tiny delay to slow brute-force attempts
   await new Promise((r) => setTimeout(r, 300));
 
@@ -34,8 +48,13 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error || !data.session) {
+    await Promise.all([rateLimitRecord("login", emailKey), rateLimitRecord("login_ip", ipKey)]);
     return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
   }
+
+  // Successful sign-in: forget this visitor+email's failures (the per-visitor
+  // counter is kept so one good account can't be used to reset spraying).
+  await rateLimitClear(emailKey);
 
   const res = NextResponse.json({ ok: true });
   setAdminCookie(res, data.session.access_token);

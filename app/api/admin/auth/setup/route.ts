@@ -18,6 +18,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createServiceClient } from "@/lib/supabase";
 import { setAdminCookie } from "@/lib/admin-auth";
+import { getClientIp, bucketKey, rateLimitStatus, rateLimitRecord, tooManyMessage } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Password must be at least 12 characters." }, { status: 400 });
   }
 
+  // Rate limit failed link verifications per visitor (stops token guessing).
+  const ip = getClientIp(req);
+  const ipKey = bucketKey("setup_ip", ip);
+  const wait = await rateLimitStatus(ipKey);
+  if (wait > 0) {
+    return NextResponse.json(
+      { error: tooManyMessage(wait) },
+      { status: 429, headers: { "Retry-After": String(wait) } },
+    );
+  }
+
   // Small delay to slow brute-force attempts
   await new Promise((r) => setTimeout(r, 300));
 
@@ -57,6 +69,7 @@ export async function POST(req: NextRequest) {
   });
 
   if (verifyError) {
+    await rateLimitRecord("setup_ip", ipKey);
     const msg = verifyError.message?.toLowerCase() ?? "";
     const code = msg.includes("expired") ? "expired" : "invalid";
     return NextResponse.json({ error: code }, { status: 401 });
