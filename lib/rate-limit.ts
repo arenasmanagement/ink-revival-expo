@@ -10,9 +10,10 @@
  * always include the visitor's IP, so an attacker elsewhere can only slow
  * themselves down — they cannot lock a real admin out of their own account.
  *
- * Availability: if the counter store is unreachable the check fails OPEN
- * (logs an error, lets the attempt through). Supabase Auth's own limits still
- * apply in that case, and admins are never locked out by an outage.
+ * Availability: if the shared store is unreachable, each server instance
+ * falls back to an in-memory limiter with the same rules and logs a
+ * SECURITY_ALERT. Protection is degraded (per instance) but never switched
+ * off, and shared limits resume automatically when the store recovers.
  */
 
 import { createHmac } from "crypto";
@@ -112,17 +113,75 @@ export function bucketKey(scope: RateLimitScope, ip: string, email?: string): st
   return `${scope}:${createHmac("sha256", secret).update(material).digest("hex")}`;
 }
 
-// ── Store operations (fail open) ─────────────────────────────────────────────
+// ── Fallback when the shared store is unavailable ────────────────────────────
+//
+// If Supabase can't be reached, protection is NOT switched off: each server
+// instance falls back to an in-memory limiter with the same rules, and a
+// SECURITY_ALERT line is logged (at most once a minute per instance) so the
+// outage is visible in Vercel's logs. Shared limits resume automatically as
+// soon as the store answers again.
+
+interface MemBucket { attempts: number; windowStart: number; blockedUntil: number; touched: number }
+const memory = new Map<string, MemBucket>();
+const MEMORY_MAX_BUCKETS = 5000;
+let lastAlertAt = 0;
+
+function alertStoreUnavailable(op: string, err: unknown): void {
+  const now = Date.now();
+  if (now - lastAlertAt < 60_000) return;
+  lastAlertAt = now;
+  console.error(JSON.stringify({
+    level: "error",
+    alert: "SECURITY_ALERT",
+    event: "rate_limit_store_unavailable",
+    op,
+    message:
+      err instanceof Error ? err.message
+      : typeof err === "object" && err !== null && "message" in err ? String((err as { message: unknown }).message)
+      : String(err),
+    fallback: "in-memory limiter for this server instance",
+    at: new Date(now).toISOString(),
+  }));
+}
+
+function memStatus(key: string): number {
+  const b = memory.get(key);
+  const now = Date.now();
+  return b && b.blockedUntil > now ? Math.ceil((b.blockedUntil - now) / 1000) : 0;
+}
+
+function memRecord(scope: RateLimitScope, key: string): number {
+  const r = RULES[scope];
+  const now = Date.now();
+  let b = memory.get(key);
+  if (!b || (b.blockedUntil <= now && now - b.windowStart > r.windowSeconds * 1000)) {
+    b = { attempts: 0, windowStart: now, blockedUntil: 0, touched: now };
+  }
+  b.attempts += 1;
+  b.touched = now;
+  if (b.attempts >= r.max && b.blockedUntil <= now) b.blockedUntil = now + r.blockSeconds * 1000;
+  memory.delete(key);
+  memory.set(key, b); // re-insert so Map order = least recently touched first
+  while (memory.size > MEMORY_MAX_BUCKETS) {
+    const oldest = memory.keys().next().value;
+    if (oldest === undefined) break;
+    memory.delete(oldest);
+  }
+  return b.blockedUntil > now ? Math.ceil((b.blockedUntil - now) / 1000) : 0;
+}
+
+// ── Store operations ─────────────────────────────────────────────────────────
 
 /** Seconds the bucket must wait (0 = allowed). */
 export async function rateLimitStatus(key: string): Promise<number> {
   try {
     const { data, error } = await createServiceClient().rpc("wtsf_rate_limit_status", { p_key: key });
     if (error) throw error;
-    return typeof data === "number" ? data : 0;
+    // Honour any block the fallback recorded during an outage, too.
+    return Math.max(typeof data === "number" ? data : 0, memStatus(key));
   } catch (err) {
-    console.error("[rate-limit] status check failed (allowing):", (err as Error).message);
-    return 0;
+    alertStoreUnavailable("status", err);
+    return memStatus(key);
   }
 }
 
@@ -136,18 +195,25 @@ export async function rateLimitRecord(scope: RateLimitScope, key: string): Promi
     if (error) throw error;
     return typeof data === "number" ? data : 0;
   } catch (err) {
-    console.error("[rate-limit] record failed:", (err as Error).message);
-    return 0;
+    alertStoreUnavailable("record", err);
+    return memRecord(scope, key);
   }
 }
 
 export async function rateLimitClear(key: string): Promise<void> {
+  memory.delete(key);
   try {
     const { error } = await createServiceClient().rpc("wtsf_rate_limit_clear", { p_key: key });
     if (error) throw error;
   } catch (err) {
-    console.error("[rate-limit] clear failed:", (err as Error).message);
+    alertStoreUnavailable("clear", err);
   }
+}
+
+/** Test hook: reset the in-memory fallback. */
+export function __resetFallbackForTests(): void {
+  memory.clear();
+  lastAlertAt = 0;
 }
 
 /** Largest wait across several buckets (0 = all allowed). */
