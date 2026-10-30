@@ -10,7 +10,7 @@ import { createServiceClient } from "@/lib/supabase";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
-  const authError = requireAdmin(req);
+  const authError = await requireAdmin(req);
   if (authError) return authError;
 
   const { searchParams } = new URL(req.url);

@@ -133,7 +133,7 @@ function infoRequestEmailHtml(name: string, type: string, orderId: string, messa
 }
 
 export async function POST(req: NextRequest) {
-  const authError = requireAdmin(req);
+  const authError = await requireAdmin(req);
   if (authError) return authError;
 
   let body: { orderId?: string; action?: string; reason?: string; message?: string };

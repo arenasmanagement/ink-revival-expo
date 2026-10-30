@@ -13,7 +13,7 @@ import { stripe } from "@/lib/stripe";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  const authError = requireAdmin(req);
+  const authError = await requireAdmin(req);
   if (authError) return authError;
 
   let body: { orderId?: string };

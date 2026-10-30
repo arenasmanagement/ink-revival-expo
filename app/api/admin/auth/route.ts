@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  if (!isAdminAuthenticated(req)) {
+  if (!(await isAdminAuthenticated(req))) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
   return NextResponse.json({ authenticated: true });
