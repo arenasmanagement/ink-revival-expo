@@ -12,7 +12,7 @@
  *   user's app_metadata, never from the cookie payload.
  *
  * SECURITY: Never expose this file's logic in client bundles.
- *   Import only in API routes (server) and middleware (edge-compatible).
+ *   Import only in API routes (server) and proxy.ts.
  */
 
 import { NextRequest, NextResponse } from "next/server";

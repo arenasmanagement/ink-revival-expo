@@ -1,10 +1,10 @@
 /**
- * Next.js middleware — server-side admin route protection.
+ * Next.js proxy (formerly middleware) — server-side admin route protection.
  * Runs before any admin page is rendered so unauthenticated users
  * never receive HTML from protected routes.
  *
  * Auth strategy: Supabase access_token stored in HttpOnly cookie.
- * Middleware verifies the token with Supabase Auth (see lib/admin-auth.ts) —
+ * Proxy verifies the token with Supabase Auth (see lib/admin-auth.ts) —
  * a hand-made or expired cookie is redirected to the login page.
  *
  * Also forwards `x-pathname` as a request header so the root Server Component
@@ -15,7 +15,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { COOKIE_NAME, verifyAdminToken } from "@/lib/admin-auth";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Forward pathname so the root Server Component layout can check it.
