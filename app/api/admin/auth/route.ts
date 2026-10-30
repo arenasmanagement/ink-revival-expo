@@ -52,6 +52,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
   }
 
+  // Only owner/organizer accounts may hold an admin session. Anyone else
+  // (e.g. a retired account) is signed straight back out and gets the same
+  // response as a wrong password, so the portal reveals nothing about them.
+  const role = (data.user?.app_metadata as { role?: unknown } | undefined)?.role;
+  if (role !== "owner" && role !== "organizer") {
+    try { await supabase.auth.admin.signOut(data.session.access_token); } catch { /* best effort */ }
+    await Promise.all([rateLimitRecord("login", emailKey), rateLimitRecord("login_ip", ipKey)]);
+    return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
+  }
+
   // Successful sign-in: forget this visitor+email's failures (the per-visitor
   // counter is kept so one good account can't be used to reset spraying).
   await rateLimitClear(emailKey);
