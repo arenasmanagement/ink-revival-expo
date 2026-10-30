@@ -24,7 +24,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#0f0a05" }}>
+    <div className="adm-auth min-h-dvh flex items-center justify-center px-4 py-8" style={{ background: "#0f0a05" }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <p style={{ color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", fontSize: "11px", letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: "8px" }}>

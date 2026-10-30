@@ -1,0 +1,192 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Admin portal — mobile layer
+   Desktop (≥768px with a mouse) is untouched: every rule below is scoped to
+   touch devices or narrow screens. Inline styles in the admin pages are the
+   desktop design, so mobile overrides use !important deliberately.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* iOS Safari zooms into any focused field under 16px. Touch devices and narrow
+   screens get 16px form text; pinch-zoom stays fully enabled. */
+@media (pointer: coarse), (max-width: 767px) {
+  .adm input,
+  .adm select,
+  .adm textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Background scroll lock while the mobile drawer is open */
+html.adm-scroll-lock,
+html.adm-scroll-lock body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+/* ── Mobile drawer + top bar (hidden on desktop by Tailwind md:hidden) ───── */
+.adm-topbar {
+  padding-top: env(safe-area-inset-top);
+}
+.adm-drawer {
+  width: min(300px, 86vw);
+  transform: translateX(-100%);
+  transition: transform 0.22s ease, visibility 0s linear 0.22s;
+  visibility: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.adm-drawer[data-open="true"] {
+  transform: translateX(0);
+  transition: transform 0.22s ease, visibility 0s;
+  visibility: visible;
+}
+.adm-scrim {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.adm-scrim[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .adm-drawer, .adm-drawer[data-open="true"], .adm-scrim { transition: none; }
+}
+.adm-drawer a:focus-visible,
+.adm-drawer button:focus-visible,
+.adm-topbar button:focus-visible {
+  outline: 2px solid #C4902A;
+  outline-offset: -2px;
+}
+
+/* ── Page content on phones ──────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .adm-main {
+    min-width: 0;
+    max-width: 100vw;
+    overflow-x: clip;
+  }
+  .adm-page {
+    max-width: 100% !important;
+    padding: 20px 16px 48px !important;
+  }
+  .adm-page p,
+  .adm-page span,
+  .adm-page a,
+  .adm-page h1,
+  .adm-page h2 {
+    overflow-wrap: anywhere;
+  }
+  .adm-header { margin-bottom: 20px !important; }
+  .adm-h1 {
+    font-size: 22px !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Panels / sections: consistent, lighter padding */
+  .adm-panel { padding: 16px !important; }
+
+  /* Dashboard stat cards: 2-up grid, compact */
+  .adm-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+  .adm-stat { padding: 14px !important; height: 100%; box-sizing: border-box; }
+  .adm-stat-label { font-size: 10px !important; letter-spacing: 0.08em !important; }
+  .adm-stat-num { font-size: 26px !important; }
+  .adm-two-col { gap: 16px !important; margin-bottom: 16px !important; }
+  .adm-status-grid { grid-template-columns: minmax(0, 1fr) !important; }
+
+  /* Full-width, thumb-sized action buttons */
+  .adm-actions { flex-direction: column; gap: 10px !important; }
+  .adm-actions > a,
+  .adm-actions > button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* Applications filters */
+  .adm-filters { gap: 10px !important; }
+  .adm-chips {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+    padding-bottom: 2px;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    scroll-padding-left: 16px;
+  }
+  .adm-chips::-webkit-scrollbar { display: none; }
+  .adm-chips > button {
+    flex-shrink: 0;
+    min-height: 36px;
+    white-space: nowrap;
+  }
+  .adm-filters select { width: 100%; min-height: 44px; }
+  .adm-search { width: 100%; }
+  .adm-search input { width: auto !important; flex: 1 1 auto; min-width: 0; min-height: 44px; }
+  .adm-search button { min-height: 44px; padding-left: 16px !important; padding-right: 16px !important; }
+  .adm-refresh { margin-left: 0 !important; min-height: 40px; }
+
+  /* Application cards */
+  .adm-card-top { gap: 10px; }
+  .adm-card-top > div { min-width: 0; }
+
+  /* Detail page: label above value */
+  .adm-field { flex-direction: column; gap: 2px !important; }
+  .adm-field > span:first-child,
+  .adm-field > a:first-child { width: auto !important; }
+  .adm-review-actions { flex-direction: column; }
+  .adm-review-actions > button { width: 100%; min-height: 48px; }
+  .adm-note-form input { min-height: 44px; }
+  .adm-note-form button { min-height: 44px; padding-left: 18px !important; padding-right: 18px !important; }
+  .adm-note-delete { min-width: 36px; min-height: 36px; }
+  .adm-history-row > span:first-child { width: 56px !important; }
+
+  /* Dialogs: bottom sheet feel, stacked full-width buttons */
+  .adm-modal-backdrop { align-items: flex-end !important; padding: 0 !important; }
+  .adm-modal {
+    max-width: 100% !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 22px 18px calc(18px + env(safe-area-inset-bottom)) !important;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .adm-modal-actions { flex-direction: column-reverse; }
+  .adm-modal-actions > button { width: 100%; min-height: 48px; }
+
+  /* Activity log rows */
+  .adm-log-row { grid-template-columns: 64px minmax(0, 1fr) !important; gap: 12px !important; padding: 12px 14px !important; }
+
+  /* Capacity cards */
+  .adm-cap-card { padding: 16px !important; }
+
+  /* Pagination */
+  .adm-pager { flex-wrap: wrap; }
+  .adm-pager > button { min-height: 44px; }
+}
+
+/* Very narrow phones (iPhone SE 1st gen, 320px): single-column stats */
+@media (max-width: 359px) {
+  .adm-stats { grid-template-columns: minmax(0, 1fr) !important; }
+  .adm-stat { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .adm-stat-label { margin: 0 !important; }
+}
+
+/* Auth pages (login / setup / recovery): centred card that fits small screens */
+@media (max-width: 767px) {
+  .adm-auth {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box;
+  }
+  .adm-auth input { min-height: 48px; }
+  .adm-auth button[type="submit"] { min-height: 48px; }
+}

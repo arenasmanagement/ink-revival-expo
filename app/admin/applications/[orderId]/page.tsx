@@ -57,7 +57,7 @@ function MetaField({ label, value }: { label: string; value?: unknown }) {
   if (value === undefined || value === null || value === "") return null;
   const display = typeof value === "boolean" ? (value ? "Yes" : "No") : String(value);
   return (
-    <div style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
+    <div className="adm-field" style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
       <span style={{ width: "160px", flexShrink: 0, fontSize: "12px", color: "#888", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.05em", textTransform: "capitalize" }}>
         {label.replace(/_/g, " ")}
       </span>
@@ -83,6 +83,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
   const [actionError, setActionError] = useState("");
   const [showDenyModal, setShowDenyModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showApproveModal, setShowApproveModal] = useState(false);
   const [denyReason, setDenyReason] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
 
@@ -122,6 +123,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
       setActionMsg(json.emailSent ? `✅ Done — email sent to applicant.` : `✅ Done.`);
       setShowDenyModal(false);
       setShowInfoModal(false);
+      setShowApproveModal(false);
       setDenyReason("");
       setInfoMessage("");
       await loadData();
@@ -195,19 +197,19 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
   };
 
   return (
-    <div className="px-4 py-6 md:px-8 md:py-8 pb-16" style={{ maxWidth: "900px" }}>
+    <div className="adm-page px-4 py-6 md:px-8 md:py-8 pb-16" style={{ maxWidth: "900px" }}>
       {/* Back link */}
       <Link href="/admin/applications" style={{ fontSize: "12px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textDecoration: "none", display: "inline-block", marginBottom: "20px" }}>
         ← BACK TO APPLICATIONS
       </Link>
 
       {/* Header */}
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", marginBottom: "24px" }}>
-        <div>
+      <div className="adm-header" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", marginBottom: "24px" }}>
+        <div style={{ minWidth: 0 }}>
           <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
             {TYPE_LABELS[reg.registration_type] ?? reg.registration_type} · {reg.order_id}
           </p>
-          <h1 style={{ margin: 0, fontSize: "26px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
+          <h1 className="adm-h1" style={{ margin: 0, fontSize: "26px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
             {reg.first_name} {reg.last_name}
           </h1>
           {reg.business_name && (
@@ -237,14 +239,14 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
 
       {/* Action buttons */}
       {(canApprove || canDeny || canRequestInfo) && (
-        <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", marginBottom: "24px" }}>
+        <div className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", marginBottom: "24px" }}>
           <p style={{ margin: "0 0 12px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", color: "#8a7a68", letterSpacing: "0.1em", textTransform: "uppercase" }}>
             Review Actions
           </p>
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <div className="adm-review-actions" style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             {canApprove && (
               <button
-                onClick={() => handleAction("approve")}
+                onClick={() => setShowApproveModal(true)}
                 disabled={actionLoading}
                 style={{ padding: "10px 20px", background: "#16a34a", color: "#fff", border: "none", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", borderRadius: "4px", opacity: actionLoading ? 0.6 : 1 }}
               >
@@ -278,10 +280,38 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
         </div>
       )}
 
+      {/* Approve confirmation — approving can capture a card payment, so it always asks first */}
+      {showApproveModal && (
+        <div className="adm-modal-backdrop" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+          <div className="adm-modal" role="dialog" aria-modal="true" aria-labelledby="approve-title" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%", boxSizing: "border-box" }}>
+            <h2 id="approve-title" style={{ margin: "0 0 16px", fontFamily: "var(--font-rye, serif)", fontSize: "20px", color: "#1a120a" }}>
+              {reg.status === "pending_review" ? "Approve & Capture Payment?" : "Approve Application?"}
+            </h2>
+            <p style={{ fontSize: "13px", color: "#555", fontFamily: "var(--font-garamond, serif)", marginBottom: "16px" }}>
+              {reg.status === "pending_review"
+                ? <>This will approve <strong>{reg.first_name} {reg.last_name}</strong>, <strong>charge their card {reg.amount_cents ? `$${(reg.amount_cents / 100).toFixed(2)}` : ""}</strong>, and email their confirmation.</>
+                : <>This will approve <strong>{reg.first_name} {reg.last_name}</strong> and email them that payment is still required. No funds will be captured.</>}
+            </p>
+            <div className="adm-modal-actions" style={{ display: "flex", gap: "10px", marginTop: "16px", justifyContent: "flex-end" }}>
+              <button onClick={() => setShowApproveModal(false)} disabled={actionLoading} style={{ padding: "9px 18px", background: "none", border: "1px solid #d1c9b8", color: "#1a120a", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", cursor: "pointer", borderRadius: "4px" }}>
+                Cancel
+              </button>
+              <button
+                onClick={() => handleAction("approve")}
+                disabled={actionLoading}
+                style={{ padding: "9px 18px", background: "#16a34a", color: "#fff", border: "none", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer", borderRadius: "4px", opacity: actionLoading ? 0.6 : 1 }}
+              >
+                {actionLoading ? "Processing…" : reg.status === "pending_review" ? "Confirm & Capture" : "Confirm Approval"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Deny modal */}
       {showDenyModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-          <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%" }}>
+        <div className="adm-modal-backdrop" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+          <div className="adm-modal" role="dialog" aria-modal="true" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%", boxSizing: "border-box" }}>
             <h2 style={{ margin: "0 0 16px", fontFamily: "var(--font-rye, serif)", fontSize: "20px", color: "#1a120a" }}>Deny Application</h2>
             <p style={{ fontSize: "13px", color: "#555", fontFamily: "var(--font-garamond, serif)", marginBottom: "16px" }}>
               This will deny the application and notify <strong>{reg.first_name} {reg.last_name}</strong> by email. Any payment hold will be released.
@@ -296,8 +326,8 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
               placeholder="e.g. We have reached our capacity for this category."
               style={{ width: "100%", padding: "10px 12px", fontSize: "13px", fontFamily: "var(--font-garamond, serif)", border: "1px solid #d1c9b8", borderRadius: "4px", resize: "vertical", boxSizing: "border-box" }}
             />
-            <div style={{ display: "flex", gap: "10px", marginTop: "16px", justifyContent: "flex-end" }}>
-              <button onClick={() => { setShowDenyModal(false); setDenyReason(""); }} style={{ padding: "9px 18px", background: "none", border: "1px solid #d1c9b8", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", cursor: "pointer", borderRadius: "4px" }}>
+            <div className="adm-modal-actions" style={{ display: "flex", gap: "10px", marginTop: "16px", justifyContent: "flex-end" }}>
+              <button onClick={() => { setShowDenyModal(false); setDenyReason(""); }} style={{ padding: "9px 18px", background: "none", border: "1px solid #d1c9b8", color: "#1a120a", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", cursor: "pointer", borderRadius: "4px" }}>
                 Cancel
               </button>
               <button
@@ -314,8 +344,8 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
 
       {/* Request info modal */}
       {showInfoModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-          <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%" }}>
+        <div className="adm-modal-backdrop" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+          <div className="adm-modal" role="dialog" aria-modal="true" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "8px", padding: "28px", maxWidth: "480px", width: "100%", boxSizing: "border-box" }}>
             <h2 style={{ margin: "0 0 16px", fontFamily: "var(--font-rye, serif)", fontSize: "20px", color: "#1a120a" }}>Request More Information</h2>
             <p style={{ fontSize: "13px", color: "#555", fontFamily: "var(--font-garamond, serif)", marginBottom: "16px" }}>
               This will email <strong>{reg.first_name} {reg.last_name}</strong> asking for more information.
@@ -330,8 +360,8 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
               placeholder="Explain what additional information you need…"
               style={{ width: "100%", padding: "10px 12px", fontSize: "13px", fontFamily: "var(--font-garamond, serif)", border: "1px solid #d1c9b8", borderRadius: "4px", resize: "vertical", boxSizing: "border-box" }}
             />
-            <div style={{ display: "flex", gap: "10px", marginTop: "16px", justifyContent: "flex-end" }}>
-              <button onClick={() => { setShowInfoModal(false); setInfoMessage(""); }} style={{ padding: "9px 18px", background: "none", border: "1px solid #d1c9b8", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", cursor: "pointer", borderRadius: "4px" }}>
+            <div className="adm-modal-actions" style={{ display: "flex", gap: "10px", marginTop: "16px", justifyContent: "flex-end" }}>
+              <button onClick={() => { setShowInfoModal(false); setInfoMessage(""); }} style={{ padding: "9px 18px", background: "none", border: "1px solid #d1c9b8", color: "#1a120a", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", cursor: "pointer", borderRadius: "4px" }}>
                 Cancel
               </button>
               <button
@@ -347,11 +377,11 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
       )}
 
       {/* Two column layout — stacks on mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="adm-two-col grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Applicant info */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px", minWidth: 0 }}>
           {/* Contact */}
-          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
+          <section className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", minWidth: 0 }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Contact Information</h2>
             <MetaField label="Email" value={reg.email} />
             <MetaField label="Phone" value={reg.phone} />
@@ -363,7 +393,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
 
           {/* Submitted form data */}
           {reg.metadata && Object.keys(reg.metadata).length > 0 && (
-            <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
+            <section className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", minWidth: 0 }}>
               <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Submitted Information</h2>
               {Object.entries(reg.metadata).map(([k, v]) => {
                 if (k === "pricingKey" || k === "categoryId") return null;
@@ -376,16 +406,16 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
         </div>
 
         {/* Right: Payment + admin */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px", minWidth: 0 }}>
           {/* Payment */}
-          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
+          <section className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", minWidth: 0 }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Payment Information</h2>
             <MetaField label="Amount" value={reg.amount_cents ? `$${(reg.amount_cents / 100).toFixed(2)}` : "—"} />
             <MetaField label="Payment Status" value={statusStyle.label} />
             <MetaField label="Paid At" value={reg.paid_at ? new Date(reg.paid_at).toLocaleString("en-US") : undefined} />
             <MetaField label="Submitted" value={new Date(reg.created_at).toLocaleString("en-US")} />
             {reg.stripe_payment_intent_id && (
-              <div style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
+              <div className="adm-field" style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
                 <span style={{ width: "160px", flexShrink: 0, fontSize: "12px", color: "#888", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.05em" }}>Stripe PI</span>
                 <a
                   href={`https://dashboard.stripe.com/payments/${reg.stripe_payment_intent_id}`}
@@ -406,17 +436,18 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
           </section>
 
           {/* Private notes */}
-          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
+          <section className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", minWidth: 0 }}>
             <h2 style={{ margin: "0 0 4px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Private Notes</h2>
             <p style={{ margin: "0 0 14px", fontSize: "11px", color: "#ccc", fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}>Never visible to applicants.</p>
 
-            <form onSubmit={handleAddNote} style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
+            <form className="adm-note-form" onSubmit={handleAddNote} style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
               <input
                 type="text"
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
                 placeholder="Add a private note…"
-                style={{ flex: 1, padding: "8px 12px", fontSize: "13px", fontFamily: "var(--font-garamond, serif)", border: "1px solid #d1c9b8", borderRadius: "4px" }}
+                aria-label="Add a private note"
+                style={{ flex: 1, minWidth: 0, padding: "8px 12px", fontSize: "13px", fontFamily: "var(--font-garamond, serif)", border: "1px solid #d1c9b8", borderRadius: "4px" }}
               />
               <button type="submit" disabled={noteLoading || !newNote.trim()} style={{ padding: "8px 14px", background: "#1a120a", color: "#F5EDD8", border: "none", fontSize: "11px", fontFamily: "var(--font-special-elite, monospace)", cursor: "pointer", borderRadius: "4px", opacity: !newNote.trim() ? 0.5 : 1 }}>
                 Add
@@ -434,7 +465,7 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
                       <p style={{ margin: 0, fontSize: "10px", color: "#aaa", fontFamily: "var(--font-special-elite, monospace)" }}>
                         {note.created_by} · {new Date(note.created_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </p>
-                      <button onClick={() => handleDeleteNote(note.id)} style={{ background: "none", border: "none", color: "#ccc", cursor: "pointer", fontSize: "12px", padding: "2px" }}>✕</button>
+                      <button className="adm-note-delete" aria-label="Delete note" onClick={() => handleDeleteNote(note.id)} style={{ background: "none", border: "none", color: "#ccc", cursor: "pointer", fontSize: "12px", padding: "2px" }}>✕</button>
                     </div>
                   </div>
                 ))}
@@ -443,21 +474,21 @@ export default function ApplicationDetailPage({ params }: { params: Promise<{ or
           </section>
 
           {/* Activity log */}
-          <section style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
+          <section className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px", minWidth: 0 }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#888", letterSpacing: "0.15em", textTransform: "uppercase" }}>Activity History</h2>
             {activity.length === 0 ? (
               <p style={{ color: "#ccc", fontSize: "13px", fontFamily: "var(--font-garamond, serif)", fontStyle: "italic" }}>No recorded activity yet.</p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {/* System-generated events */}
-                <div style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
+                <div className="adm-history-row" style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
                   <span style={{ fontSize: "11px", color: "#aaa", fontFamily: "var(--font-special-elite, monospace)", width: "130px", flexShrink: 0 }}>
                     {new Date(reg.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </span>
                   <span style={{ fontSize: "12px", color: "#555", fontFamily: "var(--font-garamond, serif)" }}>Application submitted</span>
                 </div>
                 {activity.map((a) => (
-                  <div key={a.id} style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
+                  <div key={a.id} className="adm-history-row" style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
                     <span style={{ fontSize: "11px", color: "#aaa", fontFamily: "var(--font-special-elite, monospace)", width: "130px", flexShrink: 0 }}>
                       {new Date(a.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                     </span>

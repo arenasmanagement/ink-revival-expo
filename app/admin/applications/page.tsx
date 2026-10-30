@@ -111,21 +111,21 @@ function ApplicationsContent() {
   }
 
   return (
-    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "1100px" }}>
-      <div style={{ marginBottom: "24px" }}>
+    <div className="adm-page px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "1100px" }}>
+      <div className="adm-header" style={{ marginBottom: "24px" }}>
         <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
           Admin Portal
         </p>
-        <h1 style={{ margin: 0, fontSize: "24px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
+        <h1 className="adm-h1" style={{ margin: 0, fontSize: "24px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
           Applications
         </h1>
         {total > 0 && <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>{total} result{total !== 1 ? "s" : ""}</p>}
       </div>
 
       {/* Filters */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "20px", alignItems: "center" }}>
+      <div className="adm-filters" style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "20px", alignItems: "center" }}>
         {/* Status filter */}
-        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+        <div className="adm-chips" role="group" aria-label="Filter by status" style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
           {STATUSES.map((s) => (
             <button
               key={s.value}
@@ -158,12 +158,13 @@ function ApplicationsContent() {
         </select>
 
         {/* Search */}
-        <form onSubmit={handleSearch} style={{ display: "flex", gap: "6px" }}>
+        <form className="adm-search" onSubmit={handleSearch} style={{ display: "flex", gap: "6px" }}>
           <input
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search name, email, business…"
+            aria-label="Search applications"
             style={{ padding: "7px 12px", fontSize: "12px", fontFamily: "var(--font-garamond, serif)", border: "1px solid #d1c9b8", background: "#fff", color: "#333", width: "220px", borderRadius: "3px" }}
           />
           <button type="submit" style={{ padding: "7px 14px", fontSize: "11px", fontFamily: "var(--font-special-elite, monospace)", background: "#C4902A", color: "#fff", border: "none", cursor: "pointer", borderRadius: "3px" }}>
@@ -176,7 +177,7 @@ function ApplicationsContent() {
           )}
         </form>
 
-        <button onClick={fetchRegistrations} style={{ marginLeft: "auto", padding: "7px 12px", fontSize: "11px", fontFamily: "var(--font-special-elite, monospace)", background: "none", border: "1px solid #d1c9b8", color: "#888", cursor: "pointer", borderRadius: "3px" }}>
+        <button className="adm-refresh" onClick={fetchRegistrations} style={{ marginLeft: "auto", padding: "7px 12px", fontSize: "11px", fontFamily: "var(--font-special-elite, monospace)", background: "none", border: "1px solid #d1c9b8", color: "#888", cursor: "pointer", borderRadius: "3px" }}>
           ↺ Refresh
         </button>
       </div>
@@ -191,8 +192,8 @@ function ApplicationsContent() {
       ) : (
         <>
           {/* Desktop table — hidden on small screens */}
-          <div className="hidden md:block" style={{ display: "flex", flexDirection: "column", gap: "1px", background: "#e0d8c8", borderRadius: "6px", overflow: "hidden", border: "1px solid #e0d8c8" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 130px 140px 80px 100px 80px", gap: "16px", padding: "10px 20px", background: "#f5f0e8", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8a7a68" }}>
+          <div className="adm-table-scroll hidden md:flex" style={{ flexDirection: "column", gap: "1px", background: "#e0d8c8", borderRadius: "6px", overflowX: "auto", overflowY: "hidden", border: "1px solid #e0d8c8" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(220px, 1fr) 130px 140px 80px 100px 80px", gap: "16px", minWidth: "860px", boxSizing: "border-box", padding: "10px 20px", background: "#f5f0e8", fontSize: "10px", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8a7a68" }}>
               <span>Applicant</span>
               <span>Type</span>
               <span>Status</span>
@@ -203,7 +204,7 @@ function ApplicationsContent() {
             {registrations.map((reg) => {
               const statusStyle = STATUS_COLORS[reg.status] ?? { bg: "#f3f4f6", text: "#6b7280", label: reg.status };
               return (
-                <div key={reg.order_id} style={{ display: "grid", gridTemplateColumns: "1fr 130px 140px 80px 100px 80px", gap: "16px", padding: "14px 20px", background: "#faf6ee", alignItems: "center" }}>
+                <div key={reg.order_id} style={{ display: "grid", gridTemplateColumns: "minmax(220px, 1fr) 130px 140px 80px 100px 80px", gap: "16px", minWidth: "860px", boxSizing: "border-box", padding: "14px 20px", background: "#faf6ee", alignItems: "center" }}>
                   <div>
                     <p style={{ margin: "0 0 2px", fontSize: "14px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a" }}>
                       {reg.first_name} {reg.last_name}
@@ -239,7 +240,7 @@ function ApplicationsContent() {
               const statusStyle = STATUS_COLORS[reg.status] ?? { bg: "#f3f4f6", text: "#6b7280", label: reg.status };
               return (
                 <Link key={reg.order_id} href={`/admin/applications/${reg.order_id}`} style={{ textDecoration: "none", display: "block", background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "16px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
+                  <div className="adm-card-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
                     <div>
                       <p style={{ margin: "0 0 2px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a" }}>
                         {reg.first_name} {reg.last_name}
@@ -253,8 +254,8 @@ function ApplicationsContent() {
                       {statusStyle.label}
                     </span>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div style={{ display: "flex", gap: "12px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
+                    <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", minWidth: 0 }}>
                       <span style={{ fontSize: "11px", color: "#8a7a68", fontFamily: "var(--font-special-elite, monospace)" }}>
                         {TYPE_LABELS[reg.registration_type] ?? reg.registration_type}
                       </span>
@@ -277,7 +278,7 @@ function ApplicationsContent() {
 
       {/* Pagination */}
       {total > 50 && (
-        <div style={{ display: "flex", gap: "8px", marginTop: "16px", justifyContent: "center" }}>
+        <div className="adm-pager" style={{ display: "flex", gap: "8px", marginTop: "16px", justifyContent: "center" }}>
           {page > 1 && (
             <button onClick={() => updateParam("page", String(page - 1))} style={{ padding: "8px 16px", fontSize: "12px", fontFamily: "var(--font-special-elite, monospace)", background: "#faf6ee", border: "1px solid #e0d8c8", cursor: "pointer", borderRadius: "3px" }}>
               ← Previous

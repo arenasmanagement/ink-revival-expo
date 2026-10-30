@@ -62,7 +62,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#0f0a05" }}>
+    <div className="adm-auth min-h-dvh flex items-center justify-center px-4 py-8" style={{ background: "#0f0a05" }}>
       <div className="w-full max-w-sm">
         {/* Logo area */}
         <div className="text-center mb-8">

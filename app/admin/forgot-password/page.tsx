@@ -51,7 +51,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="adm-auth min-h-dvh flex items-center justify-center px-4 py-8"
       style={{ background: "#0f0a05" }}
     >
       <div className="w-full max-w-sm">

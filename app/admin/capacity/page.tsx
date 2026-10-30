@@ -58,13 +58,13 @@ export default function CapacityPage() {
   useEffect(() => { load(); }, []);
 
   return (
-    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "900px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px" }}>
-        <div>
+    <div className="adm-page px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "900px" }}>
+      <div className="adm-header" style={{ display: "flex", flexWrap: "wrap", gap: "12px", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px" }}>
+        <div style={{ minWidth: 0, flex: "1 1 240px" }}>
           <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
             Admin Portal
           </p>
-          <h1 style={{ margin: 0, fontSize: "24px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
+          <h1 className="adm-h1" style={{ margin: 0, fontSize: "24px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
             Capacity Management
           </h1>
           <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>
@@ -113,15 +113,15 @@ export default function CapacityPage() {
                 const isFull = row.confirmed_from_regs >= row.total_slots;
 
                 return (
-                  <div key={row.id} style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
-                      <div>
+                  <div key={row.id} className="adm-cap-card" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "20px 24px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", marginBottom: "12px" }}>
+                      <div style={{ minWidth: 0 }}>
                         <p style={{ margin: 0, fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a" }}>{label}</p>
                         <p style={{ margin: "4px 0 0", fontSize: "12px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>
                           {row.confirmed_from_regs} confirmed · {row.reserved_from_regs} reserved · {Math.max(0, available - row.reserved_from_regs)} open
                         </p>
                       </div>
-                      <div style={{ textAlign: "right" }}>
+                      <div style={{ textAlign: "right", flexShrink: 0 }}>
                         <p style={{ margin: 0, fontSize: "22px", fontFamily: "var(--font-rye, serif)", color: isFull ? "#dc2626" : "#1a120a" }}>
                           {row.confirmed_from_regs} <span style={{ fontSize: "14px", color: "#aaa" }}>/ {row.total_slots}</span>
                         </p>

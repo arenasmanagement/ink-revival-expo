@@ -67,13 +67,13 @@ export default function ActivityPage() {
   }
 
   return (
-    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "860px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px" }}>
-        <div>
+    <div className="adm-page px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "860px" }}>
+      <div className="adm-header" style={{ display: "flex", flexWrap: "wrap", gap: "12px", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px" }}>
+        <div style={{ minWidth: 0, flex: "1 1 240px" }}>
           <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
             Admin Portal
           </p>
-          <h1 style={{ margin: 0, fontSize: "24px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
+          <h1 className="adm-h1" style={{ margin: 0, fontSize: "24px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
             Activity Log
           </h1>
           <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>
@@ -106,7 +106,7 @@ export default function ActivityPage() {
             {entries.map((a, i) => {
               const actionColor = ACTION_COLORS[a.action] ?? "#6b7280";
               return (
-                <div key={a.id} style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: "16px", padding: "14px 20px", borderBottom: i < entries.length - 1 ? "1px solid #f0ebe0" : "none", alignItems: "flex-start" }}>
+                <div key={a.id} className="adm-log-row" style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: "16px", padding: "14px 20px", borderBottom: i < entries.length - 1 ? "1px solid #f0ebe0" : "none", alignItems: "flex-start" }}>
                   <p style={{ margin: 0, fontSize: "11px", color: "#aaa", fontFamily: "var(--font-special-elite, monospace)", paddingTop: "1px" }}>
                     {new Date(a.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                   </p>

@@ -52,7 +52,7 @@ const STATUS_LABELS: Record<string, string> = {
 
 function StatCard({ label, value, href, color, sub }: { label: string; value: number | string; href?: string; color?: string; sub?: string }) {
   const content = (
-    <div style={{
+    <div className="adm-stat" style={{
       background: "#faf6ee",
       border: "1px solid #e0d8c8",
       borderRadius: "6px",
@@ -60,14 +60,14 @@ function StatCard({ label, value, href, color, sub }: { label: string; value: nu
       transition: "box-shadow 0.15s",
       cursor: href ? "pointer" : "default",
     }}>
-      <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#8a7a68", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</p>
-      <p style={{ margin: "0", fontSize: "36px", fontFamily: "var(--font-rye, serif)", color: color ?? "#1a120a", lineHeight: 1 }}>{value}</p>
+      <p className="adm-stat-label" style={{ margin: "0 0 8px", fontSize: "11px", color: "#8a7a68", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</p>
+      <p className="adm-stat-num" style={{ margin: "0", fontSize: "36px", fontFamily: "var(--font-rye, serif)", color: color ?? "#1a120a", lineHeight: 1 }}>{value}</p>
       {sub && <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#8a7a68", fontFamily: "var(--font-garamond, serif)" }}>{sub}</p>}
     </div>
   );
 
   if (href) {
-    return <Link href={href} style={{ textDecoration: "none", display: "block" }}>{content}</Link>;
+    return <Link href={href} style={{ textDecoration: "none", display: "block", minWidth: 0 }}>{content}</Link>;
   }
   return content;
 }
@@ -89,13 +89,13 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "1100px" }}>
+    <div className="adm-page px-4 py-6 md:px-8 md:py-8 pb-12" style={{ maxWidth: "1100px" }}>
       {/* Page header */}
-      <div style={{ marginBottom: "32px" }}>
+      <div className="adm-header" style={{ marginBottom: "32px" }}>
         <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#C4902A", fontFamily: "var(--font-special-elite, monospace)", letterSpacing: "0.25em", textTransform: "uppercase" }}>
           Admin Dashboard
         </p>
-        <h1 style={{ margin: "0", fontSize: "28px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
+        <h1 className="adm-h1" style={{ margin: "0", fontSize: "28px", fontFamily: "var(--font-rye, serif)", color: "#1a120a" }}>
           West TN Tattoo and Art Festival 2027
         </h1>
         <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#888", fontFamily: "var(--font-garamond, serif)" }}>
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
       {stats && (
         <>
           {/* Main stat cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+          <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "16px", marginBottom: "24px" }}>
             <StatCard label="Total Applications" value={stats.total} href="/admin/applications?status=all" />
             <StatCard label="Pending Review" value={stats.pending_review} href="/admin/applications?status=pending_review" color="#2563eb" />
             <StatCard label="Awaiting Payment" value={stats.pending + (stats.approved_pending_payment ?? 0)} href="/admin/applications?status=pending" color="#d97706" />
@@ -130,9 +130,9 @@ export default function AdminDashboard() {
           </div>
 
           {/* Two column section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="adm-two-col grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* Applications by type */}
-            <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px" }}>
+            <div className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px", minWidth: 0 }}>
               <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
                 Applications by Type
               </h2>
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Recent activity */}
-            <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px" }}>
+            <div className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px", minWidth: 0 }}>
               <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
                 Recent Submissions
               </h2>
@@ -165,8 +165,8 @@ export default function AdminDashboard() {
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {stats.recent.map((r, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
-                      <div>
+                    <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", padding: "8px 0", borderBottom: "1px solid #f0ebe0" }}>
+                      <div style={{ minWidth: 0 }}>
                         <p style={{ margin: 0, fontSize: "13px", fontFamily: "var(--font-special-elite, monospace)", color: "#333" }}>
                           {TYPE_LABELS[r.registration_type] ?? r.registration_type}
                         </p>
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
                           {new Date(r.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                         </p>
                       </div>
-                      <div style={{ textAlign: "right" }}>
+                      <div style={{ textAlign: "right", flexShrink: 0 }}>
                         <span style={{
                           display: "inline-block",
                           padding: "2px 8px",
@@ -201,11 +201,11 @@ export default function AdminDashboard() {
           </div>
 
           {/* System status */}
-          <div style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px" }}>
+          <div className="adm-panel" style={{ background: "#faf6ee", border: "1px solid #e0d8c8", borderRadius: "6px", padding: "24px", minWidth: 0 }}>
             <h2 style={{ margin: "0 0 16px", fontSize: "15px", fontFamily: "var(--font-special-elite, monospace)", color: "#1a120a", letterSpacing: "0.05em" }}>
               System Status
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "12px" }}>
+            <div className="adm-status-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "12px" }}>
               {[
                 { name: "Registration Forms", status: "live", note: "Artists, Vendors, Food Trucks, Sponsors, Car Show, Competitions" },
                 { name: "Admin Review Portal", status: "live", note: "This panel — approve, deny, request info, add notes" },
@@ -238,7 +238,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Quick actions */}
-          <div style={{ marginTop: "24px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <div className="adm-actions" style={{ marginTop: "24px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <Link href="/admin/applications?status=pending_review" style={{
               padding: "10px 20px",
               background: "#2563eb",
