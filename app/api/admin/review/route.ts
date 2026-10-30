@@ -27,7 +27,15 @@ export const dynamic = "force-dynamic";
 // SECURITY CONSTANT — DO NOT CHANGE
 const FROM_EMAIL = "West TN Tattoo & Art Festival <contact@westtninkrevival.com>";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy Resend client — created on first send, not at module load, so
+// `next build` works without RESEND_API_KEY (matches lib/stripe.ts).
+let _resend: Resend | null = null;
+
+/** Async so a missing key becomes a rejected promise, handled by each call's .catch(). */
+async function sendEmail(params: Parameters<Resend["emails"]["send"]>[0]) {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend.emails.send(params);
+}
 
 function typeLabel(type: string): string {
   const labels: Record<string, string> = {
@@ -196,7 +204,7 @@ export async function POST(req: NextRequest) {
       }).eq("order_id", orderId);
 
       // Send approval email (payment confirmed)
-      await resend.emails.send({
+      await sendEmail({
         from: FROM_EMAIL,
         to: applicantEmail,
         subject: `✅ You're Confirmed — ${typeLabel(registrationType)} | West TN Tattoo & Art Festival`,
@@ -225,7 +233,7 @@ export async function POST(req: NextRequest) {
     }).eq("order_id", orderId);
 
     // Send approval email (payment still needed)
-    await resend.emails.send({
+    await sendEmail({
       from: FROM_EMAIL,
       to: applicantEmail,
       subject: `Your Application Has Been Approved — West TN Tattoo & Art Festival`,
@@ -272,7 +280,7 @@ export async function POST(req: NextRequest) {
     }).eq("order_id", orderId);
 
     // Send denial email
-    await resend.emails.send({
+    await sendEmail({
       from: FROM_EMAIL,
       to: applicantEmail,
       subject: `Update on Your Application — West TN Tattoo & Art Festival`,
@@ -305,7 +313,7 @@ export async function POST(req: NextRequest) {
     }).eq("order_id", orderId);
 
     // Send info request email
-    await resend.emails.send({
+    await sendEmail({
       from: FROM_EMAIL,
       to: applicantEmail,
       subject: `Information Needed — Your Application | West TN Tattoo & Art Festival`,
